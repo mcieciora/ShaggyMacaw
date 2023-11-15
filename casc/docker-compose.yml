@@ -5,9 +5,8 @@ services:
     container_name: postgres
     ports:
       - "5432:5432"
-    environment:
-      - POSTGRES_USER=
-      - POSTGRES_PASSWORD=
+    env_file:
+      - postgres.env
     volumes:
       - postgres-volume:/var/lib/postgresql/data
   jira:
@@ -37,9 +36,8 @@ services:
       dockerfile: jenkins.Dockerfile
     ports:
       - "8080:8080"
-    environment:
-      - JENKINS_USER_PASS=
-      - JENKINS_ADMIN_PASS=
+    env_file:
+      - jenkins.env
     volumes:
       - jenkins-volume:/var/jenkins_home
       - ./casc.yml:/var/jenkins_conf/casc.yml
