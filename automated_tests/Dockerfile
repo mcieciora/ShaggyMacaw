@@ -1,12 +1,10 @@
 FROM python:3.11-slim
 
-COPY requirements.txt app/requirements.txt
-COPY requirements/requirements-testing.txt app/requirements-testing.txt
-COPY pytest.ini app/pytest.ini
+COPY requirements.txt requirements/requirements-testing.txt pytest.ini app/
 
-COPY automated_tests app/automated_tests
+COPY automated_tests app/automated_tests/
 
-COPY src app/src
+COPY src app/src/
 
 WORKDIR app
 
