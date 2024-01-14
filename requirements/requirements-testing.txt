@@ -1,6 +1,7 @@
-pytest==7.4.3
-pytest-cov==4.1.0
-pylint==3.0.2
-pylint-pytest==1.1.5
-flake8==6.1.0
-ruff==0.1.5
+pytest
+pytest-cov
+pylint
+pylint-pytest
+flake8
+black
+ruff
