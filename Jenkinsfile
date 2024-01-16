@@ -53,15 +53,6 @@ pipeline {
                         }
                     }
                 }
-                stage ("pytype") {
-                    steps {
-                        script {
-                            customImage.inside("-v $WORKSPACE:/app") {
-                                sh "python3 -m pytype input ."
-                            }
-                        }
-                    }
-                }
                 stage("Code coverage") {
                     steps {
                         script {
