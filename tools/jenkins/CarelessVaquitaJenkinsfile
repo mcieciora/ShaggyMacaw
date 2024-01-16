@@ -5,7 +5,8 @@ pipeline {
             steps {
                 script {
                     sh """
-                        printf '%s\n' "def test() {" | cat - Jenkinsfile > TestJenkinsfile.groovy; printf '\n%s' "}" >> TestJenkinsfile.groovy
+                        printf '%s\n' "def call() {" | cat - Jenkinsfile > TestJenkinsfile.groovy
+                        sed -i "132i }" TestJenkinsfile.groovy
                     """
                 }
             }
