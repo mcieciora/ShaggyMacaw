@@ -5,7 +5,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                        printf '%s\n' "def test() {" | cat - Jenkinsfile > TestJenkinsfile; printf '\n%s' "}" >> TestJenkinsfile
+                        printf '%s\n' "def test() {" | cat - Jenkinsfile > TestJenkinsfile.groovy; printf '\n%s' "}" >> TestJenkinsfile.groovy
                     """
                 }
             }
@@ -20,7 +20,7 @@ pipeline {
         stage ("Run Jenkinsfile") {
             steps {
                 script {
-                    def test_jenkinsfile = load("TestJenkinsfile")
+                    def test_jenkinsfile = load("TestJenkinsfile.groovy")
                     test_jenkinsfile.test()
                 }
             }
