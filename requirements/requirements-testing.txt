@@ -3,3 +3,5 @@ pytest-cov
 pylint
 pylint-pytest
 flake8
+black
+ruff
