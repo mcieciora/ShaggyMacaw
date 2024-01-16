@@ -8,15 +8,20 @@ services:
     ports:
       - "8000:8000"
     links:
-      - mongodb
-  mongodb:
-    container_name: mongodb
-    image: mongo:4.2
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USER}
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
-      - MONGO_INITDB_DATABASE=newdb
+      - postgres
+  postgres:
+    container_name: postgres_db
+    image: postgres:16.1-alpine3.19
+    env_file:
+      - .env
     ports:
-      - '27017:27017'
+      - "5432:5432"
     volumes:
-      - ./data:/data/db
+      - ./postgres_data:/var/lib/postgresql/data
+  pgadmin:
+      container_name: pgadmin4_container
+      image: dpage/pgadmin4:8.2
+      env_file:
+        - .env
+      ports:
+        - "5050:80"

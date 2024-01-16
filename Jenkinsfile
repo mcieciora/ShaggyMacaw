@@ -34,6 +34,25 @@ pipeline {
                         }
                     }
                 }
+                stage ("ruff") {
+                    steps {
+                        script {
+                            customImage.inside("-v $WORKSPACE:/app") {
+                                sh "python3 -m ruff format ."
+                                sh "python3 -m ruff check ."
+                            }
+                        }
+                    }
+                }
+                stage ("black") {
+                    steps {
+                        script {
+                            customImage.inside("-v $WORKSPACE:/app") {
+                                sh "python3 -m black ."
+                            }
+                        }
+                    }
+                }
                 stage("Code coverage") {
                     steps {
                         script {
