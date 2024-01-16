@@ -4,5 +4,4 @@ pylint
 pylint-pytest
 flake8
 black
-pytype
 ruff
