@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+    stages {
+        stage ("Prepare Jenkinsfile") {
+            steps {
+                script {
+                    sh """
+                        printf '%s\n' "def test() {" | cat - Jenkinsfile > TestJenkinsfile; printf '\n%s' "}" >> TestJenkinsfile
+                    """
+                }
+            }
+        }
+        stage ("Prepare repository files") {
+            steps {
+                script {
+                    echo "Preparing workspace for test job"
+                }
+            }
+        }
+        stage ("Run Jenkinsfile") {
+            steps {
+                script {
+                    def test_jenkinsfile = load("TestJenkinsfile")
+                    test_jenkinsfile.test()
+                }
+            }
+        }
+    }
+}
