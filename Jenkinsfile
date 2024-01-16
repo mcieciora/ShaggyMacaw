@@ -26,7 +26,7 @@ pipeline {
                     }
                 }
                 stage ("flake8") {
-                    steps
+                    steps {
                         script {
                             customImage.inside("-v $WORKSPACE:/app") {
                                 sh "python3 -m flake8 --max-line-length 120 --max-complexity 10 src"
