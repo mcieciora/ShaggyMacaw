@@ -22,7 +22,7 @@ pipeline {
             steps {
                 script {
                     def test_jenkinsfile = load("TestJenkinsfile.groovy")
-                    test_jenkinsfile.test()
+                    test_jenkinsfile.call()
                 }
             }
         }
