@@ -21,6 +21,9 @@ pipeline {
         stage ("Run Jenkinsfile") {
             steps {
                 script {
+                    sh """
+                        pwd
+                    """
                     def test_jenkinsfile = load("TestJenkinsfile.groovy")
                     test_jenkinsfile.call()
                 }
