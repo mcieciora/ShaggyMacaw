@@ -13,7 +13,7 @@ pipeline {
                 }
             }
         }
-        stage("Run tests") {
+        stage("Verify dependencies") {
             steps {
                 script {
                     customImage.inside("-v $WORKSPACE:/app") {
@@ -25,7 +25,9 @@ pipeline {
     }
     post {
         always {
-            cleanWs()
+            dir("$WORKSPACE") {
+                deleteDir()
+            }
         }
     }
 }

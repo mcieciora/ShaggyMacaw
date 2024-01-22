@@ -24,7 +24,9 @@ pipeline {
         always {
             archiveArtifacts artifacts: "**/*.xml"
             junit "**/*.xml"
-            cleanWs()
+            dir("$WORKSPACE") {
+                deleteDir()
+            }
         }
     }
 }

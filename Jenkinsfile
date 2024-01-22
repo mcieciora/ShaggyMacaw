@@ -125,7 +125,9 @@ pipeline {
         always {
             archiveArtifacts artifacts: "**/*.xml, htmlcov/*.html"
             junit "**/*.xml"
-            cleanWs()
+            dir("$WORKSPACE") {
+                deleteDir()
+            }
         }
     }
 }
