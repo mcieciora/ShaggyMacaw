@@ -1,0 +1,31 @@
+def customImage
+
+pipeline {
+    agent any
+    triggers {
+        cron('H 6 * * *')
+    }
+    stages {
+        stage ("Prepare docker test image") {
+            steps {
+                script {
+                    customImage = docker.build("test_image:${env.BUILD_ID}", "-f automated_tests/Dockerfile .")
+                }
+            }
+        }
+        stage("Run tests") {
+            steps {
+                script {
+                    customImage.inside("-v $WORKSPACE:/app") {
+                        sh "python3 tools/python/python_dependencies_up_to_date_verification.py"
+                    }
+                }
+            }
+        }
+    }
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}
