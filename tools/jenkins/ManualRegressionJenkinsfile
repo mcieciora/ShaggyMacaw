@@ -2,6 +2,10 @@ def customImage
 
 pipeline {
     agent any
+    parameters {
+        choice(name: 'FLAG', choices: ["unittest", "smoke", "regression", "nightly"], description: "Choose test flag.")
+        choice(name: 'TEST_GROUP', choices: ["iso", "grub", "image", "install"], description: "Choose test group.")
+    }
     stages {
         stage ("Prepare docker test image") {
             steps {
