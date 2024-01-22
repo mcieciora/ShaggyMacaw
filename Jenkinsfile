@@ -21,6 +21,7 @@ pipeline {
                             customImage.inside("-v $WORKSPACE:/app") {
                                 sh "python3 -m pylint src --max-line-length=120 --disable=C0114 --fail-under=9.5"
                                 sh "python3 -m pylint --load-plugins pylint_pytest automated_tests --max-line-length=120 --disable=C0114,C0116 --fail-under=9.5"
+                                sh "python3 -m pylint tools/python --max-line-length=120 --disable=C0114 --fail-under=9.5"
                             }
                         }
                     }
@@ -124,7 +125,9 @@ pipeline {
         always {
             archiveArtifacts artifacts: "**/*.xml, htmlcov/*.html"
             junit "**/*.xml"
-            cleanWs()
+            dir("$WORKSPACE") {
+                deleteDir()
+            }
         }
     }
 }

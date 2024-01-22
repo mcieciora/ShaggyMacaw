@@ -2,9 +2,8 @@ def customImage
 
 pipeline {
     agent any
-    parameters {
-        choice(name: 'FLAG', choices: ["unittest", "smoke", "regression", "nightly"], description: "Choose test flag.")
-        choice(name: 'TEST_GROUP', choices: ["iso", "grub", "image", "install"], description: "Choose test group.")
+    triggers {
+        cron('H 6 * * *')
     }
     stages {
         stage ("Prepare docker test image") {
@@ -14,11 +13,14 @@ pipeline {
                 }
             }
         }
-        stage("Run tests") {
+        stage("Verify dependencies") {
             steps {
                 script {
                     customImage.inside("-v $WORKSPACE:/app") {
-                        sh "python3 -m pytest -m ${env.FLAG} -k ${env.TEST_GROUP} -v --junitxml=results/${TEST_GROUP}_results.xml"
+                        return_value = sh(script: "python3 tools/python/python_dependencies_up_to_date_verification.py", returnStdout: true).trim()
+                        if (return_value.contains("Consider upgrading")) {
+                            unstable(return_value)
+                        }
                     }
                 }
             }
@@ -26,8 +28,6 @@ pipeline {
     }
     post {
         always {
-            archiveArtifacts artifacts: "**/*.xml"
-            junit "**/*.xml"
             dir("$WORKSPACE") {
                 deleteDir()
             }
