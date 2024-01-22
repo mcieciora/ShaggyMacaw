@@ -5,14 +5,17 @@ jenkins:
   scmCheckoutRetryCount: 1
   labelString: "master"
   crumbIssuer: "standard"
+  projectNamingStrategy:
+    roleBased:
+      forceExistingJobs: false
   securityRealm:
     local:
       allowsSignup: false
       users:
        - id: admin_user
-         password: $JENKINS_ADMIN_PASS
+         password: "password"
        - id: jenkins_user
-         password: $JENKINS_USER_PASS
+         password: "password"
   authorizationStrategy:
     roleBased:
       roles:
