@@ -3,7 +3,9 @@ def customImage
 pipeline {
     agent any
     environment {
-        FLAG = getTestEnvValue()
+        FLAG = getValue("FLAG")
+        TEST_GROUPS = getValue("TEST_GROUP")
+        REGULAR_BUILD = getValue("REGULAR_BUILD")
     }
     stages {
         stage ("Prepare docker test image") {
@@ -14,6 +16,11 @@ pipeline {
             }
         }
         stage("Code analysis") {
+            when {
+                expression {
+                    return env.REGULAR_BUILD
+                }
+            }
             parallel {
                 stage ("Pylint") {
                     steps {
@@ -94,9 +101,14 @@ pipeline {
                     stage("Test stage") {
                         steps {
                             script {
-                                echo "Running ${TEST_GROUP}"
-                                customImage.inside("-v $WORKSPACE:/app") {
-                                    sh "python3 -m pytest -m ${FLAG} -k ${TEST_GROUP} -v --junitxml=results/${TEST_GROUP}_results.xml"
+                                if (env.REGULAR_BUILD && env.TEST_GROUP != "all" && env.TEST_GROUPS.contains(TEST_GROUP)) {
+                                    echo "Running ${TEST_GROUP}"
+                                    customImage.inside("-v $WORKSPACE:/app") {
+                                        sh "python3 -m pytest -m ${FLAG} -k ${TEST_GROUP} -v --junitxml=results/${TEST_GROUP}_results.xml"
+                                    }
+                                }
+                                else {
+                                    echo "Skipping execution."
                                 }
                             }
                         }
@@ -105,6 +117,11 @@ pipeline {
             }
         }
         stage ("Staging") {
+            when {
+                expression {
+                    return env.REGULAR_BUILD
+                }
+            }
             parallel {
                 stage ("Scan for skipped tests") {
                     when {
@@ -132,10 +149,7 @@ pipeline {
     }
 }
 
-def getTestEnvValue() {
-    String return_value = "smoke"
-    if (params.containsKey("TEST_FLAG")) {
-        return_value = "${TEST_FLAG}"
-    }
-    return return_value
+
+def getValue(variable, defaultValue) {
+    return params.containsKey(variable) ? params.get(variable) : defaultValue
 }
