@@ -3,9 +3,9 @@ def customImage
 pipeline {
     agent any
     environment {
-        FLAG = getValue("FLAG")
-        TEST_GROUPS = getValue("TEST_GROUP")
-        REGULAR_BUILD = getValue("REGULAR_BUILD")
+        FLAG = getValue("FLAG", "smoke")
+        TEST_GROUPS = getValue("TEST_GROUP", "all")
+        REGULAR_BUILD = getValue("REGULAR_BUILD", true)
     }
     stages {
         stage ("Prepare docker test image") {
