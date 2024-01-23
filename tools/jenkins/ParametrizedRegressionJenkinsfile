@@ -1,0 +1,28 @@
+def customImage
+
+pipeline {
+    agent any
+    parameters {
+        choice(name: "FLAG", choices: ["unittest", "smoke", "regression", "nightly"], description: "Choose test flag.")
+        choice(name: "TEST_GROUP", choices: ["all", "iso", "grub", "image", "install"], description: "Choose test group.")
+        booleanParam(name: "REGULAR_BUILD", defaultValue: false, description: "If true code linters and staging will be executed too.")
+    }
+    stages {
+        stage("Start job") {
+            steps {
+                script {
+                    build job: 'regression_auto_job',
+                    parameters: [string(name: 'FLAG', value: params.FLAG), string(name: 'TEST_GROUP', value: 'iso'), booleanParam(name: 'REGULAR_BUILD', value: false)],
+                    waitForStart: true
+                }
+            }
+        }
+    }
+    post {
+        always {
+            dir("$WORKSPACE") {
+                deleteDir()
+            }
+        }
+    }
+}
