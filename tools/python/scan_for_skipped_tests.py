@@ -17,6 +17,7 @@ def main():
                 print(f'[ERR] {file_content.count(pattern)} skip mark(s) found in: {python_file}')
     if skipped_tests_dict.keys():
         return 1
+    return 0
 
 
 if __name__ == '__main__':
