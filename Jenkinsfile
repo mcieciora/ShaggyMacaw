@@ -18,7 +18,7 @@ pipeline {
         stage("Code analysis") {
             when {
                 expression {
-                    return env.REGULAR_BUILD
+                    return env.REGULAR_BUILD == true
                 }
             }
             parallel {
@@ -119,7 +119,7 @@ pipeline {
         stage ("Staging") {
             when {
                 expression {
-                    return env.REGULAR_BUILD
+                    return env.REGULAR_BUILD == true
                 }
             }
             parallel {
