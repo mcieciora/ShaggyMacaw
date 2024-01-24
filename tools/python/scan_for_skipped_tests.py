@@ -1,6 +1,5 @@
 from sys import exit
 from glob import glob
-from errno import EPERM
 
 
 def main():
@@ -17,7 +16,7 @@ def main():
                 skipped_tests_dict[python_file] = file_content.count(pattern)
                 print(f'[ERR] {file_content.count(pattern)} skip mark(s) found in: {python_file}')
     if skipped_tests_dict.keys():
-        exit(EPERM)
+        exit(1)
 
 
 if __name__ == '__main__':
