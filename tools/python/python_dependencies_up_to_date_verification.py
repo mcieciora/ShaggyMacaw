@@ -1,4 +1,4 @@
-from sys import executable, exit
+from sys import executable, exit # pylint: disable=redefined-builtin
 from glob import glob
 import subprocess
 from json import loads
@@ -12,8 +12,9 @@ def main():
     :return: None
     """
     dependencies_list = []
+    non_zero_status_exit = False
     for req_file in glob("./**/*requirements*.txt"):
-        with open(req_file, mode="r") as req:
+        with open(req_file, mode="r", encoding="utf-8") as req:
             format_dependency_list = [r.split("=")[0] for r in req.readlines()]
             dependencies_list.extend(format_dependency_list)
     outdated_dependencies = subprocess.check_output([executable, "-m", "pip", "list", "-o", "--format", "json"])
@@ -21,7 +22,9 @@ def main():
         if listed_req["name"] in dependencies_list:
             print(f"{listed_req['name']} is outdated. Consider upgrading from {listed_req['version']} to "
                   f"{listed_req['latest_version']}")
+    if non_zero_status_exit:
+        exit(1)
 
 
 if __name__ == '__main__':
-    exit(main())
+    main()

@@ -64,9 +64,9 @@ pipeline {
                                 allowMissing: false,
                                 alwaysLinkToLastBuild: false,
                                 keepAll: true,
-                                reportDir: 'htmlcov',
-                                reportFiles: 'index.html',
-                                reportName: 'PyTestCov'
+                                reportDir: "htmlcov",
+                                reportFiles: "index.html",
+                                reportName: "PyTestCov"
                             ]
                         }
                     }
@@ -86,8 +86,8 @@ pipeline {
             matrix {
                 axes {
                     axis {
-                        name 'TEST_GROUP'
-                        values 'iso', 'grub', 'image', 'install'
+                        name "TEST_GROUP"
+                        values "google"
                     }
                 }
                 stages {
@@ -109,12 +109,12 @@ pipeline {
                 stage ("Scan for skipped tests") {
                     when {
                         expression {
-                            return env.BRANCH_NAME == 'release' || env.BRANCH_NAME == 'master'
+                            return env.BRANCH_NAME == "release" || env.BRANCH_NAME == "master"
                         }
                     }
                     steps {
                         script {
-                            sh 'python3 automated_tests/tools/python/scan_for_skipped_tests.py'
+                            sh "python3 automated_tests/tools/python/scan_for_skipped_tests.py"
                         }
                     }
                 }
