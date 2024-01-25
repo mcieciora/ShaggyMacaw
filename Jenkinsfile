@@ -105,8 +105,8 @@ pipeline {
             matrix {
                 axes {
                     axis {
-                        name "TEST_GROUP"
-                        values "google"
+                        name 'TEST_GROUP'
+                        values 'iso', 'grub', 'image', 'install'
                     }
                 }
                 stages {
