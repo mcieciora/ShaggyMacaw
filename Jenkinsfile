@@ -11,9 +11,9 @@ pipeline {
         stage ("Show parameters") {
             steps {
                 script {
-                    echo ${FLAG}
-                    echo ${TEST_GROUPS}
-                    echo ${REGULAR_BUILD}
+                    echo "${FLAG}"
+                    echo "${TEST_GROUPS}"
+                    echo "${REGULAR_BUILD}"
                 }
             }
         }
