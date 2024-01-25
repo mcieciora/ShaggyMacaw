@@ -1,7 +1,7 @@
 from os.path import join
 from sys import argv
 
-global PROJECT_ROOT_PATH
+PROJECT_ROOT_PATH = None
 
 
 def _get_template_content():
