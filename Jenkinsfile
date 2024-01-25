@@ -12,7 +12,7 @@ pipeline {
             steps {
                 script {
                     echo "${FLAG}"
-                    echo "${TEST_GROUP}"
+                    echo "${TEST_GROUPS}"
                     echo "${REGULAR_BUILD}"
                 }
             }
