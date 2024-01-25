@@ -1,4 +1,4 @@
-def customImage
+def testImage
 
 pipeline {
     agent any
@@ -11,7 +11,7 @@ pipeline {
         stage ("Prepare docker test image") {
             steps {
                 script {
-                    customImage = docker.build("test_image:${env.BUILD_ID}", "-f automated_tests/Dockerfile .")
+                    testImage = docker.build("test_image:${env.BUILD_ID}", "-f automated_tests/Dockerfile .")
                 }
             }
         }
@@ -25,7 +25,7 @@ pipeline {
                 stage ("Pylint") {
                     steps {
                         script {
-                            customImage.inside("-v $WORKSPACE:/app") {
+                            testImage.inside("-v $WORKSPACE:/app") {
                                 sh "python3 -m pylint src --max-line-length=120 --disable=C0114 --fail-under=9.5"
                                 sh "python3 -m pylint --load-plugins pylint_pytest automated_tests --max-line-length=120 --disable=C0114,C0116 --fail-under=9.5"
                                 sh "python3 -m pylint tools/python --max-line-length=120 --disable=C0114 --fail-under=9.5"
@@ -36,7 +36,7 @@ pipeline {
                 stage ("flake8") {
                     steps {
                         script {
-                            customImage.inside("-v $WORKSPACE:/app") {
+                            testImage.inside("-v $WORKSPACE:/app") {
                                 sh "python3 -m flake8 --max-line-length 120 --max-complexity 10 src"
                             }
                         }
@@ -45,7 +45,7 @@ pipeline {
                 stage ("ruff") {
                     steps {
                         script {
-                            customImage.inside("-v $WORKSPACE:/app") {
+                            testImage.inside("-v $WORKSPACE:/app") {
                                 sh "python3 -m ruff format ."
                                 sh "python3 -m ruff check ."
                             }
@@ -55,7 +55,7 @@ pipeline {
                 stage ("black") {
                     steps {
                         script {
-                            customImage.inside("-v $WORKSPACE:/app") {
+                            testImage.inside("-v $WORKSPACE:/app") {
                                 sh "python3 -m black ."
                             }
                         }
@@ -64,7 +64,7 @@ pipeline {
                 stage("Code coverage") {
                     steps {
                         script {
-                            customImage.inside("-v $WORKSPACE:/app") {
+                            testImage.inside("-v $WORKSPACE:/app") {
                                 sh "python3 -m pytest --cov=src automated_tests/ --cov-fail-under=95 --cov-report=html"
                             }
                             publishHTML target: [
@@ -78,12 +78,24 @@ pipeline {
                         }
                     }
                 }
+                stage ("Scan for skipped tests") {
+                    when {
+                        expression {
+                            return env.BRANCH_NAME == 'release' || env.BRANCH_NAME == 'master'
+                        }
+                    }
+                    steps {
+                        script {
+                            sh 'python3 automated_tests/tools/python/scan_for_skipped_tests.py'
+                        }
+                    }
+                }
             }
         }
         stage ("Run unit tests") {
             steps {
                 script {
-                    customImage.inside("-v $WORKSPACE:/app") {
+                    testImage.inside("-v $WORKSPACE:/app") {
                         sh "python3 -m pytest -m unittest -v --junitxml=results/unittests_results.xml"
                     }
                 }
@@ -93,8 +105,8 @@ pipeline {
             matrix {
                 axes {
                     axis {
-                        name "TEST_GROUP"
-                        values "google"
+                        name 'TEST_GROUP'
+                        values 'iso', 'grub', 'image', 'install'
                     }
                 }
                 stages {
@@ -117,21 +129,45 @@ pipeline {
             }
         }
         stage ("Staging") {
-            when {
-                expression {
-                    return env.REGULAR_BUILD == true
+            stages {
+                stage ("Build docker compose") {
+                    steps {
+                        script {
+                            sh "docker compose build --no-cache"
+                        }
+                    }
                 }
-            }
-            parallel {
-                stage ("Scan for skipped tests") {
+                stage ("Run app & health check") {
+                    steps {
+                        script {
+                            sh "tools/shells_scripts/app_health_check.sh 30"
+                        }
+                    }
+
+                }
+                stage ("Push docker image") {
+                    steps {
+                        script {
+                            def registryPath = "http://localhost:5000"
+                            if (env.BRANCH_NAME == "master") {
+                                registryPath = "https://index.docker.io/v1/"
+                            }
+                            docker.withRegistry("${registryPath}", "dockerhub_creds") {
+                                def customImage = docker.build("CarelessVaquita:${env.BUILD_ID}")
+                                customImage.push()
+                            }
+                        }
+                    }
+                }
+                stage ("Push tag") {
                     when {
                         expression {
-                            return env.BRANCH_NAME == "release" || env.BRANCH_NAME == "master"
+                            return env.BRANCH_NAME == 'master'
                         }
                     }
                     steps {
                         script {
-                            sh "python3 automated_tests/tools/python/scan_for_skipped_tests.py"
+                            sh "tools/shells_scripts/create_and_push_tag.sh ${BRANCH_NAME}-${env.BUILD_ID} ${env.BUILD_ID}"
                         }
                     }
                 }
