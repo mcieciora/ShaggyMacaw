@@ -110,7 +110,7 @@ pipeline {
                     stage("Test stage") {
                         steps {
                             script {
-                                if (env.TEST_GROUP == "all" || env.TEST_GROUPS.contains(TEST_GROUP)) {
+                                if (env.TEST_GROUPS == "all" || env.TEST_GROUPS.contains(TEST_GROUP)) {
                                     echo "Running ${TEST_GROUP}"
                                     customImage.inside("-v $WORKSPACE:/app") {
                                         sh "python3 -m pytest -m ${FLAG} -k ${TEST_GROUP} -v --junitxml=results/${TEST_GROUP}_results.xml"
