@@ -12,7 +12,7 @@ pipeline {
             steps {
                 script {
                     build job: 'regression_auto_job',
-                    parameters: [string(name: 'FLAG', value: params.FLAG), string(name: 'TEST_GROUP', value: 'iso'), booleanParam(name: 'REGULAR_BUILD', value: false)],
+                    parameters: [string(name: 'FLAG', value: params.FLAG), string(name: 'TEST_GROUP', value: params.TEST_GROUP), booleanParam(name: 'REGULAR_BUILD', value: false)],
                     waitForStart: true
                 }
             }
