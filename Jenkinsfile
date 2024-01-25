@@ -8,6 +8,15 @@ pipeline {
         REGULAR_BUILD = getValue("REGULAR_BUILD", true)
     }
     stages {
+        stage ("Build info") {
+            steps {
+                script {
+                    echo "${FLAG}"
+                    echo "${TEST_GROUP}"
+                    echo "${REGULAR_BUILD}"
+                }
+            }
+        }
         stage ("Prepare docker test image") {
             steps {
                 script {
@@ -129,6 +138,11 @@ pipeline {
             }
         }
         stage ("Staging") {
+            when {
+                expression {
+                    return env.REGULAR_BUILD == true
+                }
+            }
             stages {
                 stage ("Build docker compose") {
                     steps {
@@ -146,6 +160,11 @@ pipeline {
 
                 }
                 stage ("Push docker image") {
+                    when {
+                        expression {
+                            return env.BRANCH_NAME == "master" || env.BRANCH_NAME == "develop"
+                        }
+                    }
                     steps {
                         script {
                             def registryPath = "http://localhost:5000"
