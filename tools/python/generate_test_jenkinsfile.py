@@ -1,6 +1,8 @@
 from os.path import join
 from sys import argv
 
+global PROJECT_ROOT_PATH
+
 
 def _get_template_content():
     """
