@@ -8,15 +8,6 @@ pipeline {
         REGULAR_BUILD = getValue("REGULAR_BUILD", true)
     }
     stages {
-        stage ("Show parameters") {
-            steps {
-                script {
-                    echo "${FLAG}"
-                    echo "${TEST_GROUPS}"
-                    echo "${REGULAR_BUILD}"
-                }
-            }
-        }
         stage ("Prepare docker test image") {
             steps {
                 script {
