@@ -145,6 +145,7 @@ pipeline {
                 stage ("Run app & health check") {
                     steps {
                         script {
+                            sh "chmod +x tools/shell_scripts/app_health_check.sh"
                             sh "tools/shell_scripts/app_health_check.sh 30"
                         }
                     }
@@ -177,7 +178,8 @@ pipeline {
                     }
                     steps {
                         script {
-                            sh "tools/shells_scripts/create_and_push_tag.sh ${BRANCH_NAME}-${env.BUILD_ID} ${env.BUILD_ID}"
+                        sh "chmod +x tools/shell_scripts/create_and_push_tag.sh"
+                            sh "tools/shell_scripts/create_and_push_tag.sh ${BRANCH_NAME}-${env.BUILD_ID} ${env.BUILD_ID}"
                         }
                     }
                 }
