@@ -145,7 +145,7 @@ pipeline {
                 stage ("Run app & health check") {
                     steps {
                         script {
-                            sh "tools/shells_scripts/app_health_check.sh 30"
+                            sh "tools/shell_scripts/app_health_check.sh 30"
                         }
                     }
 
