@@ -146,7 +146,7 @@ pipeline {
                     steps {
                         script {
                             sh "chmod +x tools/shell_scripts/app_health_check.sh"
-                            sh "tools/shell_scripts/app_health_check.sh 30"
+                            sh "tools/shell_scripts/app_health_check.sh 30 1"
                         }
                     }
 
