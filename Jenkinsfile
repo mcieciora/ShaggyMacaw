@@ -8,18 +8,6 @@ pipeline {
         REGULAR_BUILD = getValue("REGULAR_BUILD", true)
     }
     stages {
-        stage ("Build info") {
-            steps {
-                script {
-                    echo "${FLAG}"
-                    echo "${env.FLAG.getClass()}"
-                    echo "${TEST_GROUPS}"
-                    echo "${env.TEST_GROUPS.getClass()}"
-                    echo "${REGULAR_BUILD}"
-                    echo "${env.REGULAR_BUILD.getClass()}"
-                }
-            }
-        }
         stage ("Prepare docker test image") {
             steps {
                 script {
@@ -30,7 +18,7 @@ pipeline {
         stage("Code analysis") {
             when {
                 expression {
-                    return env.REGULAR_BUILD == true
+                    return env.REGULAR_BUILD == "true"
                 }
             }
             parallel {
@@ -143,7 +131,7 @@ pipeline {
         stage ("Staging") {
             when {
                 expression {
-                    return env.REGULAR_BUILD == true
+                    return env.REGULAR_BUILD == "true"
                 }
             }
             stages {
