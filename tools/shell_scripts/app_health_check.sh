@@ -8,7 +8,7 @@ docker compose up -d
 echo "Sleeping for $CHECK_TIME"
 sleep "$CHECK_TIME"
 
-VALUE=$(docker ps -q | wc -l)
+VALUE=$(docker ps -q -f "name=app" | wc -l)
 
 if [ "$VALUE" -eq "$EXPECTED_VALUE" ]; then
   exit 0

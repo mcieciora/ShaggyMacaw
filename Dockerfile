@@ -6,4 +6,4 @@ COPY requirements.txt /app
 
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-ENTRYPOINT ["sleep", "75"]
+ENTRYPOINT ["sleep", "180"]
