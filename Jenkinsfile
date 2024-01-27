@@ -12,8 +12,11 @@ pipeline {
             steps {
                 script {
                     echo "${FLAG}"
+                    echo "${env.FLAG.getClass()}"
                     echo "${TEST_GROUPS}"
+                    echo "${env.TEST_GROUPS.getClass()}"
                     echo "${REGULAR_BUILD}"
+                    echo "${env.REGULAR_BUILD.getClass()}"
                 }
             }
         }
