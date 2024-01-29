@@ -151,8 +151,7 @@ pipeline {
                     }
                     post {
                         always {
-                            sh "docker compose down"
-                            sh "docker compose rm -fsv"
+                            sh "docker system prune -af"
                         }
                     }
                 }
