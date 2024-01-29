@@ -149,7 +149,11 @@ pipeline {
                             sh "tools/shell_scripts/app_health_check.sh 30 1"
                         }
                     }
-
+                    post {
+                        always {
+                            sh "docker compose down --rmi all -v"
+                        }
+                    }
                 }
                 stage ("Push docker image") {
                     when {
@@ -188,11 +192,15 @@ pipeline {
     }
     post {
         always {
+            sh "docker rmi test_image:${env.BUILD_ID}"
             archiveArtifacts artifacts: "**/*.xml, htmlcov/*.html"
             junit "**/*.xml"
             dir("$WORKSPACE") {
                 deleteDir()
             }
+            sh "docker images"
+            sh "docker container ls -a"
+            sh "docker volume ls"
         }
     }
 }
