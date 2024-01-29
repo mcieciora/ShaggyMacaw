@@ -197,6 +197,7 @@ pipeline {
         always {
             archiveArtifacts artifacts: "**/*.xml, htmlcov/*.html"
             junit "**/*.xml"
+            sh "docker rmi test_image:${env.BUILD_ID}"
             dir("$WORKSPACE") {
                 deleteDir()
             }
