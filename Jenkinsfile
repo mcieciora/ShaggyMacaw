@@ -152,9 +152,6 @@ pipeline {
                     post {
                         always {
                             sh "docker compose down --rmi all -v"
-                            sh "docker images"
-                            sh "docker container ls -a"
-                            sh "docker volume ls"
                         }
                     }
                 }
@@ -195,12 +192,15 @@ pipeline {
     }
     post {
         always {
+            sh "docker rmi test_image:${env.BUILD_ID}"
             archiveArtifacts artifacts: "**/*.xml, htmlcov/*.html"
             junit "**/*.xml"
-            sh "docker rmi test_image:${env.BUILD_ID}"
             dir("$WORKSPACE") {
                 deleteDir()
             }
+            sh "docker images"
+            sh "docker container ls -a"
+            sh "docker volume ls"
         }
     }
 }
