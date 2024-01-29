@@ -151,7 +151,7 @@ pipeline {
                     }
                     post {
                         always {
-                            sh "docker compose down --rmi -v"
+                            sh "docker compose down --rmi all -v"
                             sh "docker images"
                             sh "docker container ls -a"
                             sh "docker volume ls"
