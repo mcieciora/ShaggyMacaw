@@ -152,6 +152,9 @@ pipeline {
                     post {
                         always {
                             sh "docker system prune -af"
+                            sh "docker images"
+                            sh "docker container ls -a"
+                            sh "docker volume ls"
                         }
                     }
                 }
