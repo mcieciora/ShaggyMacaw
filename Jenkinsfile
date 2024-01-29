@@ -149,7 +149,11 @@ pipeline {
                             sh "tools/shell_scripts/app_health_check.sh 30 1"
                         }
                     }
-
+                    post {
+                        always {
+                            sh "docker compose rm -fsv"
+                        }
+                    }
                 }
                 stage ("Push docker image") {
                     when {
