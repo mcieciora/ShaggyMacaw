@@ -17,7 +17,15 @@ Currently supported tools and versions:
 - groovy 4.0.18+
 
 <h2>About Vaquita</h2>  
-Vaquita <i>(Phocoena sinus)</i> - TBD
+Vaquita <i>(Phocoena sinus)</i> has a small body with an unusually tall, triangular dorsal fin, a rounded head, and no distinguished beak. 
+The coloration is mostly grey with a darker back and a white ventral field. Prominent black patches surround its lips and eyes. 
+Vaquitas reproduction time is very long as they reach sexual maturity from six years old. 
+Their pregnancies last from 10 to 11 months, and vaquita calves are nursed by their mothers for 6-8 months until becoming independent. 
+In 2023, it was estimated that there are as few as 10 in the wild. 
+The drastic decline in vaquita population is the result of fisheries bycatch in commercial and illegal gillnets, including fisheries targeting the now-endangered Totoaba, 
+shrimp, and other available fish species.
+This animal was chosen as mascot for this project to raise awareness, that there are species critically endangered in the world which the exact number is not precisely 
+known and the moment of extinction will likely go completely unnoticed, but commercial massive fishing that bypasses government regulations will stay intact.
 
 ![vaquita.png](doc/vaquita.PNG)
 
