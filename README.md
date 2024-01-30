@@ -35,55 +35,73 @@ Vaquita <i>(Phocoena sinus)</i> - TBD
 
 - Create empty GitHub repository and clone it:
 
-```git clone <empty_repository_url> && cd <empty_repository_url>```
+```
+git clone <empty_repository_url> && cd <empty_repository_url>
+```
 
 - Sync upstream of your repository to CarelessVaquita
 
-```git remote add upstream https://github.com/mcieciora/CarelessVaquita.git```
+```
+git remote add upstream https://github.com/mcieciora/CarelessVaquita.git
+```
 
 - Pull changes from upstream master branch
 
-```git pull upstream master --allow-unrealted-histories```
+```
+git pull upstream master --allow-unrealted-histories
+```
 
 - Set your repository origin header to master
 
-```git push origin master```
+```
+git push origin master
+```
 
 - Remember to pull from time to time
 
-```git pull upstream master```
+```
+git pull upstream master
+```
 
 <h4>Gitflow part</h4>
 
 - Initialize git flow
 
-```git flow init```
+```
+git flow init
+```
 
 - Map local master branch to remote master branch
 
-```git push --set-upstream origin master```
+```
+git push --set-upstream origin master
+```
 
 - Map local development branch to remote development branch
 
-```git checkout develop && git push --set-upstream origin develop```
+```
+git checkout develop && git push --set-upstream origin develop
+```
 
 - Feature start/finish flow:
 
-```git flow feature start <feature_name>```
+```
+git flow feature start <feature_name>
 
-```touch my_file.txt```
+touch my_file.txt
 
-```git add my_file.txt```
+git add my_file.txt
 
-```git commit -m 'my_file added'```
+git commit -m 'my_file added'
 
-```git push --set-upstream origin feature/<feature_name>```
+git push --set-upstream origin feature/<feature_name>
 
-```git push```
+git push
 
-```git flow feature finish feature_name```
+git flow feature finish feature_name
 
-```git push```
+git push
+```
 
 <h2>Known issues</h2>
 
@@ -92,6 +110,8 @@ Vaquita <i>(Phocoena sinus)</i> - TBD
 - Main Jenkinsfile produces too many artifacts
   
 - Docker image push step does not work with dockerhub and local registry
+
+
 
 Happy Vaquiting ;)  
 
