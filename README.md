@@ -115,11 +115,6 @@ git push
 
 - Jenkins CasC uses host docker.sock
 
-- Main Jenkinsfile produces too many artifacts
-  
-- Docker image push step does not work with dockerhub and local registry
-
-
 
 Happy Vaquiting ;)  
 
