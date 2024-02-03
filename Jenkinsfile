@@ -90,14 +90,16 @@ pipeline {
                     }
                 }
                 stage ("Scan for skipped tests") {
-                    when {
-                        expression {
-                            return env.BRANCH_NAME == "release" || env.BRANCH_NAME == "master"
-                        }
-                    }
+//                    when {
+//                        expression {
+//                            return env.BRANCH_NAME == "release" || env.BRANCH_NAME == "master"
+//                        }
+//                    }
                     steps {
                         script {
-                            sh "python3 automated_tests/tools/python/scan_for_skipped_tests.py"
+                            testImage.inside("-v $WORKSPACE:/app") {
+                                sh "python3 automated_tests/tools/python/scan_for_skipped_tests.py"
+                            }
                         }
                     }
                 }
@@ -188,15 +190,16 @@ pipeline {
                     }
                 }
                 stage ("Push tag") {
-                    when {
-                        expression {
-                            return env.BRANCH_NAME == "master"
-                        }
-                    }
+//                    when {
+//                        expression {
+//                            return env.BRANCH_NAME == "master"
+//                        }
+//                    }
                     steps {
                         script {
                             sh "chmod +x tools/shell_scripts/create_and_push_tag.sh"
-                            sh "tools/shell_scripts/create_and_push_tag.sh ${BRANCH_NAME}_${env.BUILD_ID} ${env.BUILD_ID}"
+//                            sh "tools/shell_scripts/create_and_push_tag.sh ${BRANCH_NAME}_${env.BUILD_ID} ${env.BUILD_ID}"
+                            sh "tools/shell_scripts/create_and_push_tag.sh test_${env.BUILD_ID} ${env.BUILD_ID}"
                         }
                     }
                 }
