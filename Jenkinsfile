@@ -6,8 +6,19 @@ pipeline {
         FLAG = getValue("FLAG", "smoke")
         TEST_GROUPS = getValue("TEST_GROUP", "all")
         REGULAR_BUILD = getValue("REGULAR_BUILD", true)
+        BRANCH_TO_USE = getValue("BRANCH", env.BRANCH_NAME)
+    }
+    options {
+        skipDefaultCheckout()
     }
     stages {
+        stage ("Checkout branch") {
+            steps {
+                script {
+                    git branch: "${BRANCH_TO_USE}", url: "https://github.com/mcieciora/CarelessVaquita.git"
+                }
+            }
+        }
         stage ("Prepare docker test image") {
             steps {
                 script {
@@ -198,9 +209,6 @@ pipeline {
             dir("$WORKSPACE") {
                 deleteDir()
             }
-            sh "docker images"
-            sh "docker container ls -a"
-            sh "docker volume ls"
         }
     }
 }
