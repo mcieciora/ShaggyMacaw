@@ -180,7 +180,8 @@ pipeline {
                                 registryPath = "https://index.docker.io/v1/"
                             }
                             docker.withRegistry("${registryPath}", "dockerhub_creds") {
-                                def customImage = docker.build("careless_vaquita:${BRANCH_NAME}_${env.BUILD_ID}")
+//                                def customImage = docker.build("careless_vaquita:${BRANCH_NAME}_${env.BUILD_ID}")
+                                def customImage = docker.build("careless_vaquita:test_${env.BUILD_ID}")
                                 customImage.push()
                             }
                         }
