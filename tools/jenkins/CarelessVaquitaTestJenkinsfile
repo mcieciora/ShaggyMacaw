@@ -7,6 +7,7 @@ pipeline {
         TEST_GROUPS = getValue("TEST_GROUP", "all")
         REGULAR_BUILD = getValue("REGULAR_BUILD", true)
         BRANCH_TO_USE = getValue("BRANCH", env.BRANCH_NAME)
+        REPO_URL = "https://github.com/mcieciora/CarelessVaquita.git"
     }
     options {
         skipDefaultCheckout()
@@ -15,7 +16,7 @@ pipeline {
         stage ("Checkout branch") {
             steps {
                 script {
-                    git branch: "${BRANCH_TO_USE}", url: "https://github.com/mcieciora/CarelessVaquita.git"
+                    git branch: "${BRANCH_TO_USE}", url: REPO_URL
                 }
             }
         }
@@ -97,14 +98,16 @@ pipeline {
                     }
                 }
                 stage ("Scan for skipped tests") {
-                    when {
-                        expression {
-                            return env.BRANCH_NAME == "release" || env.BRANCH_NAME == "master"
-                        }
-                    }
+//                    when {
+//                        expression {
+//                            return env.BRANCH_NAME == "release" || env.BRANCH_NAME == "master"
+//                        }
+//                    }
                     steps {
                         script {
-                            sh "python3 automated_tests/tools/python/scan_for_skipped_tests.py"
+                            testImage.inside("-v $WORKSPACE:/app") {
+                                sh "python3 tools/python/scan_for_skipped_tests.py"
+                            }
                         }
                     }
                 }
@@ -195,15 +198,22 @@ pipeline {
                     }
                 }
                 stage ("Push tag") {
-                    when {
-                        expression {
-                            return env.BRANCH_NAME == "master"
-                        }
-                    }
+//                    when {
+//                        expression {
+//                            return env.BRANCH_NAME == "master"
+//                        }
+//                    }
                     steps {
                         script {
-                            sh "chmod +x tools/shell_scripts/create_and_push_tag.sh"
-                            sh "tools/shell_scripts/create_and_push_tag.sh ${BRANCH_NAME}_${env.BUILD_ID} ${env.BUILD_ID}"
+//                            sh "tools/shell_scripts/create_and_push_tag.sh ${BRANCH_NAME}_${env.BUILD_ID} ${env.BUILD_ID}"
+//                            def TAG_NAME = "${BRANCH_NAME}_${env.BUILD_ID}"
+                            def TAG_NAME = "test_${env.BUILD_ID}"
+                            withCredentials([usernamePassword(
+                            credentialsId: "github_id",
+                            passwordVariable: "GIT_PASSWORD",
+                            usernameVariable: "GIT_USERNAME")]) {
+                                sh "git tag -a $TAG_NAME -m $TAG_NAME && git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${env.REPO_URL} ${env.BUILD_ID}"
+                            }
                         }
                     }
                 }
@@ -215,16 +225,6 @@ pipeline {
             sh "docker rmi test_image:${env.BUILD_ID}"
             archiveArtifacts artifacts: "**/*_results.xml"
             junit "**/*_results.xml"
-            publishHTML([
-                allowMissing: false,
-                alwaysLinkToLastBuild: true,
-                keepAll: false,
-                reportDir: 'htmlcov',
-                reportFiles: 'index.html',
-                reportName: 'Coverage report',
-                reportTitles: '',
-                useWrapperFileDirectly: true
-            ])
             dir("$WORKSPACE") {
                 deleteDir()
             }

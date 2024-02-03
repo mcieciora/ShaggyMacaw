@@ -7,6 +7,7 @@ pipeline {
         TEST_GROUPS = getValue("TEST_GROUP", "all")
         REGULAR_BUILD = getValue("REGULAR_BUILD", true)
         BRANCH_TO_USE = getValue("BRANCH", env.BRANCH_NAME)
+        REPO_URL = "https://github.com/mcieciora/CarelessVaquita.git"
     }
     options {
         skipDefaultCheckout()
@@ -15,7 +16,7 @@ pipeline {
         stage ("Checkout branch") {
             steps {
                 script {
-                    git branch: "${BRANCH_TO_USE}", url: "https://github.com/mcieciora/CarelessVaquita.git"
+                    git branch: "${BRANCH_TO_USE}", url: REPO_URL
                 }
             }
         }
@@ -197,9 +198,15 @@ pipeline {
 //                    }
                     steps {
                         script {
-                            sh "chmod +x tools/shell_scripts/create_and_push_tag.sh"
 //                            sh "tools/shell_scripts/create_and_push_tag.sh ${BRANCH_NAME}_${env.BUILD_ID} ${env.BUILD_ID}"
-                            sh "tools/shell_scripts/create_and_push_tag.sh test_${env.BUILD_ID} ${env.BUILD_ID}"
+//                            def TAG_NAME = "${BRANCH_NAME}_${env.BUILD_ID}"
+                            def TAG_NAME = "test_${env.BUILD_ID}"
+                            withCredentials([usernamePassword(
+                            credentialsId: "github_id",
+                            passwordVariable: "GIT_PASSWORD",
+                            usernameVariable: "GIT_USERNAME")]) {
+                                sh "git tag -a $TAG_NAME -m $TAG_NAME && git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${env.REPO_URL} ${env.BUILD_ID}"
+                            }
                         }
                     }
                 }
