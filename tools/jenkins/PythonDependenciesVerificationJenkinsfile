@@ -28,6 +28,7 @@ pipeline {
     }
     post {
         always {
+            sh "docker rmi test_image:${env.BUILD_ID}"
             dir("$WORKSPACE") {
                 deleteDir()
             }
