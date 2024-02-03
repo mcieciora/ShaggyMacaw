@@ -22,8 +22,9 @@ def _get_injection_index(jenkinsfile_content):
     """
     return_value = 0
     for index, line in enumerate(jenkinsfile_content):
-        if "stages" in line:
-            return_value = index + 1
+        if "Prepare docker test image" in line:
+            return_value = index
+            break
     return return_value
 
 
