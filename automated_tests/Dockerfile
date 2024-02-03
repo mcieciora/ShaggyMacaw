@@ -1,12 +1,13 @@
-FROM python:3.11-slim
+FROM python:3.12.1-slim
 
-COPY requirements.txt requirements/requirements-testing.txt pytest.ini app/
+WORKDIR /app
+COPY requirements.txt requirements/requirements-testing.txt pytest.ini ./
 
-COPY automated_tests app/automated_tests/
+WORKDIR /app/automated_tests
+COPY automated_tests .
 
-COPY src app/src/
+WORKDIR /app/src
+COPY src .
 
-WORKDIR app
-
-RUN python3 -m pip install -r requirements.txt
-RUN python3 -m pip install -r requirements-testing.txt
+WORKDIR /app
+RUN python3 -m pip install --no-cache-dir -r requirements.txt -r requirements-testing.txt

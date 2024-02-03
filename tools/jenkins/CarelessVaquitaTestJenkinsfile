@@ -19,6 +19,13 @@ pipeline {
                 }
             }
         }
+        stage("Prepare workspace for Jenkinsfile testing") {
+            steps {
+                script {
+                    echo "Dummy code"
+                }
+            }
+        }
         stage ("Prepare docker test image") {
             steps {
                 script {

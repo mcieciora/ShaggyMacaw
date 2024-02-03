@@ -1,4 +1,4 @@
-from sys import exit
+from sys import exit  # pylint: disable=redefined-builtin
 from glob import glob
 
 
@@ -16,8 +16,8 @@ def main():
                 skipped_tests_dict[python_file] = file_content.count(pattern)
                 print(f'[ERR] {file_content.count(pattern)} skip mark(s) found in: {python_file}')
     if skipped_tests_dict.keys():
-        return 1
+        exit(1)
 
 
 if __name__ == '__main__':
-    exit(main())
+    main()
