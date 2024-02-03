@@ -206,8 +206,18 @@ pipeline {
     post {
         always {
             sh "docker rmi test_image:${env.BUILD_ID}"
-            archiveArtifacts artifacts: "**/*.xml, htmlcov/*.html"
-            junit "**/*.xml"
+            archiveArtifacts artifacts: "**/*_results.xml"
+            junit "**/*_results.xml"
+            publishHTML([
+                allowMissing: false,
+                alwaysLinkToLastBuild: true,
+                keepAll: false,
+                reportDir: 'htmlcov',
+                reportFiles: 'index.html',
+                reportName: 'Coverage report',
+                reportTitles: '',
+                useWrapperFileDirectly: true
+            ])
             dir("$WORKSPACE") {
                 deleteDir()
             }
