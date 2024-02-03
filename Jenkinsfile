@@ -167,14 +167,14 @@ pipeline {
                     }
                 }
                 stage ("Push docker image") {
-                    when {
-                        expression {
-                            return env.BRANCH_NAME == "master" || env.BRANCH_NAME == "develop"
-                        }
-                    }
+//                    when {
+//                        expression {
+//                            return env.BRANCH_NAME == "master" || env.BRANCH_NAME == "develop"
+//                        }
+//                    }
                     steps {
                         script {
-                            // def registryPath = "http://localhost:5000"
+//                            def registryPath = "http://localhost:5000"
                             def registryPath = "https://index.docker.io/v1/"
                             if (env.BRANCH_NAME == "master") {
                                 registryPath = "https://index.docker.io/v1/"
