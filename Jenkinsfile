@@ -174,7 +174,8 @@ pipeline {
                     }
                     steps {
                         script {
-                            def registryPath = "http://localhost:5000"
+                            // def registryPath = "http://localhost:5000"
+                            def registryPath = "https://index.docker.io/v1/"
                             if (env.BRANCH_NAME == "master") {
                                 registryPath = "https://index.docker.io/v1/"
                             }
