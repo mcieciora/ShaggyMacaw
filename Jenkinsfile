@@ -91,11 +91,11 @@ pipeline {
                     }
                 }
                 stage ("Scan for skipped tests") {
-//                    when {
-//                        expression {
-//                            return env.BRANCH_NAME == "release" || env.BRANCH_NAME == "master"
-//                        }
-//                    }
+                    when {
+                        expression {
+                            return env.BRANCH_NAME == "release" || env.BRANCH_NAME == "master"
+                        }
+                    }
                     steps {
                         script {
                             testImage.inside("-v $WORKSPACE:/app") {
@@ -201,11 +201,9 @@ pipeline {
 //                            sh "tools/shell_scripts/create_and_push_tag.sh ${BRANCH_NAME}_${env.BUILD_ID} ${env.BUILD_ID}"
 //                            def TAG_NAME = "${BRANCH_NAME}_${env.BUILD_ID}"
                             def TAG_NAME = "test_${env.BUILD_ID}"
-                            withCredentials([usernamePassword(
-                            credentialsId: "github_id",
-                            passwordVariable: "GIT_PASSWORD",
-                            usernameVariable: "GIT_USERNAME")]) {
-                                sh "git tag -a $TAG_NAME -m $TAG_NAME && git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${env.REPO_URL} ${env.BUILD_ID}"
+                            withCredentials([sshUserPrivateKey(credentialsId: "github_id", keyFileVariable: 'key')]) {
+                                sh 'GIT_SSH_COMMAND = "ssh -i $key"'
+                                sh "git tag -a $TAG_NAME -m $TAG_NAME && git push origin ${env.BUILD_ID}"
                             }
                         }
                     }
