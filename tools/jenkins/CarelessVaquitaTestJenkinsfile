@@ -1,11 +1,24 @@
-def customImage
+def testImage
 
 pipeline {
     agent any
     environment {
-        FLAG = getTestEnvValue()
+        FLAG = getValue("FLAG", "smoke")
+        TEST_GROUPS = getValue("TEST_GROUP", "all")
+        REGULAR_BUILD = getValue("REGULAR_BUILD", true)
+        BRANCH_TO_USE = getValue("BRANCH", env.BRANCH_NAME)
+    }
+    options {
+        skipDefaultCheckout()
     }
     stages {
+        stage ("Checkout branch") {
+            steps {
+                script {
+                    git branch: "${BRANCH_TO_USE}", url: "https://github.com/mcieciora/CarelessVaquita.git"
+                }
+            }
+        }
         stage("Prepare workspace for Jenkinsfile testing") {
             steps {
                 script {
@@ -16,18 +29,24 @@ pipeline {
         stage ("Prepare docker test image") {
             steps {
                 script {
-                    customImage = docker.build("test_image:${env.BUILD_ID}", "-f automated_tests/Dockerfile .")
+                    testImage = docker.build("test_image:${env.BUILD_ID}", "-f automated_tests/Dockerfile .")
                 }
             }
         }
         stage("Code analysis") {
+            when {
+                expression {
+                    return env.REGULAR_BUILD == "true"
+                }
+            }
             parallel {
                 stage ("Pylint") {
                     steps {
                         script {
-                            customImage.inside("-v $WORKSPACE:/app") {
+                            testImage.inside("-v $WORKSPACE:/app") {
                                 sh "python3 -m pylint src --max-line-length=120 --disable=C0114 --fail-under=9.5"
                                 sh "python3 -m pylint --load-plugins pylint_pytest automated_tests --max-line-length=120 --disable=C0114,C0116 --fail-under=9.5"
+                                sh "python3 -m pylint tools/python --max-line-length=120 --disable=C0114 --fail-under=9.5"
                             }
                         }
                     }
@@ -35,7 +54,7 @@ pipeline {
                 stage ("flake8") {
                     steps {
                         script {
-                            customImage.inside("-v $WORKSPACE:/app") {
+                            testImage.inside("-v $WORKSPACE:/app") {
                                 sh "python3 -m flake8 --max-line-length 120 --max-complexity 10 src"
                             }
                         }
@@ -44,7 +63,7 @@ pipeline {
                 stage ("ruff") {
                     steps {
                         script {
-                            customImage.inside("-v $WORKSPACE:/app") {
+                            testImage.inside("-v $WORKSPACE:/app") {
                                 sh "python3 -m ruff format ."
                                 sh "python3 -m ruff check ."
                             }
@@ -54,7 +73,7 @@ pipeline {
                 stage ("black") {
                     steps {
                         script {
-                            customImage.inside("-v $WORKSPACE:/app") {
+                            testImage.inside("-v $WORKSPACE:/app") {
                                 sh "python3 -m black ."
                             }
                         }
@@ -63,17 +82,29 @@ pipeline {
                 stage("Code coverage") {
                     steps {
                         script {
-                            customImage.inside("-v $WORKSPACE:/app") {
+                            testImage.inside("-v $WORKSPACE:/app") {
                                 sh "python3 -m pytest --cov=src automated_tests/ --cov-fail-under=95 --cov-report=html"
                             }
                             publishHTML target: [
                                 allowMissing: false,
                                 alwaysLinkToLastBuild: false,
                                 keepAll: true,
-                                reportDir: 'htmlcov',
-                                reportFiles: 'index.html',
-                                reportName: 'PyTestCov'
+                                reportDir: "htmlcov",
+                                reportFiles: "index.html",
+                                reportName: "PyTestCov"
                             ]
+                        }
+                    }
+                }
+                stage ("Scan for skipped tests") {
+                    when {
+                        expression {
+                            return env.BRANCH_NAME == "release" || env.BRANCH_NAME == "master"
+                        }
+                    }
+                    steps {
+                        script {
+                            sh "python3 automated_tests/tools/python/scan_for_skipped_tests.py"
                         }
                     }
                 }
@@ -82,7 +113,7 @@ pipeline {
         stage ("Run unit tests") {
             steps {
                 script {
-                    customImage.inside("-v $WORKSPACE:/app") {
+                    testImage.inside("-v $WORKSPACE:/app") {
                         sh "python3 -m pytest -m unittest -v --junitxml=results/unittests_results.xml"
                     }
                 }
@@ -92,17 +123,22 @@ pipeline {
             matrix {
                 axes {
                     axis {
-                        name 'TEST_GROUP'
-                        values 'iso', 'grub', 'image', 'install'
+                        name "TEST_GROUP"
+                        values "google"
                     }
                 }
                 stages {
                     stage("Test stage") {
                         steps {
                             script {
-                                echo "Running ${TEST_GROUP}"
-                                customImage.inside("-v $WORKSPACE:/app") {
-                                    sh "python3 -m pytest -m ${FLAG} -k ${TEST_GROUP} -v --junitxml=results/${TEST_GROUP}_results.xml"
+                                if (env.TEST_GROUPS == "all" || env.TEST_GROUPS.contains(TEST_GROUP)) {
+                                    echo "Running ${TEST_GROUP}"
+                                    testImage.inside("-v $WORKSPACE:/app") {
+                                        sh "python3 -m pytest -m ${FLAG} -k ${TEST_GROUP} -v --junitxml=results/${TEST_GROUP}_results.xml"
+                                    }
+                                }
+                                else {
+                                    echo "Skipping execution."
                                 }
                             }
                         }
@@ -111,16 +147,63 @@ pipeline {
             }
         }
         stage ("Staging") {
-            parallel {
-                stage ("Scan for skipped tests") {
+            when {
+                expression {
+                    return env.REGULAR_BUILD == "true"
+                }
+            }
+            stages {
+                stage ("Build docker compose") {
+                    steps {
+                        script {
+                            sh "docker compose build --no-cache"
+                        }
+                    }
+                }
+                stage ("Run app & health check") {
+                    steps {
+                        script {
+                            sh "chmod +x tools/shell_scripts/app_health_check.sh"
+                            sh "tools/shell_scripts/app_health_check.sh 30 1"
+                        }
+                    }
+                    post {
+                        always {
+                            sh "docker compose down --rmi all -v"
+                        }
+                    }
+                }
+                stage ("Push docker image") {
                     when {
                         expression {
-                            return env.BRANCH_NAME == 'release' || env.BRANCH_NAME == 'master'
+                            return env.BRANCH_NAME == "master" || env.BRANCH_NAME == "develop"
                         }
                     }
                     steps {
                         script {
-                            sh 'python3 automated_tests/tools/python/scan_for_skipped_tests.py'
+                            def registryPath = ""
+                            def containerName = "mcieciora/careless_vaquita:${env.BRANCH_NAME}_${env.BUILD_ID}"
+                            if (env.BRANCH_NAME == "develop") {
+                                registryPath = "http://localhost:5000"
+                                containerName = "careless_vaquita:${env.BRANCH_NAME}_${env.BUILD_ID}"
+                            }
+                            docker.withRegistry("${registryPath}", "dockerhub_id") {
+                                def customImage = docker.build("${containerName}")
+                                customImage.push()
+                            }
+                        }
+                    }
+                }
+                stage ("Push tag") {
+                    when {
+                        expression {
+                            return env.BRANCH_NAME == "master"
+                        }
+                    }
+                    steps {
+                        script {
+                            sh "chmod +x tools/shell_scripts/create_and_push_tag.sh"
+                            sh "tools/shell_scripts/create_and_push_tag.sh ${BRANCH_NAME}_${env.BUILD_ID} ${env.BUILD_ID}"
                         }
                     }
                 }
@@ -129,17 +212,27 @@ pipeline {
     }
     post {
         always {
-            archiveArtifacts artifacts: "**/*.xml, htmlcov/*.html"
-            junit "**/*.xml"
-            cleanWs()
+            sh "docker rmi test_image:${env.BUILD_ID}"
+            archiveArtifacts artifacts: "**/*_results.xml"
+            junit "**/*_results.xml"
+            publishHTML([
+                allowMissing: false,
+                alwaysLinkToLastBuild: true,
+                keepAll: false,
+                reportDir: 'htmlcov',
+                reportFiles: 'index.html',
+                reportName: 'Coverage report',
+                reportTitles: '',
+                useWrapperFileDirectly: true
+            ])
+            dir("$WORKSPACE") {
+                deleteDir()
+            }
         }
     }
 }
 
-def getTestEnvValue() {
-    String return_value = "smoke"
-    if (params.containsKey("TEST_FLAG")) {
-        return_value = "${TEST_FLAG}"
-    }
-    return return_value
+
+def getValue(variable, defaultValue) {
+    return params.containsKey(variable) ? params.get(variable) : defaultValue
 }
