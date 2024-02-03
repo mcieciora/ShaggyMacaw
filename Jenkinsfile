@@ -98,7 +98,7 @@ pipeline {
                     steps {
                         script {
                             testImage.inside("-v $WORKSPACE:/app") {
-                                sh "python3 automated_tests/tools/python/scan_for_skipped_tests.py"
+                                sh "python3 tools/python/scan_for_skipped_tests.py"
                             }
                         }
                     }
@@ -211,16 +211,6 @@ pipeline {
             sh "docker rmi test_image:${env.BUILD_ID}"
             archiveArtifacts artifacts: "**/*_results.xml"
             junit "**/*_results.xml"
-            publishHTML([
-                allowMissing: false,
-                alwaysLinkToLastBuild: true,
-                keepAll: false,
-                reportDir: 'htmlcov',
-                reportFiles: 'index.html',
-                reportName: 'Coverage report',
-                reportTitles: '',
-                useWrapperFileDirectly: true
-            ])
             dir("$WORKSPACE") {
                 deleteDir()
             }
