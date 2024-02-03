@@ -167,18 +167,18 @@ pipeline {
                     }
                 }
                 stage ("Push docker image") {
-//                    when {
-//                        expression {
-//                            return env.BRANCH_NAME == "master" || env.BRANCH_NAME == "develop"
-//                        }
-//                    }
+                    when {
+                        expression {
+                            return env.BRANCH_NAME == "master" || env.BRANCH_NAME == "develop"
+                        }
+                    }
                     steps {
                         script {
                             def registryPath = ""
-                            def containerName = "mcieciora/careless_vaquita:test_${env.BUILD_ID}"
-                            if (env.BRANCH_NAME != "develop") {
+                            def containerName = "mcieciora/careless_vaquita:${env.BRANCH_NAME}_${env.BUILD_ID}"
+                            if (env.BRANCH_NAME == "develop") {
                                 registryPath = "http://localhost:5000"
-                                containerName = "careless_vaquita:test_${env.BUILD_ID}"
+                                containerName = "careless_vaquita:${env.BRANCH_NAME}_${env.BUILD_ID}"
                             }
                             docker.withRegistry("${registryPath}", "dockerhub_id") {
                                 def customImage = docker.build("${containerName}")
