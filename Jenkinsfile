@@ -206,8 +206,9 @@ pipeline {
     post {
         always {
             sh "docker rmi test_image:${env.BUILD_ID}"
-            archiveArtifacts artifacts: "**/*.xml, htmlcov/*.html"
-            junit "**/*.xml"
+            sh "ls htmlcov/"
+            archiveArtifacts artifacts: "**/*_results.xml, htmlcov/*.html"
+            junit "**/*_results.xml"
             dir("$WORKSPACE") {
                 deleteDir()
             }
