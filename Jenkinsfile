@@ -175,12 +175,13 @@ pipeline {
                     steps {
                         script {
                             def registryPath = ""
-                            if (env.BRANCH_NAME == "develop") {
+                            def containerName = "mcieciora/careless_vaquita:test_${env.BUILD_ID}"
+                            if (env.BRANCH_NAME != "develop") {
                                 registryPath = "http://localhost:5000"
+                                containerName = "careless_vaquita:test_${env.BUILD_ID}"
                             }
                             docker.withRegistry("${registryPath}", "dockerhub_id") {
-//                              def customImage = docker.build("careless_vaquita:${BRANCH_NAME}_${env.BUILD_ID}")
-                                def customImage = docker.build("mcieciora/careless_vaquita:test_${env.BUILD_ID}")
+                                def customImage = docker.build("${containerName}")
                                 customImage.push()
                             }
                         }
