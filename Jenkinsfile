@@ -16,7 +16,8 @@ pipeline {
         stage ("Checkout branch") {
             steps {
                 script {
-                    withCredentials([sshUserPrivateKey(credentialsId: "github_id")]) {
+                    withCredentials([sshUserPrivateKey(credentialsId: "github_id", keyFileVariable: 'key')]) {
+                        sh 'GIT_SSH_COMMAND="ssh -i $key"'
                         git branch: env.BRANCH_TO_USE, url: env.REPO_URL
                     }
                 }
