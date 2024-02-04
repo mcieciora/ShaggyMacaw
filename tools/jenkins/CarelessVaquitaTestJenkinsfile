@@ -201,14 +201,14 @@ pipeline {
                     }
                 }
                 stage ("Push tag") {
-//                    when {
-//                        expression {
-//                            return env.BRANCH_NAME == "master"
-//                        }
-//                    }
+                    when {
+                        expression {
+                            return env.BRANCH_NAME == "master"
+                        }
+                    }
                     steps {
                         script {
-                            def TAG_NAME = "test_${env.BUILD_ID}"
+                            def TAG_NAME = "${env.BRANCH_NAME}_${env.BUILD_ID}"
                             withCredentials([sshUserPrivateKey(credentialsId: "github_id", keyFileVariable: 'key')]) {
                                 sh 'GIT_SSH_COMMAND="ssh -i $key"'
                                 sh "git tag -a $TAG_NAME -m $TAG_NAME && git push origin $TAG_NAME"
