@@ -202,7 +202,8 @@ pipeline {
                     steps {
                         script {
                             def TAG_NAME = "test_${env.BUILD_ID}"
-                            withCredentials([sshUserPrivateKey(credentialsId: "github_id")]) {
+                            withCredentials([sshUserPrivateKey(credentialsId: "github_id", keyFileVariable: 'key')]) {
+                                sh 'GIT_SSH_COMMAND="ssh -i $key"'
                                 sh "git tag -a $TAG_NAME -m $TAG_NAME && git push origin $TAG_NAME"
                             }
                         }
