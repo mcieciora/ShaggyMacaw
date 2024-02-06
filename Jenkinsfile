@@ -1,7 +1,12 @@
 def testImage
 
 pipeline {
-    agent any
+    agent {
+        docker {
+          image 'docker:latest'
+          args '--rm --privileged --group-add=docker'
+        }
+    }
     environment {
         FLAG = getValue("FLAG", "smoke")
         TEST_GROUPS = getValue("TEST_GROUP", "all")
