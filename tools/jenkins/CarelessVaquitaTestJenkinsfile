@@ -38,7 +38,7 @@ pipeline {
             }
             steps {
                 script {
-                    echo "Dummy code
+                    echo "Dummy code"
                 }
             }
         }
