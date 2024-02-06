@@ -1,4 +1,9 @@
         stage("Prepare workspace for Jenkinsfile testing") {
+            when {
+                expression {
+                    return env.CUSTOM_WORKSPACE == "true"
+                }
+            }
             steps {
                 script {
                     echo "Dummy code"
