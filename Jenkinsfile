@@ -1,12 +1,7 @@
 def testImage
 
 pipeline {
-    agent {
-        docker {
-          image 'docker:latest'
-          args '--rm --privileged --group-add=docker'
-        }
-    }
+    agent any
     environment {
         FLAG = getValue("FLAG", "smoke")
         TEST_GROUPS = getValue("TEST_GROUP", "all")
@@ -195,6 +190,7 @@ pipeline {
                                 def customImage = docker.build("${containerName}")
                                 customImage.push()
                             }
+                            sh "docker rmi ${containerName}"
                         }
                     }
                 }
