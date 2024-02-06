@@ -12,7 +12,7 @@ pipeline {
         skipDefaultCheckout()
     }
     triggers {
-        cron('H 6 * * * % BRANCH=master \n H 6 * * * % BRANCH=develop')
+        cron('H 6 * * * %BRANCH=master \n H 6 * * * %BRANCH=develop')
     }
     stages {
         stage ("Checkout branch") {
