@@ -5,7 +5,7 @@ STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR | sed 's| |\\ |g
 echo "$STAGED_FILES" | grep -w "Jenkinsfile"
 IS_JENKINSFILE_STAGED=$?
 
-echo "$STAGED_FILES" | grep -w "resources/CarelessVaquitaTestPipelineStageTemplate"
+echo "$STAGED_FILES" | grep "Template"
 IS_TEMPLATE_STAGES=$?
 
 if [ "$IS_JENKINSFILE_STAGED" -eq 0 ] || [ "$IS_TEMPLATE_STAGES" -eq 0 ]; then
