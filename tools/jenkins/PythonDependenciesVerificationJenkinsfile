@@ -3,7 +3,7 @@ def customImage
 pipeline {
     agent any
     parameters {
-        string(name: 'BRANCH', defaultValue: '*/develop', description: "Execution branch")
+        string(name: 'BRANCH', defaultValue: 'develop', description: "Execution branch")
     }
     environment {
         REPO_URL = "git@github.com:mcieciora/CarelessVaquita.git"
