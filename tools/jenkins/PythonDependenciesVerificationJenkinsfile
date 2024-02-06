@@ -2,10 +2,29 @@ def customImage
 
 pipeline {
     agent any
+    parameters {
+        string(name: 'BRANCH', defaultValue: '*/develop', description: "Execution branch")
+    }
+    environment {
+        REPO_URL = "git@github.com:mcieciora/CarelessVaquita.git"
+    }
+    options {
+        skipDefaultCheckout()
+    }
     triggers {
-        cron('H 6 * * *')
+        cron('H 6 * * * % BRANCH=master \n H 6 * * * % BRANCH=develop')
     }
     stages {
+        stage ("Checkout branch") {
+            steps {
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId: "github_id", keyFileVariable: 'key')]) {
+                        sh 'GIT_SSH_COMMAND="ssh -i $key"'
+                        git branch: params.BRANCH, url: env.REPO_URL
+                    }
+                }
+            }
+        }
         stage ("Prepare docker test image") {
             steps {
                 script {
