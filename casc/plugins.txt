@@ -3,3 +3,4 @@ role-strategy:latest
 blueocean:latest
 docker-plugin:latest
 docker-workflow:latest
+parameterized-scheduler:latest
