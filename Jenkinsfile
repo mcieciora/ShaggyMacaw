@@ -190,6 +190,7 @@ pipeline {
                                 def customImage = docker.build("${containerName}")
                                 customImage.push()
                             }
+                            sh "docker rmi ${containerName}"
                         }
                     }
                 }
