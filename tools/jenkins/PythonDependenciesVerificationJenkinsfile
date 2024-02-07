@@ -25,7 +25,7 @@ pipeline {
                         sh 'GIT_SSH_COMMAND="ssh -i $key"'
                         git branch: params.BRANCH, url: env.REPO_URL
                     }
-                    currentBuild.description = "Branch: ${env.BRANCH_TO_USE}"
+                    currentBuild.description = "Branch: ${env.BRANCH}"
                 }
             }
         }
