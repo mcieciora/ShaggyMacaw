@@ -30,7 +30,7 @@ def _get_injection_index(pattern, jenkinsfile_content):
 
 def generate_test_jenkinsfile():
     """
-    Generate TestJenkinsfile by injecting template code (available in CarelessVaquitaTestPipelineStageTemplate) in
+    Generate TestJenkinsfile by injecting template code (available in TestPipeline*Template) in
     line provided by _get_injection_index function.
     :return: None
     """
@@ -42,7 +42,7 @@ def generate_test_jenkinsfile():
         jenkinsfile_content.insert(
             _get_injection_index("environment {", jenkinsfile_content),
             "".join(_get_template_content("tools/resources/TestPipelineParametersTemplate")))
-    with open(join(PROJECT_ROOT_PATH, "tools/jenkins/CarelessVaquitaTestJenkinsfile"), mode="w", encoding="utf-8") \
+    with open(join(PROJECT_ROOT_PATH, "tools/jenkins/ParametrizedTestJenkinsfile"), mode="w", encoding="utf-8") \
             as test_jenkinsfile:
         test_jenkinsfile.writelines(jenkinsfile_content)
 
@@ -50,4 +50,4 @@ def generate_test_jenkinsfile():
 if __name__ == '__main__':
     PROJECT_ROOT_PATH = argv[1]
     generate_test_jenkinsfile()
-    print("Generated tools/jenkins/CarelessVaquitaTestJenkinsfile")
+    print("Generated tools/jenkins/ParametrizedTestJenkinsfile")

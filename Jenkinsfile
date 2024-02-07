@@ -20,6 +20,7 @@ pipeline {
                         sh 'GIT_SSH_COMMAND="ssh -i $key"'
                         git branch: env.BRANCH_TO_USE, url: env.REPO_URL
                     }
+                    currentBuild.description = "Branch: ${env.BRANCH_TO_USE}\nFlag: ${env.FLAG}\nGroups: ${env.TEST_GROUPS}"
                 }
             }
         }
