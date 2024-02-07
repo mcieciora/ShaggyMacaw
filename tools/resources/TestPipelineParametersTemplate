@@ -5,3 +5,9 @@
         string(name: 'BRANCH', defaultValue: '*/develop', description: "Execution branch")
         booleanParam(name: "CUSTOM_WORKSPACE", defaultValue: false, description: "If true workspace will be set up from tools/resources")
     }
+    triggers {
+        parameterizedCron('''
+                H 21 * * * %BRANCH=master;%FLAG=nightly
+                H 21 * * * %BRANCH=develop;%FLAG=nightly
+        ''')
+    }
