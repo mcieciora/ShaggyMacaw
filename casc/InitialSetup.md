@@ -52,7 +52,7 @@ Username: <any> or jenkins_server
 git ls-remote -h -- <your repository SSH url> HEAD
 ```
 
-You should be able now to create simple pipeline job that checks out your repository using keys stored nn Jenkins instance:
+You should be able now to create simple pipeline job that checks out your repository using keys stored in Jenkins instance:
 ```
 pipeline {
     agent any
