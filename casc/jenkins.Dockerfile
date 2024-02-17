@@ -8,6 +8,7 @@ ENV CASC_JENKINS_CONFIG /root/jenkins.yaml
 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
 COPY jenkins.yaml /root/jenkins.yaml
 COPY jobs /root/casc/jobs
+COPY initial_jobs /root/casc/initial_jobs
 RUN jenkins-plugin-cli -f /usr/share/jenkins/ref/plugins.txt
 
 # Install docker
