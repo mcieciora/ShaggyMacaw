@@ -2,7 +2,7 @@
 Careless Vaquita is an <i>open source project base template with ready to go CI/CD setup.</i> It is strongly targeted for Python developers, but with sufficient knowledge and ease, programmers of other languages ​​should have no problem adapting this solution to their needs, because this project only outlines good practices.
 Currently supported tools and versions:
 
-- Jenkins 2.441 
+- Jenkins 2.445 
   - additional plugins listed in casc/plugins.txt
 
 - Python 3.9.18+ 
@@ -111,11 +111,20 @@ git flow feature finish feature_name
 git push
 ```
 
+<h2>How to begin</h2>
+
+<h3>SetupDSLJob</h3>
+
+After logging into your Jenkins instance there should be already one job ready to trigger, called "SetupDSLJobs". It will fail during first execution, because you need to go to Manage Jenkins > In-process Script Approval and Approve all pending scripts. When it is done Build SetupDSLJobs with parameters, put your project name, GitHub url, and it will generate three base pipelines and one view that contains all of them in one place.
+
+![SetupDSLJobs.png](doc/SetupDSLJobs.PNG)
+
 <h2>Known issues</h2>
 
 - Jenkins CasC uses host docker.sock
 - Jenkins CasC does not start with default node configured
 - CUSTOM_WORKSPACE feature is not implemented in pipeline stage
+- SetupDSLJobs pipeline fails during first run
 
 
 Happy Vaquiting ;)  
