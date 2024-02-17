@@ -1,10 +1,10 @@
-listView(env.TEST_TEXT) {
-    description(env.TEST_TEXT)
+listView(INPUT.PROJECT_NAME) {
+    description(INPUT.PROJECT_NAME)
     filterBuildQueue()
     filterExecutors()
     jobs {
-        name('release-projectA')
-        regex('.*Pipeline.*')
+        name('INPUT.PROJECT_NAME')
+        regex('.*INPUT.PROJECT_NAME.*')
     }
     columns {
         status()

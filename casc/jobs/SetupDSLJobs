@@ -1,0 +1,16 @@
+pipelineJob("SetupDSLJobs") {
+    definition {
+        cpsScm {
+            scm {
+                git {
+                    remote {
+                        url("https://github.com/mcieciora/CarelessVaquita.git")
+                    }
+                    branch("*/feature/multiple_projects_creation_from_dsl")
+                }
+            }
+            scriptPath("casc/SetupDSLJobs.Jenkinsfile")
+            lightweight()
+        }
+    }
+}
