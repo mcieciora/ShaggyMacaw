@@ -15,7 +15,7 @@ pipeline {
                         sh "sed -i 's~INPUT.RANDOM_INT~${env.RANDOM_INT}~g' *"
                         sh "ls * | xargs cat"
                     }
-                    jobDsl removedConfigFilesAction: 'DELETE', removedJobAction: 'DELETE', removedViewAction: 'DELETE', targets: 'casc/jobs/*'
+                    jobDsl targets: 'casc/jobs/*'
                 }
             }
         }
