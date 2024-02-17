@@ -34,7 +34,7 @@ jenkins:
             entries:
               - user: "jenkins_user"
 jobs:
-  - file: /root/casc/jobs/SetupDSLJobs
+  - file: /root/casc/initial_jobs/SetupDSLJobs
 unclassified:
   location:
     url: http://localhost:8080

@@ -9,7 +9,7 @@ pipelineJob("SetupDSLJobs") {
                     branch("*/feature/multiple_projects_creation_from_dsl")
                 }
             }
-            scriptPath("casc/SetupDSLJobs.Jenkinsfile")
+            scriptPath("casc/initial_jobs/SetupDSLJobs.Jenkinsfile")
             lightweight()
         }
     }
