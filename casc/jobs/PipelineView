@@ -3,8 +3,8 @@ listView('${env.TEST_TEXT}') {
     filterBuildQueue()
     filterExecutors()
     jobs {
-        name(\'release-projectA\')
-        regex(/.*Pipeline.*/)
+        name('release-projectA')
+        regex(.*Pipeline.*)
     }
     columns {
         status()
