@@ -1,0 +1,17 @@
+listView(\'${env.TEST_TEXT}\') {
+    description(\'${env.TEST_TEXT}\')
+    filterBuildQueue()
+    filterExecutors()
+    jobs {
+        name(\'release-projectA\')
+        regex(/.*Pipeline.*/)
+    }
+    columns {
+        status()
+        weather()
+        name()
+        lastSuccess()
+        lastFailure()
+        lastDuration()
+    }
+}
