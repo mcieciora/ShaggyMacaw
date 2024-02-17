@@ -1,5 +1,5 @@
-listView(INPUT.PROJECT_NAME) {
-    description(INPUT.PROJECT_NAME)
+listView("INPUT.PROJECT_NAME") {
+    description("INPUT.PROJECT_NAME")
     filterBuildQueue()
     filterExecutors()
     jobs {
