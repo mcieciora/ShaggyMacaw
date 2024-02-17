@@ -1,10 +1,10 @@
-pipelineJob("ParametrizedTestPipeline") {
+pipelineJob("ParametrizedTestPipeline_INPUT.PROJECT_NAME") {
     definition {
         cpsScm {
             scm {
                 git {
                     remote {
-                        url("https://github.com/mcieciora/CarelessVaquita.git")
+                        url("INPUT.PROJECT_URL")
                     }
                      branch("*/develop")
                 }

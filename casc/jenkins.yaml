@@ -34,9 +34,7 @@ jenkins:
             entries:
               - user: "jenkins_user"
 jobs:
-  - file: /root/casc/jobs/ParametrizedTestPipeline
-  - file: /root/casc/jobs/PythonDependenciesVerification
-  - file: /root/casc/jobs/MultibranchPipeline
+  - file: /root/casc/initial_jobs/SetupDSLJobs
 unclassified:
   location:
     url: http://localhost:8080
