@@ -13,4 +13,7 @@ pipelineJob("ParametrizedTestPipeline_INPUT.PROJECT_NAME") {
             lightweight()
         }
     }
+    logRotator {
+        daysToKeep(7)
+    }
 }

@@ -13,4 +13,7 @@ pipelineJob("PythonDependenciesVerification_INPUT.PROJECT_NAME") {
             lightweight()
         }
     }
+    logRotator {
+        daysToKeep(7)
+    }
 }
