@@ -14,7 +14,7 @@ pipeline {
                         sh "sed -i 's~INPUT.PROJECT_URL~${env.PROJECT_URL}~g' *"
                         sh "sed -i 's~INPUT.RANDOM_INT~${env.RANDOM_INT}~g' *"
                     }
-                    jobDsl targets: 'casc/jobs/*'
+                    jobDsl sandbox: true targets: 'casc/jobs/*'
                 }
             }
         }
