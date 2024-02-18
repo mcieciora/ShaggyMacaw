@@ -41,6 +41,9 @@ jenkins:
         numExecutors: 1
 jobs:
   - file: /root/casc/initial_jobs/SetupDSLJobs
+security:
+  globalJobDslSecurityConfiguration:
+    useScriptSecurity: false
 unclassified:
   location:
     url: http://localhost:8080
