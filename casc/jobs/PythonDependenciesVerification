@@ -1,4 +1,7 @@
 pipelineJob("PythonDependenciesVerification_INPUT.PROJECT_NAME") {
+    parameters {
+        stringParam("BRANCH", "develop", "Execution branch")
+    }
     definition {
         cpsScm {
             scm {
