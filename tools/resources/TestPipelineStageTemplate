@@ -7,9 +7,6 @@
             steps {
                 script {
                     sh "cp -r tools/resources/resource_project_files/* ."
-                    sh "ls src"
-                    sh "ls automated_tests/nightly"
-                    sh "cat automated_tests/smoke/test_google_com_status_code.py"
                 }
             }
         }
