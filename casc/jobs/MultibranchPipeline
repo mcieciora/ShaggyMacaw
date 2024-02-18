@@ -9,7 +9,12 @@ multibranchPipelineJob("MultibranchPipeline_INPUT.PROJECT_NAME") {
     displayName("MultibranchPipeline_INPUT.PROJECT_NAME")
     triggers {
         periodicFolderTrigger {
-        interval("5m")
+            interval("5m")
+        }
+    }
+    orphanedItemStrategy {
+        discardOldItems {
+            daysToKeep(7)
         }
     }
 }
