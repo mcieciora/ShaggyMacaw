@@ -2,8 +2,6 @@ FROM jenkins/jenkins:2.445-alpine
 
 USER root
 
-RUN apk add --update curl
-
 # Install plugins and setup jenkins instance with CASC
 ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false
 ENV CASC_JENKINS_CONFIG /root/jenkins.yaml
