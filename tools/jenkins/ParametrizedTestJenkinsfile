@@ -45,7 +45,7 @@ pipeline {
             }
             steps {
                 script {
-                    echo "Dummy code"
+                    sh "cp -r tools/resources/resource_project_files/* ."
                 }
             }
         }
@@ -139,7 +139,7 @@ pipeline {
             steps {
                 script {
                     testImage.inside("-v $WORKSPACE:/app") {
-                        sh "python3 -m pytest -m unittest -v --junitxml=results/unittests_results.xml"
+                        sh "python3 -m pytest -m unittest automated_tests -v --junitxml=results/unittests_results.xml"
                     }
                 }
             }
@@ -159,7 +159,7 @@ pipeline {
                                 if (env.TEST_GROUPS == "all" || env.TEST_GROUPS.contains(TEST_GROUP)) {
                                     echo "Running ${TEST_GROUP}"
                                     testImage.inside("-v $WORKSPACE:/app") {
-                                        sh "python3 -m pytest -m ${FLAG} -k ${TEST_GROUP} -v --junitxml=results/${TEST_GROUP}_results.xml"
+                                        sh "python3 -m pytest -m ${FLAG} -k ${TEST_GROUP} automated_tests -v --junitxml=results/${TEST_GROUP}_results.xml"
                                     }
                                 }
                                 else {
