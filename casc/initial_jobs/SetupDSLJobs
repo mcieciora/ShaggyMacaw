@@ -11,7 +11,7 @@ pipelineJob("SetupDSLJobs") {
                     remote {
                         url("https://github.com/mcieciora/CarelessVaquita.git")
                     }
-                    branch("*/feature/fully_dockerized_env")
+                    branch("*/master")
                 }
             }
             scriptPath("casc/initial_jobs/SetupDSLJobs.Jenkinsfile")
