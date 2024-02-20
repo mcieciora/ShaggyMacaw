@@ -10,6 +10,7 @@ services:
   jenkins:
     image: jenkins
     container_name: jenkins
+    privileged: true
     build:
       context: .
       dockerfile: jenkins.Dockerfile
@@ -17,15 +18,6 @@ services:
       - "8080:8080"
     volumes:
       - jenkins-volume:/var/jenkins_home
-  amy:
-    image: agent
-    container_name: amy
-    privileged: true
-    build:
-      context: .
-      dockerfile: agent.Dockerfile
-    volumes:
-      - ./nodes:/root/nodes
 volumes:
   jenkins-volume:
   registry-volume:

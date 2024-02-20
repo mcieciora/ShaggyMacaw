@@ -33,12 +33,6 @@ jenkins:
               - "Job/Read"
             entries:
               - user: "jenkins_user"
-  nodes:
-    - permanent:
-        name: "Amy"
-        remoteFS: "/root/nodes/amy"
-        labelString: "amy"
-        numExecutors: 1
 jobs:
   - file: /root/casc/initial_jobs/SetupDSLJobs
 security:
