@@ -119,13 +119,6 @@ After logging into your Jenkins instance there should be already one job ready t
 
 ![SetupDSLJobs.png](doc/SetupDSLJobs.PNG)
 
-<h2>Known issues</h2>
-
-- Jenkins CasC uses host docker.sock
-- Jenkins CasC does not start with default node configured
-- CUSTOM_WORKSPACE feature is not implemented in pipeline stage
-- SetupDSLJobs pipeline fails during first run
-
 
 Happy Vaquiting ;)  
 
