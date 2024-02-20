@@ -10,7 +10,6 @@ services:
   jenkins:
     image: jenkins
     container_name: jenkins
-    privileged: true
     build:
       context: .
       dockerfile: jenkins.Dockerfile
