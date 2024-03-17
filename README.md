@@ -2,7 +2,7 @@
 Careless Vaquita is an <i>open source project base template with ready to go CI/CD setup.</i> It is strongly targeted for Python developers, but with sufficient knowledge and ease, programmers of other languages ​​should have no problem adapting this solution to their needs, because this project only outlines good practices.
 Currently supported tools and versions:
 
-- Jenkins 2.445 
+- Jenkins 2.449
   - additional plugins listed in casc/plugins.txt
 
 - Python 3.9.18+ 
