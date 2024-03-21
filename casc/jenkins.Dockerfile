@@ -1,5 +1,5 @@
 FROM jenkins/jenkins:2.449-alpine
-
+# hadolint ignore=DL3002
 USER root
 
 # Install plugins and setup jenkins instance with CASC

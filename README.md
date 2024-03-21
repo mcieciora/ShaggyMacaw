@@ -56,7 +56,7 @@ git remote add upstream https://github.com/mcieciora/CarelessVaquita.git
 - Pull changes from upstream master branch
 
 ```
-git pull upstream master --allow-unrealted-histories
+git pull upstream master --allow-unrelated-histories
 ```
 
 - Set your repository origin header to master

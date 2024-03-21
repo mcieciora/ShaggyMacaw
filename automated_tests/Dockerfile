@@ -1,7 +1,8 @@
 FROM python:3.12.1-slim
 
 WORKDIR /app
-COPY requirements.txt requirements/requirements-testing.txt pytest.ini ./
+COPY requirements/testing/requirements.txt ./requirements-testing.txt
+COPY requirements/example_app/requirements.txt pytest.ini ./
 
 WORKDIR /app/automated_tests
 COPY automated_tests .
