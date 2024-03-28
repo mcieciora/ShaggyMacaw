@@ -24,10 +24,21 @@ pipeline {
                 }
             }
         }
-        stage ("Prepare docker test image") {
-            steps {
-                script {
-                    testImage = docker.build("test_image:${env.BUILD_ID}", "-f automated_tests/Dockerfile .")
+        stage ("Prepare docker images") {
+            parallel {
+                stage("Build test image") {
+                    steps {
+                        script {
+                            testImage = docker.build("test_image:${env.BUILD_ID}", "-f automated_tests/Dockerfile .")
+                        }
+                    }
+                }
+                stage ("Build docker compose") {
+                    steps {
+                        script {
+                            sh "docker compose build --no-cache"
+                        }
+                    }
                 }
             }
         }
@@ -153,13 +164,6 @@ pipeline {
                 }
             }
             stages {
-                stage ("Build docker compose") {
-                    steps {
-                        script {
-                            sh "docker compose build --no-cache"
-                        }
-                    }
-                }
                 stage ("Run app & health check") {
                     steps {
                         script {
@@ -217,9 +221,10 @@ pipeline {
     post {
         always {
             sh "docker rmi test_image:${env.BUILD_ID}"
+            sh "docker compose down --rmi all -v"
             archiveArtifacts artifacts: "**/*_results.xml"
             junit "**/*_results.xml"
-            dir("$WORKSPACE") {
+            dir("${WORKSPACE}") {
                 deleteDir()
             }
         }
