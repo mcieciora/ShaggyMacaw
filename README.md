@@ -1,9 +1,6 @@
 <h2>What is <i>CarelessVaquita</i></h2>  
-Careless Vaquita is an <i>open source project base template with ready to go CI/CD setup.</i> It is strongly targeted for Python developers, but with sufficient knowledge and ease, programmers of other languages ​​should have no problem adapting this solution to their needs, because this project only outlines good practices.
+Careless Vaquita is an <i>open source project base template</i> with possibility to add read to go CI/CD setup as well. Check out: [ResponsibleDugong](https://github.com/mcieciora/ResponsibleDugong). This project is strongly targeted for Python developers, but with sufficient knowledge and ease, programmers of other languages ​​should have no problem adapting this solution to their needs, because this project only outlines good practices.
 Currently supported tools and versions:
-
-- Jenkins 2.449
-  - additional plugins listed in casc/plugins.txt
 
 - Python 3.9.18+ 
   - requirements listed in requirements.requirements-testing.txt
@@ -21,7 +18,7 @@ Vaquita <i>(Phocoena sinus)</i> has a small body with an unusually tall, triangu
 The coloration is mostly grey with a darker back and a white ventral field. Prominent black patches surround its lips and eyes. 
 Vaquitas reproduction time is very long as they reach sexual maturity from six years old. 
 Their pregnancies last from 10 to 11 months, and vaquita calves are nursed by their mothers for 6-8 months until becoming independent. 
-In 2023, it was estimated that there are as few as 10 in the wild. 
+In 2023, it was estimated that there were as few as 10 in the wild. 
 The drastic decline in vaquita population is the result of fisheries bycatch in commercial and illegal gillnets, including fisheries targeting the now-endangered Totoaba, 
 shrimp, and other available fish species.
 This animal was chosen as mascot for this project to raise awareness, that there are species critically endangered in the world which the exact number is not precisely 
@@ -110,15 +107,6 @@ git flow feature finish feature_name
 
 git push
 ```
-
-<h2>How to begin</h2>
-
-<h3>SetupDSLJob</h3>
-
-After logging into your Jenkins instance there should be already one job ready to trigger, called "SetupDSLJobs". It will fail during first execution, because you need to go to Manage Jenkins > In-process Script Approval and Approve all pending scripts. When it is done Build SetupDSLJobs with parameters, put your project name, GitHub url, and it will generate three base pipelines and one view that contains all of them in one place.
-
-![SetupDSLJobs.png](doc/SetupDSLJobs.PNG)
-
 
 Happy Vaquiting ;)  
 
