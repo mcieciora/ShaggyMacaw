@@ -38,12 +38,12 @@ pipeline {
                     }
                     steps {
                         script {
-                            testImage = docker.build("mcieciora/careless_vaquita:test_image", "-f automated_tests/Dockerfile .")
-//                            if (env.BRANCH_NAME == "master" || env.BRANCH_NAME == "develop") {
+                            testImage = docker.build("${DOCKERHUB_REPO}:test_image", "-f automated_tests/Dockerfile .")
+                            if (env.BRANCH_NAME == "master" || env.BRANCH_NAME == "develop") {
                                 docker.withRegistry("", "dockerhub_id") {
                                     testImage.push()
                                 }
-//                            }
+                            }
                         }
                     }
                 }
@@ -55,7 +55,7 @@ pipeline {
                     }
                     steps {
                         script {
-                            testImage = docker.image("mcieciora/careless_vaquita:test_image")
+                            testImage = docker.image("${DOCKERHUB_REPO}:test_image")
                         }
                     }
                 }
@@ -241,7 +241,7 @@ pipeline {
     }
     post {
         always {
-            sh "docker rmi test_image:${env.BUILD_ID}"
+            sh "docker rmi ${DOCKERHUB_REPO}:test_image"
             sh "docker compose down --rmi all -v"
             archiveArtifacts artifacts: "**/*_results.xml"
             junit "**/*_results.xml"
