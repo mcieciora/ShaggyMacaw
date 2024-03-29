@@ -1,5 +1,5 @@
 def testImage
-
+Integer build_test_image
 
 pipeline {
     agent any
@@ -22,15 +22,34 @@ pipeline {
                         git branch: env.BRANCH_TO_USE, url: env.REPO_URL
                     }
                     currentBuild.description = "Branch: ${env.BRANCH_TO_USE}\nFlag: ${env.FLAG}\nGroups: ${env.TEST_GROUPS}"
+                    build_test_image = sh(script: "git diff --name-only \$(git rev-parse HEAD) \$(git rev-parse HEAD^1) | grep -e automated_tests -e src -e requirements",
+                                          returnStatus: true)
                 }
             }
         }
         stage ("Prepare docker images") {
             parallel {
                 stage("Build test image") {
+                    when {
+                        expression {
+                            return build_test_image
+                        }
+                    }
                     steps {
                         script {
                             testImage = docker.build("test_image:${env.BUILD_ID}", "-f automated_tests/Dockerfile .")
+                        }
+                    }
+                }
+                stage("Pull test image") {
+                    when {
+                        expression {
+                            return !build_test_image
+                        }
+                    }
+                    steps {
+                        script {
+                            testImage = docker.image("test_image:latest")
                         }
                     }
                 }
