@@ -9,6 +9,7 @@ pipeline {
         REGULAR_BUILD = getValue("REGULAR_BUILD", true)
         BRANCH_TO_USE = getValue("BRANCH", env.BRANCH_NAME)
         REPO_URL = "git@github.com:mcieciora/CarelessVaquita.git"
+        DOCKERHUB_REPO = "mcieciora/careless_vaquita"
     }
     options {
         skipDefaultCheckout()
@@ -32,24 +33,29 @@ pipeline {
                 stage("Build test image") {
                     when {
                         expression {
-                            return build_test_image
+                            return !build_test_image
                         }
                     }
                     steps {
                         script {
-                            testImage = docker.build("test_image:${env.BUILD_ID}", "-f automated_tests/Dockerfile .")
+                            testImage = docker.build("mcieciora/careless_vaquita:test_image", "-f automated_tests/Dockerfile .")
+//                            if (env.BRANCH_NAME == "master" || env.BRANCH_NAME == "develop") {
+                                docker.withRegistry("", "dockerhub_id") {
+                                    testImage.push()
+                                }
+//                            }
                         }
                     }
                 }
                 stage("Pull test image") {
                     when {
                         expression {
-                            return !build_test_image
+                            return build_test_image
                         }
                     }
                     steps {
                         script {
-                            testImage = docker.image("test_image:latest")
+                            testImage = docker.image("mcieciora/careless_vaquita:test_image")
                         }
                     }
                 }
@@ -205,13 +211,8 @@ pipeline {
                     }
                     steps {
                         script {
-                            def registryPath = ""
-                            def containerName = "mcieciora/careless_vaquita:${env.BRANCH_NAME}_${env.BUILD_ID}"
-                            if (env.BRANCH_NAME == "develop") {
-                                registryPath = "http://localhost:5000"
-                                containerName = "careless_vaquita:${env.BRANCH_NAME}_${env.BUILD_ID}"
-                            }
-                            docker.withRegistry("${registryPath}", "dockerhub_id") {
+                            def containerName = "${DOCKERHUB_REPO}:${env.BRANCH_NAME}_${env.BUILD_ID}"
+                            docker.withRegistry("", "dockerhub_id") {
                                 def customImage = docker.build("${containerName}")
                                 customImage.push()
                             }
