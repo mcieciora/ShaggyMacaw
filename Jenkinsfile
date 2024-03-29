@@ -33,7 +33,7 @@ pipeline {
                 stage("Build test image") {
                     when {
                         expression {
-                            return !build_test_image
+                            return build_test_image
                         }
                     }
                     steps {
@@ -50,7 +50,7 @@ pipeline {
                 stage("Pull test image") {
                     when {
                         expression {
-                            return build_test_image
+                            return !build_test_image
                         }
                     }
                     steps {
