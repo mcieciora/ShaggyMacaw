@@ -1,5 +1,6 @@
 def testImage
 
+
 pipeline {
     agent any
     environment {
@@ -130,6 +131,19 @@ pipeline {
                 }
             }
         }
+        stage ("Run app & health check") {
+            steps {
+                script {
+                    sh "chmod +x tools/shell_scripts/app_health_check.sh"
+                    sh "tools/shell_scripts/app_health_check.sh 30 1"
+                }
+            }
+            post {
+                always {
+                    sh "docker compose down --rmi all -v"
+                }
+            }
+        }
         stage("Run tests") {
             matrix {
                 axes {
@@ -163,20 +177,7 @@ pipeline {
                     return env.REGULAR_BUILD == "true"
                 }
             }
-            stages {
-                stage ("Run app & health check") {
-                    steps {
-                        script {
-                            sh "chmod +x tools/shell_scripts/app_health_check.sh"
-                            sh "tools/shell_scripts/app_health_check.sh 30 1"
-                        }
-                    }
-                    post {
-                        always {
-                            sh "docker compose down --rmi all -v"
-                        }
-                    }
-                }
+            parallel {
                 stage ("Push docker image") {
                     when {
                         expression {
