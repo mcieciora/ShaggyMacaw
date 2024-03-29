@@ -1,0 +1,24 @@
+pipeline {
+    agent any
+    triggers {
+        cron('H 6 * * *')
+    }
+    stages {
+        stage ("Analyze images") {
+            steps {
+                script {
+                    sh "chmod +x tools/shell_scripts/scan_docker_images.sh"
+                    sh "tools/shell_scripts/scan_docker_images.sh"
+                }
+            }
+        }
+    }
+    post {
+        always {
+            archiveArtifacts artifacts: 'scan_*', followSymlinks: false
+            dir("${WORKSPACE}") {
+                deleteDir()
+            }
+        }
+    }
+}

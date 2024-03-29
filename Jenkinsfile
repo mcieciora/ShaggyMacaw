@@ -249,12 +249,14 @@ pipeline {
                     }
                     steps {
                         script {
-                            def containerName = "${DOCKERHUB_REPO}:${env.BRANCH_NAME}_${env.BUILD_ID}"
                             docker.withRegistry("", "dockerhub_id") {
-                                def customImage = docker.build("${containerName}")
-                                customImage.push()
+                                def customImage = docker.build("app_image")
+                                customImage.push("${DOCKERHUB_REPO}:${env.BRANCH_NAME}_${env.BUILD_ID}")
+                                if (env.BRANCH_NAME == "master") {
+                                    customImage.push("latest")
+                                }
                             }
-                            sh "docker rmi ${containerName}"
+                            sh "docker rmi app_image"
                         }
                     }
                 }
