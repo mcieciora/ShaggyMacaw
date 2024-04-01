@@ -75,13 +75,13 @@ pipeline {
                 }
             }
             parallel {
-                stage ("Pylint") {
+                stage ("pylint") {
                     steps {
                         script {
                             testImage.inside("-v $WORKSPACE:/app") {
-                                sh "python3 -m pylint src --max-line-length=120 --disable=C0114 --fail-under=9.5"
-                                sh "python3 -m pylint --load-plugins pylint_pytest automated_tests --max-line-length=120 --disable=C0114,C0116 --fail-under=9.5"
-                                sh "python3 -m pylint tools/python --max-line-length=120 --disable=C0114 --fail-under=9.5"
+                                sh "python -m pylint src --max-line-length=120 --disable=C0114 --fail-under=9.5"
+                                sh "python -m pylint --load-plugins pylint_pytest automated_tests --max-line-length=120 --disable=C0114,C0116 --fail-under=9.5"
+                                sh "python -m pylint tools/python --max-line-length=120 --disable=C0114 --fail-under=9.5"
                             }
                         }
                     }
@@ -90,7 +90,7 @@ pipeline {
                     steps {
                         script {
                             testImage.inside("-v $WORKSPACE:/app") {
-                                sh "python3 -m flake8 --max-line-length 120 --max-complexity 10 src"
+                                sh "python -m flake8 --max-line-length 120 --max-complexity 10 src automated_tests tools/python"
                             }
                         }
                     }
@@ -99,8 +99,7 @@ pipeline {
                     steps {
                         script {
                             testImage.inside("-v $WORKSPACE:/app") {
-                                sh "python3 -m ruff format ."
-                                sh "python3 -m ruff check ."
+                                sh "python -m ruff check src automated_tests tools/python"
                             }
                         }
                     }
@@ -109,7 +108,36 @@ pipeline {
                     steps {
                         script {
                             testImage.inside("-v $WORKSPACE:/app") {
-                                sh "python3 -m black ."
+                                sh "python -m black src automated_tests tools/python"
+                            }
+                        }
+                    }
+                }
+                stage ("bandit") {
+                    steps {
+                        script {
+                            testImage.inside("-v $WORKSPACE:/app") {
+                                sh "python -m bandit src automated_tests tools/python"
+                            }
+                        }
+                    }
+                }
+                stage ("pydocstyle") {
+                    steps {
+                        script {
+                            testImage.inside("-v $WORKSPACE:/app") {
+                                sh "python -m pydocstyle ."
+                            }
+                        }
+                    }
+                }
+                stage ("radon") {
+                    steps {
+                        script {
+                            testImage.inside("-v $WORKSPACE:/app") {
+                                sh "python -m radon cc ."
+                                sh "python -m radon mi ."
+                                sh "python -m radon hal ."
                             }
                         }
                     }
@@ -118,7 +146,7 @@ pipeline {
                     steps {
                         script {
                             testImage.inside("-v $WORKSPACE:/app") {
-                                sh "python3 -m pytest --cov=src automated_tests/ --cov-fail-under=95 --cov-report=html"
+                                sh "python -m pytest --cov=src automated_tests/ --cov-fail-under=95 --cov-report=html"
                             }
                             publishHTML target: [
                                 allowMissing: false,
@@ -140,7 +168,7 @@ pipeline {
                     steps {
                         script {
                             testImage.inside("-v $WORKSPACE:/app") {
-                                sh "python3 tools/python/scan_for_skipped_tests.py"
+                                sh "python tools/python/scan_for_skipped_tests.py"
                             }
                         }
                     }
@@ -151,7 +179,7 @@ pipeline {
             steps {
                 script {
                     testImage.inside("-v $WORKSPACE:/app") {
-                        sh "python3 -m pytest -m unittest automated_tests -v --junitxml=results/unittests_results.xml"
+                        sh "python -m pytest -m unittest automated_tests -v --junitxml=results/unittests_results.xml"
                     }
                 }
             }
@@ -184,7 +212,7 @@ pipeline {
                                 if (env.TEST_GROUPS == "all" || env.TEST_GROUPS.contains(TEST_GROUP)) {
                                     echo "Running ${TEST_GROUP}"
                                     testImage.inside("-v $WORKSPACE:/app") {
-                                        sh "python3 -m pytest -m ${FLAG} -k ${TEST_GROUP} automated_tests -v --junitxml=results/${TEST_GROUP}_results.xml"
+                                        sh "python -m pytest -m ${FLAG} -k ${TEST_GROUP} automated_tests -v --junitxml=results/${TEST_GROUP}_results.xml"
                                     }
                                 }
                                 else {

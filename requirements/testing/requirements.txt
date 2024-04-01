@@ -5,3 +5,6 @@ pylint-pytest==1.1.7
 flake8==7.0.0
 black==24.3.0
 ruff==0.3.3
+bandit==1.7.8
+pydocstyle==6.3.0
+radon==6.0.1

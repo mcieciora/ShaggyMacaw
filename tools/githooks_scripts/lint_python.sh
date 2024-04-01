@@ -17,3 +17,6 @@ python -m ruff format src
 
 echo "Running black in src"
 python -m black src
+
+echo "Running pydocstyle in src"
+python -m pydocstyle src

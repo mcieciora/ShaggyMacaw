@@ -9,8 +9,9 @@ def _get_template_content(template_path):
     Get content of template Jenkinsfile.
     :return: Template Jenkinsfile content
     """
-    with open(join(PROJECT_ROOT_PATH, template_path),
-              mode="r", encoding="utf-8") as template:
+    with open(
+        join(PROJECT_ROOT_PATH, template_path), mode="r", encoding="utf-8"
+    ) as template:
         return template.readlines()
 
 
@@ -34,20 +35,29 @@ def generate_test_jenkinsfile():
     line provided by _get_injection_index function.
     :return: None
     """
-    with open(join(PROJECT_ROOT_PATH, "Jenkinsfile"), mode="r", encoding="utf-8") as main_jenkinsfile:
+    with open(
+        join(PROJECT_ROOT_PATH, "Jenkinsfile"), mode="r", encoding="utf-8"
+    ) as main_jenkinsfile:
         jenkinsfile_content = main_jenkinsfile.readlines()
         jenkinsfile_content.insert(
             _get_injection_index("Prepare docker images", jenkinsfile_content),
-            "".join(_get_template_content("tools/resources/TestPipelineStageTemplate")))
+            "".join(_get_template_content("tools/resources/TestPipelineStageTemplate")),
+        )
         jenkinsfile_content.insert(
             _get_injection_index("environment {", jenkinsfile_content),
-            "".join(_get_template_content("tools/resources/TestPipelineParametersTemplate")))
-    with open(join(PROJECT_ROOT_PATH, "tools/jenkins/ParametrizedTestJenkinsfile"), mode="w", encoding="utf-8") \
-            as test_jenkinsfile:
+            "".join(
+                _get_template_content("tools/resources/TestPipelineParametersTemplate")
+            ),
+        )
+    with open(
+        join(PROJECT_ROOT_PATH, "tools/jenkins/ParametrizedTestJenkinsfile"),
+        mode="w",
+        encoding="utf-8",
+    ) as test_jenkinsfile:
         test_jenkinsfile.writelines(jenkinsfile_content)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     PROJECT_ROOT_PATH = argv[1]
     generate_test_jenkinsfile()
     print("Generated tools/jenkins/ParametrizedTestJenkinsfile")

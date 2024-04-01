@@ -10,5 +10,8 @@ COPY automated_tests .
 WORKDIR /app/src
 COPY src .
 
+WORKDIR /app/tools/python
+COPY tools/python .
+
 WORKDIR /app
-RUN python3 -m pip install --no-cache-dir -r requirements.txt -r requirements-testing.txt
+RUN python -m pip install --no-cache-dir -r requirements.txt -r requirements-testing.txt

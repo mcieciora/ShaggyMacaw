@@ -17,14 +17,18 @@ def main():
         with open(req_file, mode="r", encoding="utf-8") as req:
             format_dependency_list = [r.split("=")[0] for r in req.readlines()]
             dependencies_list.extend(format_dependency_list)
-    outdated_dependencies = subprocess.check_output([executable, "-m", "pip", "list", "-o", "--format", "json"])
+    outdated_dependencies = subprocess.check_output(
+        [executable, "-m", "pip", "list", "-o", "--format", "json"]
+    )
     for listed_req in loads(outdated_dependencies):
         if listed_req["name"] in dependencies_list:
-            print(f"{listed_req['name']} is outdated. Consider upgrading from {listed_req['version']} to "
-                  f"{listed_req['latest_version']}")
+            print(
+                f"{listed_req['name']} is outdated. Consider upgrading from {listed_req['version']} to "
+                f"{listed_req['latest_version']}"
+            )
     if non_zero_status_exit:
         exit(1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
