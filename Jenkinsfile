@@ -31,7 +31,7 @@ pipeline {
         }
         stage ("Prepare docker images") {
             parallel {
-                stage("Build test image") {
+                stage ("Build test image") {
                     when {
                         expression {
                             return !pull_test_image || env.FORCE_DOCKER_IMAGE_BUILD
@@ -48,7 +48,7 @@ pipeline {
                         }
                     }
                 }
-                stage("Pull test image") {
+                stage ("Pull test image") {
                     when {
                         expression {
                             return pull_test_image && !env.FORCE_DOCKER_IMAGE_BUILD
@@ -69,7 +69,7 @@ pipeline {
                 }
             }
         }
-        stage("Code analysis") {
+        stage ("Code analysis") {
             when {
                 expression {
                     return env.REGULAR_BUILD == "true"
@@ -152,7 +152,7 @@ pipeline {
                         }
                     }
                 }
-                stage("Code coverage") {
+                stage ("Code coverage") {
                     steps {
                         script {
                             testImage.inside("-v $WORKSPACE:/app") {
@@ -207,7 +207,7 @@ pipeline {
                 }
             }
         }
-        stage("Run tests") {
+        stage ("Run tests") {
             matrix {
                 axes {
                     axis {
@@ -216,7 +216,7 @@ pipeline {
                     }
                 }
                 stages {
-                    stage("Test stage") {
+                    stage ("Test stage") {
                         steps {
                             script {
                                 if (env.TEST_GROUPS == "all" || env.TEST_GROUPS.contains(TEST_GROUP)) {
