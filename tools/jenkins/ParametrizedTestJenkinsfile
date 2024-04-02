@@ -270,9 +270,7 @@ pipeline {
             sh "docker compose down --rmi all -v"
             archiveArtifacts artifacts: "**/*_results.xml"
             junit "**/*_results.xml"
-            dir("${WORKSPACE}") {
-                deleteDir()
-            }
+            cleanWs()
         }
     }
 }
