@@ -11,7 +11,13 @@ for TAG in $TAGS; do
   if [ "$SCAN_RESULT" -ne 0 ]; then
     echo "Vulnerabilities found. Running recommendations"
     docker scout recommendations $DOCKERHUB_REPO:"$TAG" > scan_"$TAG".txt
-    RETURN_VALUE=1
+    IMAGE_UP_TO_DATE=$(grep This image version is up to date scan_"$TAG")
+    RECOMMENDATIONS_AVAILABLE=$(grep There are no tag recommendations at this time scan_"$TAG")
+    if [ "$IMAGE_UP_TO_DATE" -eq 0 ] && [ "$RECOMMENDATIONS_AVAILABLE" -eq 0 ]; then
+      RETURN_VALUE=0
+    else
+      RETURN_VALUE=1
+    fi
   else
     echo "No vulnerabilities detected"
   fi
