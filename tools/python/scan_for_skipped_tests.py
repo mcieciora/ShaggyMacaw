@@ -4,8 +4,8 @@ from glob import glob
 
 def main():
     """
-    This script searches for all skip marks in test suites. Should not be executed on feature branches.
-    
+    This script searches for all skip marks in test suites. Should not be executed on feature branches
+
     :return: None
     """
     skipped_tests_dict = {}

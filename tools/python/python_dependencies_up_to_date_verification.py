@@ -5,10 +5,9 @@ from json import loads
 
 
 def main():
-    """
-    This script compares list of outdated Python dependencies in current environment and the ones declared in all
+    """This script compares list of outdated Python dependencies in current environment and the ones declared in all
     found requirements.txt files. It raises information about possibility to update specific packages, but does not
-    require it.
+    require it
 
     :return: None
     """
