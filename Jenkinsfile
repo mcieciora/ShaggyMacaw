@@ -51,7 +51,7 @@ pipeline {
                 stage("Pull test image") {
                     when {
                         expression {
-                            return pull_test_image
+                            return pull_test_image && !env.FORCE_DOCKER_IMAGE_BUILD
                         }
                     }
                     steps {
