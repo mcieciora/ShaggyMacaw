@@ -10,7 +10,7 @@ pipeline {
         BRANCH_TO_USE = getValue("BRANCH", env.BRANCH_NAME)
         REPO_URL = "git@github.com:mcieciora/CarelessVaquita.git"
         DOCKERHUB_REPO = "mcieciora/careless_vaquita"
-        FORCE_DOCKER_IMAGE_BUILD = getValue("FORCE_BUILD", true)
+        FORCE_DOCKER_IMAGE_BUILD = getValue("FORCE_BUILD", false)
     }
     options {
         skipDefaultCheckout()
