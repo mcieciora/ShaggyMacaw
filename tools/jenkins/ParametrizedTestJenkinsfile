@@ -171,7 +171,7 @@ pipeline {
                     steps {
                         script {
                             testImage.inside("-v $WORKSPACE:/app") {
-                                sh "python3 -m mypy ."
+                                sh "python -m mypy src automated_tests tools/python"
                             }
                         }
                     }
