@@ -142,6 +142,15 @@ pipeline {
                         }
                     }
                 }
+                stage ("mypy") {
+                    steps {
+                        script {
+                            testImage.inside("-v $WORKSPACE:/app") {
+                                sh "python3 -m mypy ."
+                            }
+                        }
+                    }
+                }
                 stage("Code coverage") {
                     steps {
                         script {
