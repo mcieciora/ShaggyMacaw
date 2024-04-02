@@ -7,6 +7,7 @@ PROJECT_ROOT_PATH = None
 def _get_template_content(template_path):
     """
     Get content of template Jenkinsfile.
+
     :return: Template Jenkinsfile content
     """
     with open(
@@ -18,6 +19,7 @@ def _get_template_content(template_path):
 def _get_injection_index(pattern, jenkinsfile_content):
     """
     Get index of template code injection by finding 'stages' line number in main Jenkinsfile.
+
     :param jenkinsfile_content: Main Jenkinsfile content
     :return: Index of template code injection
     """
@@ -33,6 +35,7 @@ def generate_test_jenkinsfile():
     """
     Generate TestJenkinsfile by injecting template code (available in TestPipeline*Template) in
     line provided by _get_injection_index function.
+
     :return: None
     """
     with open(
