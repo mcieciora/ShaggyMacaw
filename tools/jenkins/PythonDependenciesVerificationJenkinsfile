@@ -52,7 +52,9 @@ pipeline {
     post {
         always {
             sh "docker rmi test_image:${env.BUILD_ID}"
-            cleanWs()
+            dir("$WORKSPACE") {
+                deleteDir()
+            }
         }
     }
 }
