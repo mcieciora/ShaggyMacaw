@@ -2,9 +2,9 @@ from sys import exit  # pylint: disable=redefined-builtin
 from glob import glob
 
 
-def main():
+def scan_for_skipped_tests():
     """
-    This script searches for all skip marks in test suites. Should not be executed on feature branches
+    Script searches for all skip marks in test suites.
 
     :return: None
     """
@@ -23,4 +23,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    scan_for_skipped_tests()

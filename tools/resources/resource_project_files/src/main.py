@@ -2,7 +2,8 @@ from requests import get
 
 
 def get_google_com_status_code():
-    """Get https://google.com status code.
+    """
+    Get https://google.com status code.
 
     :return: Status code
     """
@@ -10,7 +11,8 @@ def get_google_com_status_code():
 
 
 def get_itfoss_com_status_code():
-    """Get https://itsfoss.com/ status code.
+    """
+    Get https://itsfoss.com/ status code.
 
     :return: Status code
     """
