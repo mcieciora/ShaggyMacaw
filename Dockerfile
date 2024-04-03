@@ -1,5 +1,5 @@
 FROM python:3.12.2-alpine
-# TEMP CHANGE
+
 WORKDIR /app
 
 COPY requirements/example_app/requirements.txt /app
