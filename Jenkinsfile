@@ -1,4 +1,5 @@
 def testImage
+Integer build_test_image
 
 pipeline {
     agent any
@@ -8,6 +9,8 @@ pipeline {
         REGULAR_BUILD = getValue("REGULAR_BUILD", true)
         BRANCH_TO_USE = getValue("BRANCH", env.BRANCH_NAME)
         REPO_URL = "git@github.com:mcieciora/CarelessVaquita.git"
+        DOCKERHUB_REPO = "mcieciora/careless_vaquita"
+        FORCE_DOCKER_IMAGE_BUILD = getValue("FORCE_BUILD", false)
     }
     options {
         skipDefaultCheckout()
@@ -21,15 +24,41 @@ pipeline {
                         git branch: env.BRANCH_TO_USE, url: env.REPO_URL
                     }
                     currentBuild.description = "Branch: ${env.BRANCH_TO_USE}\nFlag: ${env.FLAG}\nGroups: ${env.TEST_GROUPS}"
+                    build_test_image = sh(script: "git diff --name-only \$(git rev-parse HEAD) \$(git rev-parse HEAD^1) | grep -e automated_tests -e src -e requirements",
+                                          returnStatus: true)
                 }
             }
         }
         stage ("Prepare docker images") {
             parallel {
-                stage("Build test image") {
+                stage ("Build test image") {
+                    when {
+                        anyOf {
+                            expression {build_test_image == 0}
+                            expression {env.FORCE_DOCKER_IMAGE_BUILD.toBoolean() == true}
+                        }
+                    }
                     steps {
                         script {
-                            testImage = docker.build("test_image:${env.BUILD_ID}", "-f automated_tests/Dockerfile .")
+                            testImage = docker.build("${DOCKERHUB_REPO}:test_image", "-f automated_tests/Dockerfile .")
+                            if (env.BRANCH_NAME == "master" || env.BRANCH_NAME == "develop") {
+                                docker.withRegistry("", "dockerhub_id") {
+                                    testImage.push()
+                                }
+                            }
+                        }
+                    }
+                }
+                stage ("Pull test image") {
+                    when {
+                        allOf {
+                            expression {build_test_image == 1}
+                            expression {env.FORCE_DOCKER_IMAGE_BUILD.toBoolean() == false}
+                        }
+                    }
+                    steps {
+                        script {
+                            testImage = docker.image("${DOCKERHUB_REPO}:test_image")
                         }
                     }
                 }
@@ -42,20 +71,20 @@ pipeline {
                 }
             }
         }
-        stage("Code analysis") {
+        stage ("Code analysis") {
             when {
                 expression {
                     return env.REGULAR_BUILD == "true"
                 }
             }
             parallel {
-                stage ("Pylint") {
+                stage ("pylint") {
                     steps {
                         script {
                             testImage.inside("-v $WORKSPACE:/app") {
-                                sh "python3 -m pylint src --max-line-length=120 --disable=C0114 --fail-under=9.5"
-                                sh "python3 -m pylint --load-plugins pylint_pytest automated_tests --max-line-length=120 --disable=C0114,C0116 --fail-under=9.5"
-                                sh "python3 -m pylint tools/python --max-line-length=120 --disable=C0114 --fail-under=9.5"
+                                sh "python -m pylint src --max-line-length=120 --disable=C0114 --fail-under=9.5"
+                                sh "python -m pylint --load-plugins pylint_pytest automated_tests --max-line-length=120 --disable=C0114,C0116 --fail-under=9.5"
+                                sh "python -m pylint tools/python --max-line-length=120 --disable=C0114 --fail-under=9.5"
                             }
                         }
                     }
@@ -64,7 +93,7 @@ pipeline {
                     steps {
                         script {
                             testImage.inside("-v $WORKSPACE:/app") {
-                                sh "python3 -m flake8 --max-line-length 120 --max-complexity 10 src"
+                                sh "python -m flake8 --max-line-length 120 --max-complexity 10 src automated_tests tools/python"
                             }
                         }
                     }
@@ -73,8 +102,7 @@ pipeline {
                     steps {
                         script {
                             testImage.inside("-v $WORKSPACE:/app") {
-                                sh "python3 -m ruff format ."
-                                sh "python3 -m ruff check ."
+                                sh "python -m ruff check src automated_tests tools/python"
                             }
                         }
                     }
@@ -83,16 +111,54 @@ pipeline {
                     steps {
                         script {
                             testImage.inside("-v $WORKSPACE:/app") {
-                                sh "python3 -m black ."
+                                sh "python -m black src automated_tests tools/python"
                             }
                         }
                     }
                 }
-                stage("Code coverage") {
+                stage ("bandit") {
                     steps {
                         script {
                             testImage.inside("-v $WORKSPACE:/app") {
-                                sh "python3 -m pytest --cov=src automated_tests/ --cov-fail-under=95 --cov-report=html"
+                                sh "python -m bandit src automated_tests tools/python"
+                            }
+                        }
+                    }
+                }
+                stage ("pydocstyle") {
+                    steps {
+                        script {
+                            testImage.inside("-v $WORKSPACE:/app") {
+                                sh "python -m pydocstyle --ignore D100,D104,D107,D212 ."
+                            }
+                        }
+                    }
+                }
+                stage ("radon") {
+                    steps {
+                        script {
+                            testImage.inside("-v $WORKSPACE:/app") {
+                                sh "python -m radon cc ."
+                                sh "python -m radon mi ."
+                                sh "python -m radon hal ."
+                            }
+                        }
+                    }
+                }
+                stage ("mypy") {
+                    steps {
+                        script {
+                            testImage.inside("-v $WORKSPACE:/app") {
+                                sh "python -m mypy src automated_tests tools/python"
+                            }
+                        }
+                    }
+                }
+                stage ("Code coverage") {
+                    steps {
+                        script {
+                            testImage.inside("-v $WORKSPACE:/app") {
+                                sh "python -m pytest --cov=src automated_tests/ --cov-fail-under=95 --cov-report=html"
                             }
                             publishHTML target: [
                                 allowMissing: false,
@@ -114,7 +180,7 @@ pipeline {
                     steps {
                         script {
                             testImage.inside("-v $WORKSPACE:/app") {
-                                sh "python3 tools/python/scan_for_skipped_tests.py"
+                                sh "python tools/python/scan_for_skipped_tests.py"
                             }
                         }
                     }
@@ -125,12 +191,25 @@ pipeline {
             steps {
                 script {
                     testImage.inside("-v $WORKSPACE:/app") {
-                        sh "python3 -m pytest -m unittest automated_tests -v --junitxml=results/unittests_results.xml"
+                        sh "python -m pytest -m unittest automated_tests -v --junitxml=results/unittests_results.xml"
                     }
                 }
             }
         }
-        stage("Run tests") {
+        stage ("Run app & health check") {
+            steps {
+                script {
+                    sh "chmod +x tools/shell_scripts/app_health_check.sh"
+                    sh "tools/shell_scripts/app_health_check.sh 30 1"
+                }
+            }
+            post {
+                always {
+                    sh "docker compose down --rmi all -v"
+                }
+            }
+        }
+        stage ("Run tests") {
             matrix {
                 axes {
                     axis {
@@ -139,13 +218,13 @@ pipeline {
                     }
                 }
                 stages {
-                    stage("Test stage") {
+                    stage ("Test stage") {
                         steps {
                             script {
                                 if (env.TEST_GROUPS == "all" || env.TEST_GROUPS.contains(TEST_GROUP)) {
                                     echo "Running ${TEST_GROUP}"
                                     testImage.inside("-v $WORKSPACE:/app") {
-                                        sh "python3 -m pytest -m ${FLAG} -k ${TEST_GROUP} automated_tests -v --junitxml=results/${TEST_GROUP}_results.xml"
+                                        sh "python -m pytest -m ${FLAG} -k ${TEST_GROUP} automated_tests -v --junitxml=results/${TEST_GROUP}_results.xml"
                                     }
                                 }
                                 else {
@@ -163,20 +242,7 @@ pipeline {
                     return env.REGULAR_BUILD == "true"
                 }
             }
-            stages {
-                stage ("Run app & health check") {
-                    steps {
-                        script {
-                            sh "chmod +x tools/shell_scripts/app_health_check.sh"
-                            sh "tools/shell_scripts/app_health_check.sh 30 1"
-                        }
-                    }
-                    post {
-                        always {
-                            sh "docker compose down --rmi all -v"
-                        }
-                    }
-                }
+            parallel {
                 stage ("Push docker image") {
                     when {
                         expression {
@@ -185,17 +251,14 @@ pipeline {
                     }
                     steps {
                         script {
-                            def registryPath = ""
-                            def containerName = "mcieciora/careless_vaquita:${env.BRANCH_NAME}_${env.BUILD_ID}"
-                            if (env.BRANCH_NAME == "develop") {
-                                registryPath = "http://localhost:5000"
-                                containerName = "careless_vaquita:${env.BRANCH_NAME}_${env.BUILD_ID}"
+                            docker.withRegistry("", "dockerhub_id") {
+                                def customImage = docker.build("app_image")
+                                customImage.push("${DOCKERHUB_REPO}:${env.BRANCH_NAME}_${env.BUILD_ID}")
+                                if (env.BRANCH_NAME == "master") {
+                                    customImage.push("latest")
+                                }
                             }
-                            docker.withRegistry("${registryPath}", "dockerhub_id") {
-                                def customImage = docker.build("${containerName}")
-                                customImage.push()
-                            }
-                            sh "docker rmi ${containerName}"
+                            sh "docker rmi app_image"
                         }
                     }
                 }
@@ -220,7 +283,7 @@ pipeline {
     }
     post {
         always {
-            sh "docker rmi test_image:${env.BUILD_ID}"
+            sh "docker rmi ${DOCKERHUB_REPO}:test_image"
             sh "docker compose down --rmi all -v"
             archiveArtifacts artifacts: "**/*_results.xml"
             junit "**/*_results.xml"
