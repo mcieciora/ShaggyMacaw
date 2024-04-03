@@ -1,5 +1,5 @@
 def testImage
-Integer pull_test_image
+Integer build_test_image
 
 pipeline {
     agent any
@@ -24,7 +24,7 @@ pipeline {
                         git branch: env.BRANCH_TO_USE, url: env.REPO_URL
                     }
                     currentBuild.description = "Branch: ${env.BRANCH_TO_USE}\nFlag: ${env.FLAG}\nGroups: ${env.TEST_GROUPS}"
-                    pull_test_image = sh(script: "git diff --name-only \$(git rev-parse HEAD) \$(git rev-parse HEAD^1) | grep -e automated_tests -e src -e requirements",
+                    build_test_image = sh(script: "git diff --name-only \$(git rev-parse HEAD) \$(git rev-parse HEAD^1) | grep -e automated_tests -e src -e requirements",
                                           returnStatus: true)
                 }
             }
@@ -34,7 +34,7 @@ pipeline {
                 stage ("Build test image") {
                     when {
                         expression {
-                            return !pull_test_image || env.FORCE_DOCKER_IMAGE_BUILD
+                            return build_test_image || env.FORCE_DOCKER_IMAGE_BUILD
                         }
                     }
                     steps {
@@ -51,7 +51,7 @@ pipeline {
                 stage ("Pull test image") {
                     when {
                         expression {
-                            return pull_test_image && !env.FORCE_DOCKER_IMAGE_BUILD
+                            return !build_test_image && !env.FORCE_DOCKER_IMAGE_BUILD
                         }
                     }
                     steps {
