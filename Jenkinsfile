@@ -33,7 +33,7 @@ pipeline {
             parallel {
                 stage ("Build test image") {
                     when {
-                        allOf {
+                        anyOf {
                             expression {build_test_image == 0}
                             expression {env.FORCE_DOCKER_IMAGE_BUILD == true}
                         }
@@ -51,7 +51,7 @@ pipeline {
                 }
                 stage ("Pull test image") {
                     when {
-                        anyOf {
+                        allOf {
                             expression {build_test_image == 1}
                             expression {env.FORCE_DOCKER_IMAGE_BUILD == false}
                         }
