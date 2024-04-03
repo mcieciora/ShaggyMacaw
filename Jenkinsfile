@@ -35,7 +35,7 @@ pipeline {
                     when {
                         anyOf {
                             expression {build_test_image == 0}
-                            expression {env.FORCE_DOCKER_IMAGE_BUILD == true}
+                            expression {env.FORCE_DOCKER_IMAGE_BUILD.toBoolean() == true}
                         }
                     }
                     steps {
@@ -53,7 +53,7 @@ pipeline {
                     when {
                         allOf {
                             expression {build_test_image == 1}
-                            expression {env.FORCE_DOCKER_IMAGE_BUILD == false}
+                            expression {env.FORCE_DOCKER_IMAGE_BUILD.toBoolean() == false}
                         }
                     }
                     steps {
