@@ -278,8 +278,8 @@ pipeline {
                     steps {
                         script {
                             docker.withRegistry("", "dockerhub_id") {
-                                def customImage = docker.build("app_image")
-                                customImage.push("${DOCKERHUB_REPO}:${env.BRANCH_NAME}_${env.BUILD_ID}")
+                                def customImage = docker.build("${DOCKERHUB_REPO}:${env.BRANCH_NAME}_${env.BUILD_ID}")
+                                customImage.push()
                                 if (env.BRANCH_NAME == "master") {
                                     customImage.push("latest")
                                 }
