@@ -284,7 +284,7 @@ pipeline {
                                     customImage.push("latest")
                                 }
                             }
-                            sh "docker rmi app_image"
+                            sh "docker rmi ${DOCKERHUB_REPO}:${env.BRANCH_NAME}_${env.BUILD_ID}"
                         }
                     }
                 }
