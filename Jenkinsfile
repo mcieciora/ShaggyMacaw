@@ -247,7 +247,7 @@ pipeline {
                 stage ("Push docker image") {
                     when {
                         expression {
-                            return env.BRANCH_NAME == "master" || env.BRANCH_NAME == "develop"
+                            return env.BRANCH_NAME != "master" || env.BRANCH_NAME == "develop"
                         }
                     }
                     steps {
@@ -266,7 +266,7 @@ pipeline {
                 stage ("Push tag") {
                     when {
                         expression {
-                            return env.BRANCH_NAME == "master"
+                            return env.BRANCH_NAME != "master"
                         }
                     }
                     steps {
