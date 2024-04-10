@@ -247,7 +247,7 @@ pipeline {
                 stage ("Push docker image") {
                     when {
                         expression {
-                            return env.BRANCH_NAME != "master" || env.BRANCH_NAME == "develop"
+                            return env.BRANCH_NAME == "master" || env.BRANCH_NAME == "develop"
                         }
                     }
                     steps {
@@ -255,7 +255,7 @@ pipeline {
                             docker.withRegistry("", "dockerhub_id") {
                                 def customImage = docker.build("${DOCKERHUB_REPO}:${env.BRANCH_NAME}_${curDate}")
                                 customImage.push()
-                                if (!env.BRANCH_NAME == "master") {
+                                if (env.BRANCH_NAME == "master") {
                                     customImage.push("latest")
                                 }
                             }
@@ -266,7 +266,7 @@ pipeline {
                 stage ("Push tag") {
                     when {
                         expression {
-                            return env.BRANCH_NAME != "master"
+                            return env.BRANCH_NAME == "master"
                         }
                     }
                     steps {
