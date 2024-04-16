@@ -279,13 +279,13 @@ pipeline {
                     steps {
                         script {
                             docker.withRegistry("", "dockerhub_id") {
-                                def customImage = docker.build("${DOCKERHUB_REPO}:${env.BRANCH_NAME}_${curDate}")
+                                def customImage = docker.build("${DOCKERHUB_REPO}:${env.BRANCH_NAME}-${curDate}")
                                 customImage.push()
                                 if (env.BRANCH_NAME == "master") {
                                     customImage.push("latest")
                                 }
                             }
-                            sh "docker rmi ${DOCKERHUB_REPO}:${env.BRANCH_NAME}_${curDate}"
+                            sh "docker rmi ${DOCKERHUB_REPO}:${env.BRANCH_NAME}-${curDate}"
                         }
                     }
                 }
@@ -297,7 +297,7 @@ pipeline {
                     }
                     steps {
                         script {
-                            def TAG_NAME = "${env.BRANCH_NAME}_${curDate}"
+                            def TAG_NAME = "${env.BRANCH_NAME}-${curDate}"
                             withCredentials([sshUserPrivateKey(credentialsId: "github_id", keyFileVariable: 'key')]) {
                                 sh 'GIT_SSH_COMMAND="ssh -i $key"'
                                 sh "git tag -a $TAG_NAME -m $TAG_NAME && git push origin $TAG_NAME"
