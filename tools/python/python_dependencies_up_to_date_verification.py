@@ -16,7 +16,9 @@ def check_for_outdated_packages():
     """
     dependencies_list = []
     non_zero_status_exit = False
-    for req_file in glob("./requirements/**/requirements.txt"):
+    requirements_files = glob("./requirements/**/requirements.txt")
+    print(requirements_files)
+    for req_file in requirements_files:
         with open(req_file, mode="r", encoding="utf-8") as req:
             format_dependency_list = [r.split("=")[0] for r in req.readlines()]
             dependencies_list.extend(format_dependency_list)
