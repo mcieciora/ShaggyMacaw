@@ -25,5 +25,3 @@ for TAG in $TAGS; do
     echo "No vulnerabilities detected"
   fi
 done
-
-echo "$RETURN_VALUE"
