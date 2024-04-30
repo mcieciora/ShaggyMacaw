@@ -6,7 +6,7 @@ DOCKERHUB_REPO="mcieciora/careless_vaquita"
 TAGS="latest test_image"
 for TAG in $TAGS; do
   echo "Running docker scout on $TAG image"
-  docker run --rm -e DOCKER_SCOUT_HUB_USER="$USERNAME" -e DOCKER_SCOUT_HUB_PASSWORD="$PASSWORD" -v /var/run/docker.sock:/var/run/docker.sock docker/scout-cli:1.7.1 cves $DOCKERHUB_REPO:"$TAG" --exit-code --only-severity critical,high
+  docker run --rm -e DOCKER_SCOUT_HUB_USER="$USERNAME" -e DOCKER_SCOUT_HUB_PASSWORD="$PASSWORD" -e DOCKER_SCOUT_NO_CACHE=true -v /var/run/docker.sock:/var/run/docker.sock docker/scout-cli:1.7.1 cves $DOCKERHUB_REPO:"$TAG" --exit-code --only-severity critical,high
   SCAN_RESULT=$?
   if [ "$SCAN_RESULT" -ne 0 ]; then
     echo "Vulnerabilities found. Running recommendations"
