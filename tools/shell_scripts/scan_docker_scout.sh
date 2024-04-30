@@ -18,7 +18,7 @@ for TAG in $TAGS; do
     if [ "$IMAGE_UP_TO_DATE" -eq 0 ] && [ "$RECOMMENDATIONS_AVAILABLE" -eq 0 ] && [ "$RETURN_VALUE" -ne 1 ]; then
       RETURN_VALUE=0
     else
-      RETURN_VALUE=1
+      RETURN_VALUE=2
       echo "Script failed, because vulnerabilities were found. Please fix them according to given recommendations."
     fi
   else
