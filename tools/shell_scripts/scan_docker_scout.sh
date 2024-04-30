@@ -26,4 +26,4 @@ for TAG in $TAGS; do
   fi
 done
 
-exit "$RETURN_VALUE"
+echo "$RETURN_VALUE"
