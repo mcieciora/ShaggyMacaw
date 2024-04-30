@@ -36,6 +36,13 @@ pipeline {
                         }
                     }
                 }
+                stage ("TBA: clair") {
+                    steps {
+                        script {
+                            sh "echo TBA"
+                        }
+                    }
+                }
             }
         }
     }
