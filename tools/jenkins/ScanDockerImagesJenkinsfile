@@ -36,7 +36,8 @@ pipeline {
                 stage ("Experimental: clair") {
                     steps {
                         script {
-                            sh "echo clair"
+                            sh "chmod +x tools/shell_scripts/scan_docker_clair.sh"
+                            sh "tools/shell_scripts/scan_docker_clair.sh"
                         }
                     }
                 }
