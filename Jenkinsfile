@@ -174,7 +174,7 @@ pipeline {
                     }
                     post {
                         always {
-                            archiveArtifacts artifacts: "htmlcov/**"
+                            archiveArtifacts artifacts: "htmlcov/*index.html"
                         }
                     }
                 }
@@ -302,9 +302,9 @@ pipeline {
     }
     post {
         always {
+            sh "docker compose down --rmi all -v"
             cleanWs()
             sh "docker rmi ${DOCKERHUB_REPO}:test_image"
-            sh "docker compose down --rmi all -v"
         }
     }
 }
