@@ -197,6 +197,12 @@ pipeline {
                     }
                 }
             }
+            post {
+                always {
+                    archiveArtifacts artifacts: "**/*_results.xml"
+                    junit "**/*_results.xml"
+                }
+            }
         }
         stage ("Run app & health check") {
             steps {
@@ -232,6 +238,12 @@ pipeline {
                                 else {
                                     echo "Skipping execution."
                                 }
+                            }
+                        }
+                        post {
+                            always {
+                                archiveArtifacts artifacts: "**/*_results.xml"
+                                junit "**/*_results.xml"
                             }
                         }
                     }
@@ -285,11 +297,9 @@ pipeline {
     }
     post {
         always {
+            cleanWs()
             sh "docker rmi ${DOCKERHUB_REPO}:test_image"
             sh "docker compose down --rmi all -v"
-            archiveArtifacts artifacts: "**/*_results.xml"
-            junit "**/*_results.xml"
-            cleanWs()
         }
     }
 }
