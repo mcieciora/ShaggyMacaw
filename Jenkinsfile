@@ -174,7 +174,7 @@ pipeline {
                     }
                     post {
                         always {
-                            archiveArtifacts artifacts: "htmlcov/*index.html, htmlcov/*.csv"
+                            archiveArtifacts artifacts: "htmlcov/*index.html, htmlcov/*.css"
                         }
                     }
                 }
