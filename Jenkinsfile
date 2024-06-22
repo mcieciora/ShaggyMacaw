@@ -173,8 +173,8 @@ pipeline {
                         }
                     }
                     post {
-                        always {
-                            archiveArtifacts artifacts: "htmlcov/*index.html, htmlcov/*.css"
+                        failure {
+                            archiveArtifacts artifacts: "htmlcov/*"
                         }
                     }
                 }
