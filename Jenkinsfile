@@ -172,6 +172,11 @@ pipeline {
                             ]
                         }
                     }
+                    post {
+                        failure {
+                            archiveArtifacts artifacts: "htmlcov/*"
+                        }
+                    }
                 }
                 stage ("Scan for skipped tests") {
                     when {
@@ -195,6 +200,12 @@ pipeline {
                     testImage.inside("-v $WORKSPACE:/app") {
                         sh "python -m pytest -m unittest automated_tests -v --junitxml=results/unittests_results.xml"
                     }
+                }
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: "**/*_results.xml"
+                    junit "**/*_results.xml"
                 }
             }
         }
@@ -232,6 +243,12 @@ pipeline {
                                 else {
                                     echo "Skipping execution."
                                 }
+                            }
+                        }
+                        post {
+                            always {
+                                archiveArtifacts artifacts: "**/*_results.xml"
+                                junit "**/*_results.xml"
                             }
                         }
                     }
@@ -285,11 +302,9 @@ pipeline {
     }
     post {
         always {
-            sh "docker rmi ${DOCKERHUB_REPO}:test_image"
             sh "docker compose down --rmi all -v"
-            archiveArtifacts artifacts: "**/*_results.xml"
-            junit "**/*_results.xml"
             cleanWs()
+            sh "docker rmi ${DOCKERHUB_REPO}:test_image"
         }
     }
 }
