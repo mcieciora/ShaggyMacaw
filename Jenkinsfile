@@ -172,6 +172,11 @@ pipeline {
                             ]
                         }
                     }
+                    post {
+                        always {
+                            archiveArtifacts artifacts: "htmlcov/**"
+                        }
+                    }
                 }
                 stage ("Scan for skipped tests") {
                     when {
