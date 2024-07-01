@@ -1,5 +1,10 @@
 <h2>What is <i>CarelessVaquita</i></h2>
-Careless Vaquita is an <i>open source project base template</i> with possibility to add ready to go CI/CD setup as well. Check out: [ResponsibleDugong](https://github.com/mcieciora/ResponsibleDugong). This project is strongly targeted for Python developers, but with sufficient knowledge and ease, programmers of other languages should have no problem adapting this solution to their needs, because this project only outlines good practices.
+Careless Vaquita is an <i>open source project base template</i> with possibility to add ready to go CI/CD setup as well. 
+Check out:
+
+[CarelessVaquita](https://github.com/mcieciora/CarelessVaquita) 
+
+This project is strongly targeted for Python developers, but with sufficient knowledge and ease, programmers of other languages should have no problem adapting this solution to their needs, because this project only outlines good practices.
 Currently supported tools and versions:
 
 - Python 3.9.18+ 
