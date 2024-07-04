@@ -1,4 +1,4 @@
-FROM --platform="${TARGETPLATFORM:-linux/arm64}" python:3.12.2-alpine
+FROM python:3.12.2-alpine
 
 WORKDIR /app
 COPY requirements/testing/requirements.txt ./requirements-testing.txt
