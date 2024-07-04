@@ -41,7 +41,7 @@ pipeline {
                     }
                     steps {
                         script {
-                            sh "docker build -t test_image -f automated_tests/Dockerfile ."
+                            sh "docker build --no-cache -t test_image -f automated_tests/Dockerfile ."
                             if (env.BRANCH_TO_USE == "master" || env.BRANCH_TO_USE == "develop") {
                                 sh "docker tag test_image ${DOCKERHUB_REPO}:test_image"
                                 sh "docker push ${DOCKERHUB_REPO}:test_image"
@@ -82,79 +82,73 @@ pipeline {
                 stage ("pylint") {
                     steps {
                         script {
-                            sh "docker run --rm -v $WORKSPACE:/app test_image python -m pylint src --max-line-length=120 --disable=C0114 --fail-under=9.5"
-                            sh "docker run --rm -v $WORKSPACE:/app test_image python -m pylint --load-plugins pylint_pytest automated_tests --max-line-length=120 --disable=C0114,C0116 --fail-under=9.5"
-                            sh "docker run --rm -v $WORKSPACE:/app test_image python -m pylint tools/python --max-line-length=120 --disable=C0114 --fail-under=9.5"
+                            sh "docker run --rm test_image python -m pylint src --max-line-length=120 --disable=C0114 --fail-under=9.5"
+                            sh "docker run --rm test_image python -m pylint --load-plugins pylint_pytest automated_tests --max-line-length=120 --disable=C0114,C0116 --fail-under=9.5"
+                            sh "docker run --rm test_image python -m pylint tools/python --max-line-length=120 --disable=C0114 --fail-under=9.5"
                         }
                     }
                 }
                 stage ("flake8") {
                     steps {
                         script {
-                            sh "docker run --rm -v $WORKSPACE:/app test_image python -m flake8 --max-line-length 120 --max-complexity 10 src automated_tests tools/python"
+                            sh "docker run --rm test_image python -m flake8 --max-line-length 120 --max-complexity 10 src automated_tests tools/python"
                         }
                     }
                 }
                 stage ("ruff") {
                     steps {
                         script {
-                            sh "docker run --rm -v $WORKSPACE:/app test_image python -m ruff check src automated_tests tools/python"
+                            sh "docker run --rm test_image python -m ruff check src automated_tests tools/python"
                         }
                     }
                 }
                 stage ("black") {
                     steps {
                         script {
-                            sh "docker run --rm -v $WORKSPACE:/app test_image python -m black src automated_tests tools/python"
+                            sh "docker run --rm test_image python -m black src automated_tests tools/python"
                         }
                     }
                 }
                 stage ("bandit") {
                     steps {
                         script {
-                            sh "docker run --rm -v $WORKSPACE:/app test_image python -m bandit src automated_tests tools/python"
+                            sh "docker run --rm test_image python -m bandit src automated_tests tools/python"
                         }
                     }
                 }
                 stage ("pydocstyle") {
                     steps {
                         script {
-                            sh "docker run --rm -v $WORKSPACE:/app test_image python -m pydocstyle --ignore D100,D104,D107,D212 ."
+                            sh "docker run --rm test_image python -m pydocstyle --ignore D100,D104,D107,D212 ."
                         }
                     }
                 }
                 stage ("radon") {
                     steps {
                         script {
-                            sh "docker run --rm -v $WORKSPACE:/app test_image python -m radon cc ."
-                            sh "docker run --rm -v $WORKSPACE:/app test_image python -m radon mi ."
-                            sh "docker run --rm -v $WORKSPACE:/app test_image python -m radon hal ."
+                            sh "docker run --rm test_image python -m radon cc ."
+                            sh "docker run --rm test_image python -m radon mi ."
+                            sh "docker run --rm test_image python -m radon hal ."
                         }
                     }
                 }
                 stage ("mypy") {
                     steps {
                         script {
-                            sh "docker run --rm -v $WORKSPACE:/app test_image python -m mypy src automated_tests tools/python"
+                            sh "docker run --rm test_image python -m mypy src automated_tests tools/python"
                         }
                     }
                 }
                 stage ("Code coverage") {
                     steps {
                         script {
-                            sh "docker run --rm -v $WORKSPACE:/app test_image python -m pytest --cov=src automated_tests/ --cov-fail-under=95 --cov-report=html"
-                            publishHTML target: [
-                                allowMissing: false,
-                                alwaysLinkToLastBuild: false,
-                                keepAll: true,
-                                reportDir: "htmlcov",
-                                reportFiles: "index.html",
-                                reportName: "PyTestCov"
-                            ]
+                            sh "docker run --name code_coverage_container test_image python -m pytest --cov=src automated_tests/ --cov-fail-under=95 --cov-report=html"
+                            sh "docker container cp code_coverage_container:/app/htmlcov ./"
                         }
                     }
                     post {
-                        failure {
+                        always {
+                            sh "docker rm code_coverage_container"
                             archiveArtifacts artifacts: "htmlcov/*"
                         }
                     }
@@ -167,7 +161,7 @@ pipeline {
                     }
                     steps {
                         script {
-                            sh "docker run --rm -v $WORKSPACE:/app test_image python tools/python/scan_for_skipped_tests.py"
+                            sh "docker run --rm test_image python tools/python/scan_for_skipped_tests.py"
                         }
                     }
                 }
@@ -176,13 +170,14 @@ pipeline {
         stage ("Run unit tests") {
             steps {
                 script {
-                    sh "docker run --rm -v $WORKSPACE:/app test_image python -m pytest -m unittest automated_tests -v --junitxml=results/unittests_results.xml"
+                    sh "docker run --name unit_test_container test_image python -m pytest -m unittest automated_tests -v --junitxml=results/unittests_results.xml"
+                    sh "docker container cp unit_test_container:/app/results ./"
                 }
             }
             post {
                 always {
-                    archiveArtifacts artifacts: "**/*_results.xml"
-                    junit "**/*_results.xml"
+                    sh "docker rm unit_test_container"
+                    archiveArtifacts artifacts: "**/unittests_results.xml"
                 }
             }
         }
@@ -213,7 +208,8 @@ pipeline {
                             script {
                                 if (env.TEST_GROUPS == "all" || env.TEST_GROUPS.contains(TEST_GROUP)) {
                                     echo "Running ${TEST_GROUP}"
-                                    sh "docker run --rm -v $WORKSPACE:/app test_image python -m pytest -m ${FLAG} -k ${TEST_GROUP} automated_tests -v --junitxml=results/${TEST_GROUP}_results.xml"
+                                    sh "docker run --name ${TEST_GROUP}_test test_image python -m pytest -m ${FLAG} -k ${TEST_GROUP} automated_tests -v --junitxml=results/${TEST_GROUP}_results.xml"
+                                    sh "docker container cp ${TEST_GROUP}_test:/app/results ./"
                                 }
                                 else {
                                     echo "Skipping execution."
@@ -222,8 +218,8 @@ pipeline {
                         }
                         post {
                             always {
-                                archiveArtifacts artifacts: "**/*_results.xml"
-                                junit "**/*_results.xml"
+                                sh "docker rm ${TEST_GROUP}_test"
+                                archiveArtifacts artifacts: "**/${TEST_GROUP}_results.xml"
                             }
                         }
                     }
@@ -246,7 +242,7 @@ pipeline {
                     steps {
                         script {
                             docker.withRegistry("", "dockerhub_id") {
-                                sh "docker build -t custom_image ."
+                                sh "docker build --no-cache -t custom_image ."
                                 sh "docker tag custom_image ${DOCKERHUB_REPO}:${env.BRANCH_TO_USE}-${curDate}"
                                 sh "docker push ${DOCKERHUB_REPO}:${env.BRANCH_TO_USE}-${curDate}"
                                 if (env.BRANCH_TO_USE == "master") {
@@ -279,6 +275,15 @@ pipeline {
     post {
         always {
             sh "docker compose down --rmi all -v"
+            junit allowEmptyResults: true, testResults: "**/**_results.xml"
+            publishHTML target: [
+                allowMissing: false,
+                alwaysLinkToLastBuild: false,
+                keepAll: true,
+                reportDir: "htmlcov",
+                reportFiles: "index.html",
+                reportName: "PyTestCov"
+            ]
             cleanWs()
         }
     }
