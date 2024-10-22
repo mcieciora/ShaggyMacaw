@@ -1,4 +1,4 @@
-FROM python:3.12.2-alpine
+FROM python:3.13-alpine
 
 WORKDIR /app
 COPY requirements /app/requirements
@@ -14,4 +14,4 @@ WORKDIR /app/tools/python
 COPY tools/python .
 
 WORKDIR /app
-RUN python -m pip install --no-cache-dir -r requirements/example_app/requirements.txt -r requirements/testing/requirements.txt
+RUN python -m pip install --no-cache-dir -r requirements/example_app/requirements.txt -r requirements/testing/requirements.txt -r requirements/merge_bot/requirements.txt
