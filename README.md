@@ -4,7 +4,7 @@ Check out:
 
 [ResponsibleDugong](https://github.com/mcieciora/ResponsibleDugong)
 
-This project is strongly targeted for Python developers, but with sufficient knowledge and ease, programmers of other languages should have no problem adapting this solution to their needs, because this project only outlines good practices.
+This project is strongly targeted for Python users, but with sufficient knowledge, programmers of other languages should have no problem adapting this solution to their needs, because this project only outlines good practices.
 Currently supported tools and versions:
 
 - Python 3.9.18+ 
@@ -36,82 +36,27 @@ known and the moment of extinction will likely go completely unnoticed, but comm
 <h2>How to setup</h2>
 <h3>Step-by-step with sources</h3>   
 
-- Fork [CarelessVaquita](https://github.com/mcieciora/CarelessVaquita). source: [fork a repository](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo)
+- Fork [CarelessVaquita](https://github.com/mcieciora/CarelessVaquita). Source: [Fork a repository](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo)
 
-- Setup git flow. source: [Atlassian - Gitflow workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow)
+- Setup git flow. Source: [Atlassian - Gitflow workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow)
 
-<h3>Step-by-step with commands (suggested)</h3>
-<h4>Fork part</h4>
+- Generate fine-grained personal token with "Read access to metadata" and "Read and Write access to code and pull requests" permissions set. Source: [Fine-grained personal access token](https://github.com/settings/tokens?type=beta)
 
-- Create empty GitHub repository and clone it:
+- Create repository ruleset for default and develop branches with "Restrict deletions", "Require a pull request before merging" and "Block force pushes" set. Source [Creating rulesets for a repository](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/creating-rulesets-for-a-repository)
 
-```
-git clone <empty_repository_url> && cd <empty_repository_url>
-```
+<h2>How to use</h2>
+<h3>Branching</h3>  
+By using GitFlow branching strategy you are able to diverse production branch (master/main) from around development branch (develop).
+Thanks to that it is possible to have additional level of quality assurance. In general workflow of feature implementation should look as following:
+1. Feature branch creation (base: develop) and feature implementation
+2. Feature merge into development branch with MergeBot (more about this in the next section)
+3. If all features for release are available create release branch (base: develop; target: master/main)
+4. Release merge into production branch with MergeBot
 
-- Sync upstream of your repository to CarelessVaquita
+<h3>Merge Bot</h3>  
+MergeBot is standalone tool, written in Python, related to project, whose main task is to manage and merge currently active pull requests. With ruleset mentioned in setup part set, it is </b>NOT</b> possible for user to merge anything into develop or production branch.
+To create pull request use PromoteBranch job. This pull request will be later checked periodically (on default every 5 minutes) for needed approvals from people mentioned in <i>required_reviewers</i> file. If pull request is approved and no other are in queue it will be merged into target branch.
 
-```
-git remote add upstream https://github.com/mcieciora/CarelessVaquita.git
-```
-
-- Pull changes from upstream master branch
-
-```
-git pull upstream master --allow-unrelated-histories
-```
-
-- Set your repository origin header to master
-
-```
-git push origin master
-```
-
-- Remember to pull from time to time
-
-```
-git pull upstream master
-```
-
-<h4>Gitflow part</h4>
-
-- Initialize git flow
-
-```
-git flow init
-```
-
-- Map local master branch to remote master branch
-
-```
-git push --set-upstream origin master
-```
-
-- Map local development branch to remote development branch
-
-```
-git checkout develop && git push --set-upstream origin develop
-```
-
-- Feature start/finish flow:
-
-```
-git flow feature start <feature_name>
-
-touch my_file.txt
-
-git add my_file.txt
-
-git commit -m 'my_file added'
-
-git push --set-upstream origin feature/<feature_name>
-
-git push
-
-git flow feature finish feature_name
-
-git push
-```
 
 Happy Vaquiting ;)  
 
