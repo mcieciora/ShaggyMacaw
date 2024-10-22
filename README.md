@@ -54,8 +54,8 @@ Thanks to that it is possible to have additional level of quality assurance. In 
 4. Release merge into production branch with MergeBot
 
 <h3>Merge Bot</h3>  
-MergeBot is standalone tool, written in Python, related to project, whose main task is to manage and merge currently active pull requests. With ruleset mentioned in setup part set, it is **NOT** possible for user to merge anything into develop or production branch. \
-To create pull request use PromoteBranch job. This pull request will be later checked periodically (on default every 5 minutes) for needed approvals from people mentioned in _required_reviewers_ file. If pull request is approved and no other are in queue it will be merged into target branch.
+MergeBot is standalone tool, written in Python, related to project, whose main task is to manage and merge currently active pull requests. With ruleset mentioned in setup part set, it is </b>NOT</b> possible for user to merge anything into develop or production branch.
+To create pull request use PromoteBranch job. This pull request will be later checked periodically (on default every 5 minutes) for needed approvals from people mentioned in <i>required_reviewers</i> file. If pull request is approved and no other are in queue it will be merged into target branch.
 
 
 Happy Vaquiting ;)  
