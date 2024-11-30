@@ -4,8 +4,7 @@ pipelineJob("NightlyTestPipeline_INPUT.PROJECT_NAME") {
             triggers {
                 parameterizedTimerTrigger {
                     parameterizedSpecification('''
-                    H 21 * * * %BRANCH=master;FLAG=unittest
-                    H 21 * * * %BRANCH=develop;FLAG=unittest
+                    H 21 * * *
                     ''')
                 }
             }
@@ -18,7 +17,7 @@ pipelineJob("NightlyTestPipeline_INPUT.PROJECT_NAME") {
                     remote {
                         url("INPUT.PROJECT_URL")
                     }
-                    branch('*/${BRANCH}')
+                    branch('*/develop')
                 }
             }
             scriptPath("tools/jenkins/NightlyTestJenkinsfile")
