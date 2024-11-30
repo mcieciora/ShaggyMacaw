@@ -5,6 +5,9 @@ pipeline {
             H 21 * * *
         ''')
     }
+    environment {
+        DEFAULT_NIGHTLY_FLAG = 'unittest'
+    }
     options {
         skipDefaultCheckout()
     }
@@ -15,7 +18,7 @@ pipeline {
                     steps {
                         build job: 'ParametrizedTestPipeline_CarelessVaquita',
                         parameters: [
-                            string(name: 'FLAG', value: 'nightly'),
+                            string(name: 'FLAG', value: DEFAULT_NIGHTLY_FLAG),
                             string(name: 'BRANCH', value: 'develop')
                         ]
                     }
@@ -24,8 +27,8 @@ pipeline {
                     steps {
                         build job: 'ParametrizedTestPipeline_CarelessVaquita',
                         parameters: [
-                            string(name: 'FLAG', value: 'nightly'),
-                            string(name: 'BRANCH', value: 'develop')
+                            string(name: 'FLAG', value: DEFAULT_NIGHTLY_FLAG),
+                            string(name: 'BRANCH', value: 'master')
                         ]
                     }
                 }
