@@ -1,0 +1,40 @@
+pipeline {
+    agent any
+    triggers {
+        parameterizedCron('''
+            H 21 * * *
+        ''')
+    }
+    options {
+        skipDefaultCheckout()
+    }
+    stages {
+        stage ("Trigger nightly builds") {
+            parallel {
+                stage ("develop") {
+                    steps {
+                        build job: 'ParametrizedTestPipeline_CarelessVaquita',
+                        parameters: [
+                            string(name: 'FLAG', value: 'nightly'),
+                            string(name: 'BRANCH', value: 'develop')
+                        ]
+                    }
+                }
+                stage ("master") {
+                    steps {
+                        build job: 'ParametrizedTestPipeline_CarelessVaquita',
+                        parameters: [
+                            string(name: 'FLAG', value: 'nightly'),
+                            string(name: 'BRANCH', value: 'develop')
+                        ]
+                    }
+                }
+            }
+        }
+    }
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}

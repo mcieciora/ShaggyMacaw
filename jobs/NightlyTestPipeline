@@ -1,0 +1,31 @@
+pipelineJob("NightlyTestPipeline_INPUT.PROJECT_NAME") {
+    properties {
+        pipelineTriggers {
+            triggers {
+                parameterizedTimerTrigger {
+                    parameterizedSpecification('''
+                    H 21 * * * %BRANCH=master;FLAG=unittest
+                    H 21 * * * %BRANCH=develop;FLAG=unittest
+                    ''')
+                }
+            }
+        }
+    }
+    definition {
+        cpsScm {
+            scm {
+                git {
+                    remote {
+                        url("INPUT.PROJECT_URL")
+                    }
+                    branch('*/${BRANCH}')
+                }
+            }
+            scriptPath("tools/jenkins/NightlyTestJenkinsfile")
+            lightweight()
+        }
+    }
+    logRotator {
+        daysToKeep(7)
+    }
+}
