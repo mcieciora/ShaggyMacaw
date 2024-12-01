@@ -20,7 +20,8 @@ pipeline {
                         parameters: [
                             string(name: 'FLAG', value: DEFAULT_NIGHTLY_FLAG),
                             string(name: 'BRANCH', value: 'develop')
-                        ]
+                        ],
+                        propagate: false
                     }
                 }
                 stage ("master") {
@@ -29,7 +30,8 @@ pipeline {
                         parameters: [
                             string(name: 'FLAG', value: DEFAULT_NIGHTLY_FLAG),
                             string(name: 'BRANCH', value: 'master')
-                        ]
+                        ],
+                        propagate: false
                     }
                 }
             }
