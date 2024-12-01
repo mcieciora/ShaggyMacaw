@@ -34,6 +34,18 @@ pipeline {
                 }
             }
         }
+        stage ("Python verification") {
+            steps {
+                build job: 'PythonDependenciesVerification_CarelessVaquita',
+                propagate: false
+            }
+        }
+        stage ("Scan docker images") {
+            steps {
+                build job: 'ScanDockerImages_CarelessVaquita',
+                propagate: false
+            }
+        }
     }
     post {
         always {
