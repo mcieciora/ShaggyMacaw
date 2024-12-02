@@ -1,9 +1,7 @@
 pipeline {
     agent any
     triggers {
-        parameterizedCron('''
-            H 21 * * *
-        ''')
+        cron("H 21 * * *")
     }
     environment {
         DEFAULT_NIGHTLY_FLAG = 'unittest'

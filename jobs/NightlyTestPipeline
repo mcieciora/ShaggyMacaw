@@ -1,14 +1,6 @@
 pipelineJob("NightlyTestPipeline_INPUT.PROJECT_NAME") {
-    properties {
-        pipelineTriggers {
-            triggers {
-                parameterizedTimerTrigger {
-                    parameterizedSpecification('''
-                    H 21 * * *
-                    ''')
-                }
-            }
-        }
+    triggers {
+        cron("H 21 * * *")
     }
     definition {
         cpsScm {
