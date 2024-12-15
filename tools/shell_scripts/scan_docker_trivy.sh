@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DOCKERHUB_REPO="mcieciora/careless_vaquita"
+DOCKERHUB_REPO="mcieciora/shaggy_macaw"
 
 TAGS="latest test_image"
 for TAG in $TAGS; do

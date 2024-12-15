@@ -8,8 +8,8 @@ pipeline {
         string(name: "BRANCH", defaultValue: "develop", description: "Execution branch.")
     }
     environment {
-        REPO_URL = "git@github.com:mcieciora/CarelessVaquita.git"
-        DOCKERHUB_REPO = "mcieciora/careless_vaquita"
+        REPO_URL = "git@github.com:mcieciora/ShaggyMacaw.git"
+        DOCKERHUB_REPO = "mcieciora/shaggy_macaw"
     }
     options {
         skipDefaultCheckout()

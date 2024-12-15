@@ -8,8 +8,8 @@ pipeline {
         string(name: "DOCKERFILE_PATH", description: "Path to Dockerfile.")
     }
     environment {
-        REPO_URL = "https://github.com/mcieciora/CarelessVaquita.git"
-        DOCKERHUB_REPO = "mcieciora/careless_vaquita"
+        REPO_URL = "https://github.com/mcieciora/ShaggyMacaw.git"
+        DOCKERHUB_REPO = "mcieciora/shaggy_macaw"
     }
     options {
         skipDefaultCheckout()
