@@ -3,6 +3,7 @@ from itertools import product
 
 class Fen:
     """FEN notation parser and verification class."""
+    
     def __init__(self, fen):
         """Initialize FEN object."""
         self.original_fen = fen
@@ -70,7 +71,6 @@ class Fen:
         if en_passant_square not in self.board_squares:
             raise WrongEnPassantValue(f"En passant square has wrong value: {en_passant_square}")
         return en_passant_square
-
 
     @staticmethod
     def parse_half_move(half_move_value):
