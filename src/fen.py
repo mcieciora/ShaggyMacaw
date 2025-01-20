@@ -3,7 +3,7 @@ from itertools import product
 
 class Fen:
     """FEN notation parser and verification class."""
-    
+
     def __init__(self, fen):
         """Initialize FEN object."""
         self.original_fen = fen
