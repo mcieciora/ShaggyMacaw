@@ -1,21 +1,15 @@
 from itertools import product
 
 class Fen:
-    """
-
-    """
+    """FEN notation parser and verification class."""
     def __init__(self, fen):
-        """
-
-        """
+        """Initializes FEN object."""
         self.original_fen = fen
         self.board_squares = self.generate_board_squares()
 
 
-    def generate_board_setup(self):
-        """
-
-        """
+    def generate_board_setting(self):
+        """Generates board setting from original_fen and verifies each FEN element."""
         parsed_fen = {}
         split_fen = self.original_fen.split()
 
@@ -31,9 +25,7 @@ class Fen:
 
     @staticmethod
     def generate_board_squares():
-        """
-
-        """
+        """Generates list of possible chess board squares."""
         files = ["a", "b", "c", "d", "e", "f", "g", "h"]
         rows = list(range(1, 9))
         product_list = list(product(files, rows))
@@ -41,9 +33,7 @@ class Fen:
 
     @staticmethod
     def parse_board_setup(fen):
-        """
-
-        """
+        """Parses board setup and verifies number of files and rows."""
         return_board = []
         rows = fen.split("/")
         if rows_number := (len(rows)) != 8:
@@ -62,36 +52,28 @@ class Fen:
 
     @staticmethod
     def parse_active_colour(active_colour):
-        """
-
-        """
+        """Parses and verifies active colours value."""
         if active_colour not in ["w", "b"]:
             raise WrongActiveColourValue(f"Active colour has incorrect value: {active_colour}, expected: w/b")
         return True if active_colour == "w" else False
 
     @staticmethod
     def parse_castling_rights(castling_rights):
-        """
-
-        """
-        if not castling_rights in ["-", "KQkq", "Kkq", "Qkq", "KQk", "Kk", "Qk", "KQq", "Kq", "Qq"]:
+        """Parses and verifies castling rights value."""
+        if castling_rights not in ["-", "KQkq", "Kkq", "Qkq", "KQk", "Kk", "Qk", "KQq", "Kq", "Qq"]:
             raise WrongCastlingRights(f"Castling rights have wrong value: {castling_rights}")
         return castling_rights
 
     def parse_en_passant(self, en_passant_square):
-        """
-
-        """
-        if not en_passant_square in self.board_squares:
+        """Parses and verifies en passant value."""
+        if en_passant_square not in self.board_squares:
             raise WrongEnPassantValue(f"En passant square has wrong value: {en_passant_square}")
         return en_passant_square
 
 
     @staticmethod
     def parse_half_move(half_move_value):
-        """
-
-        """
+        """Parses and verifies half move value."""
         try:
             return int(half_move_value)
         except ValueError:
@@ -99,28 +81,32 @@ class Fen:
 
     @staticmethod
     def parse_full_move(full_move_value):
-        """
-
-        """
+        """Parses and verifies full move value."""
         try:
             return int(full_move_value)
         except ValueError:
             raise NotIntegerFullMoveValue(f"Full move value is not an integer: {full_move_value}")
 
 class WrongBoardSize(Exception):
+    """Raised when board file or rows has wrong length."""
     pass
 
 class WrongActiveColourValue(Exception):
+    """Raised when active colour value is incorrect."""
     pass
 
 class WrongEnPassantValue(Exception):
+    """Raised when en passant value is incorrect."""
     pass
 
 class WrongCastlingRights(Exception):
+    """Raised when castling rights value is incorrect."""
     pass
 
 class NotIntegerHalfMoveValue(Exception):
+    """Raised when half move value is not integer."""
     pass
 
 class NotIntegerFullMoveValue(Exception):
+    """Raised when full move value is not integer."""
     pass
