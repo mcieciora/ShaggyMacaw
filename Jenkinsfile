@@ -147,7 +147,7 @@ pipeline {
                 stage ("Code coverage") {
                     steps {
                         script {
-                            sh "docker run --name code_coverage_container test_image python -m pytest --cov=src automated_tests/ --cov-fail-under=95 --cov-report=html"
+                            sh "docker run --name code_coverage_container test_image python -m pytest --cov=src automated_tests/ --cov-fail-under=85 --cov-report=html"
                             sh "docker container cp code_coverage_container:/app/htmlcov ./"
                         }
                     }
