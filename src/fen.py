@@ -43,10 +43,10 @@ class Fen:
             temp_row = []
             for square in row:
                 if square.isdigit():
-                    temp_row.append(square)
-                else:
                     for _ in range(int(square)):
                         temp_row.append('')
+                else:
+                    temp_row.append(square)
             if row_size := (len(temp_row)) != 8:
                 raise WrongBoardSize(f"{index} row size if incorrect. Expected is 8, but got: {row_size}")
             return_board.append(temp_row)
