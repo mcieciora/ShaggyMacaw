@@ -2,6 +2,7 @@ from pytest import mark
 
 from src.fen import Fen
 
+
 @mark.unittest
 def test__fen__generate_board_squares():
     """Cover tc-0"""
