@@ -16,7 +16,7 @@ def get_parametrized_test_set(test_file, expected_data):
 
 
 @mark.smoke
-def test__fen__generate_board_setting():
+def test__smoke__fen__generate_board_setting():
     original_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     test_object = Fen(original_fen)
     test_object.generate_board_setting()
@@ -26,7 +26,7 @@ def test__fen__generate_board_setting():
 
 
 @mark.smoke
-def test__smoke__generate_chess_board_from_fen():
+def test__smoke__fen__generate_chess_board_from_fen():
     test_set = get_parametrized_test_set("fen_0", fen_0_data)
     for test_set_value in test_set:
         test_data, expected_output = test_set_value[0], test_set_value[1]

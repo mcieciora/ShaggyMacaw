@@ -1,15 +1,6 @@
 expected_data = {
     "test_resource_1": {
-        "board_setup": [
-            ["r", "n", "", "q", "", "r", "k", ""],
-            ["p", "b", "", "p", "p", "p", "b", "p"],
-            ["", "p", "", "", "", "n", "p", ""],
-            ["", "", "P", "", "", "", "", ""],
-            ["", "", "", "", "", "", "", ""],
-            ["", "P", "", "", "P", "N", "", ""],
-            ["P", "B", "P", "", "B", "P", "P", "P"],
-            ["R", "N", "", "Q", "", "R", "K", ""]
-        ],
+        "board_setup": "rn-q-rk-pb-pppbp-p---np---P--------------P--PN--PBP-BPPPRN-Q-RK-",
         "white_move": False,
         "castling_rights": "-",
         "available_en_passant": "-",
@@ -17,16 +8,7 @@ expected_data = {
         "full_move_number": 8
     },
     "test_resource_2": {
-        "board_setup": [
-            ['r', '', '', 'q', '', 'r', 'k', ''],
-            ['p', 'b', '', '', '', 'p', 'b', 'p'],
-            ['', '', '', 'p', 'p', 'n', 'p', ''],
-            ['', '', 'p', '', 'n', '', '', ''],
-            ['', '', 'P', '', '', '', '', ''],
-            ['', 'P', 'N', '', 'P', '', '', ''],
-            ['P', 'B', 'Q', 'N', 'B', 'P', 'P', 'P'],
-            ['R', '', '', '', '', 'R', 'K', '']
-        ],
+        "board_setup": "r--q-rk-pb---pbp---ppnp---p-n-----P------PN-P---PBQNBPPPR----RK-",
         "white_move": False,
         "castling_rights": "-",
         "available_en_passant": "-",
@@ -34,16 +16,7 @@ expected_data = {
         "full_move_number": 13
     },
     "test_resource_3": {
-        "board_setup": [
-            ['', '', 'r', 'r', '', '', 'k', ''],
-            ['p', 'b', '', '', 'q', 'p', 'b', 'p'],
-            ['', '', '', '', '', 'n', 'p', ''],
-            ['', '', 'p', 'p', 'n', '', '', ''],
-            ['', '', '', '', '', '', '', ''],
-            ['', 'P', 'N', '', 'P', '', '', 'P'],
-            ['P', 'B', 'Q', 'N', 'B', 'P', 'P', ''],
-            ['', '', '', 'R', 'R', '', 'K', '']
-        ],
+        "board_setup": "--rr--k-pb--qpbp-----np---ppn------------PN-P--PPBQNBPP----RR-K-",
         "white_move": True,
         "castling_rights": "-",
         "available_en_passant": "-",
@@ -51,16 +24,7 @@ expected_data = {
         "full_move_number": 18
     },
     "test_resource_4": {
-        "board_setup": [
-            ['r', '', '', '', 'r', '', 'k', ''],
-            ['p', 'p', '', '', '', 'p', '', 'p'],
-            ['', 'b', 'n', '', '', '', '', ''],
-            ['', '', '', '', '', '', 'p', ''],
-            ['', '', '', 'p', '', 'N', 'b', ''],
-            ['', '', '', '', '', '', 'P', ''],
-            ['P', 'P', '', 'N', 'P', 'P', 'B', 'P'],
-            ['R', '', 'R', '', '', 'K', '', '']
-        ],
+        "board_setup": "r---r-k-pp---p-p-bn-----------p----p-Nb-------P-PP-NPPBPR-R--K--",
         "white_move": True,
         "castling_rights": "-",
         "available_en_passant": "g6",
@@ -68,16 +32,7 @@ expected_data = {
         "full_move_number": 18
     },
     "test_resource_5": {
-        "board_setup": [
-            ['', '', 'r', '', '', '', 'k', ''],
-            ['p', '', 'r', '', '', 'p', '', 'p'],
-            ['', '', '', '', '', '', 'p', ''],
-            ['', '', 'N', '', 'R', '', '', ''],
-            ['', '', 'N', '', '', '', '', ''],
-            ['', 'P', '', '', '', '', '', 'P'],
-            ['P', '', '', '', '', 'P', '', ''],
-            ['', '', '', '', '', '', 'K', '']
-        ],
+        "board_setup": "--r---k-p-r--p-p------p---N-R-----N------P-----PP----P--------K-",
         "white_move": True,
         "castling_rights": "-",
         "available_en_passant": "-",
@@ -85,16 +40,7 @@ expected_data = {
         "full_move_number": 31
     },
     "test_resource_6": {
-        "board_setup": [
-            ['r', '', 'b', 'q', 'k', 'b', 'n', 'r'],
-            ['p', 'p', '', 'p', 'p', 'p', 'p', 'p'],
-            ['', '', 'n', '', '', '', '', ''],
-            ['', '', '', '', '', '', '', ''],
-            ['', '', '', 'p', 'P', '', '', ''],
-            ['', '', '', '', '', 'N', '', ''],
-            ['P', 'P', 'P', '', '', 'P', 'P', 'P'],
-            ['R', 'N', 'B', 'Q', 'K', 'B', '', 'R']
-        ],
+        "board_setup": "r-bqkbnrpp-ppppp--n----------------pP--------N--PPP--PPPRNBQKB-R",
         "white_move": True,
         "castling_rights": "KQkq",
         "available_en_passant": "-",
@@ -102,16 +48,7 @@ expected_data = {
         "full_move_number": 4
     },
     "test_resource_7": {
-        "board_setup": [
-            ['r', '', 'b', 'q', 'k', '', 'n', 'r'],
-            ['', 'p', '', '', '', 'p', 'b', 'p'],
-            ['p', '', 'n', 'p', '', '', 'p', ''],
-            ['', '', '', '', 'p', '', '', ''],
-            ['', '', 'P', '', 'P', '', '', ''],
-            ['', '', 'N', 'B', '', '', '', ''],
-            ['P', 'P', '', '', '', 'P', 'P', 'P'],
-            ['R', 'N', 'B', 'Q', 'K', '', '', 'R']
-        ],
+        "board_setup": "r-bqk-nr-p---pbpp-np--p-----p-----P-P-----NB----PP---PPPRNBQK--R",
         "white_move": True,
         "castling_rights": "KQkq",
         "available_en_passant": "-",
@@ -119,16 +56,7 @@ expected_data = {
         "full_move_number": 9
     },
     "test_resource_8": {
-        "board_setup": [
-            ['', 'r', 'n', '', '', 'r', 'k', ''],
-            ['', 'p', '', 'q', '', 'p', 'b', 'p'],
-            ['p', '', 'n', 'p', 'b', '', 'p', ''],
-            ['', '', '', 'N', 'p', '', '', ''],
-            ['', '', 'P', '', 'P', '', '', ''],
-            ['', '', 'N', 'B', 'B', '', '', ''],
-            ['P', 'P', '', '', '', 'P', 'P', 'P'],
-            ['R', '', '', 'Q', '', 'R', 'K', '']
-        ],
+        "board_setup": "-rn--rk--p-q-pbpp-npb-p----Np-----P-P-----NBB---PP---PPPR--Q-RK-",
         "white_move": True,
         "castling_rights": "-",
         "available_en_passant": "-",
@@ -136,16 +64,7 @@ expected_data = {
         "full_move_number": 15
     },
     "test_resource_9": {
-        "board_setup": [
-            ['', 'r', 'n', '', '', 'r', 'k', ''],
-            ['', 'p', '', 'q', '', '', 'b', 'p'],
-            ['p', '', '', 'p', 'b', '', 'p', ''],
-            ['', '', '', 'N', '', '', '', ''],
-            ['P', '', 'P', 'p', '', 'N', '', ''],
-            ['', '', '', 'B', '', '', '', ''],
-            ['', 'P', '', '', '', 'P', 'P', 'P'],
-            ['R', '', '', 'Q', '', 'R', 'K', '']
-        ],
+        "board_setup": "-rn--rk--p-q--bpp--pb-p----N----P-Pp-N-----B-----P---PPPR--Q-RK-",
         "white_move": False,
         "castling_rights": "-",
         "available_en_passant": "-",
@@ -153,16 +72,7 @@ expected_data = {
         "full_move_number": 21
     },
     "test_resource_10": {
-        "board_setup": [
-            ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
-            ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
-            ['', '', '', '', '', '', '', ''],
-            ['', '', '', '', '', '', '', ''],
-            ['', '', '', '', 'P', '', '', ''],
-            ['', '', '', '', '', '', '', ''],
-            ['P', 'P', 'P', 'P', '', 'P', 'P', 'P'],
-            ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R']
-        ],
+        "board_setup": "rnbqkbnrpppppppp--------------------P-----------PPPP-PPPRNBQKBNR",
         "white_move": False,
         "castling_rights": "KQkq",
         "available_en_passant": "e3",

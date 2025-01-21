@@ -1,4 +1,4 @@
-from itertools import product
+from ast import Index
 
 
 class Fen:
@@ -24,32 +24,64 @@ class Fen:
         for key, value in parsed_fen.items():
             setattr(self, key, value)
 
+    def convert_square_to_index(self, square):
+        """Convert square value to board setup index."""
+        try:
+            return self.board_squares.index(square)
+        except ValueError:
+            raise NoSquareInBoard(f"Square {square} could not be found in board.")
+
+    def convert_index_to_square(self, index):
+        """Convert board setup index to square value."""
+        try:
+            return self.board_squares[index]
+        except IndexError:
+            raise NoSquareInBoard(f"Index {index} could not be found in board. Board is of 64 squares size counting "
+                                  f"from 0.")
+
+    def get_square_value(self, square):
+        """Get pawn or piece value from given square."""
+        square_index = self.convert_square_to_index(square)
+        return self.board_setup[square_index]
+
+    def is_square_empty(self, square):
+        """Return true if given square value is -"""
+        return True if self.get_square_value(square) == "-" else False
+
+    def get_square_active_colour(self, square):
+        """Get pawn's or piece's colour from given square"""
+        square_value = self.get_square_value(square)
+        if not self.is_square_empty(square):
+            return True if square_value.isupper() else False
+
     @staticmethod
     def generate_board_squares():
         """Generate list of possible chess board squares."""
-        files, rows = ["a", "b", "c", "d", "e", "f", "g", "h"], list(range(1, 9))
-        product_list = list(product(files, rows))
-        generated_squares = [''.join(map(str, x)) for x in product_list]
+        generated_squares = []
+        files, rows = ["a", "b", "c", "d", "e", "f", "g", "h"], list(range(8, 0, -1))
+        for row in rows:
+            for file in files:
+                generated_squares.append(f"{file}{row}")
         return generated_squares
 
     @staticmethod
     def parse_board_setup(fen):
         """Parse board setup and verify number of files and rows."""
-        return_board = []
+        return_board = ""
         rows = fen.split("/")
         if rows_number := (len(rows)) != 8:
             raise WrongBoardSize(f"Number of rows is incorrect. Expected is 8, but got: {rows_number}")
         for index, row in enumerate(rows):
-            temp_row = []
+            temp_row = ""
             for square in row:
                 if square.isdigit():
                     for _ in range(int(square)):
-                        temp_row.append('')
+                        temp_row += '-'
                 else:
-                    temp_row.append(square)
+                    temp_row += square
             if row_size := (len(temp_row)) != 8:
                 raise WrongBoardSize(f"{index} row size if incorrect. Expected is 8, but got: {row_size}")
-            return_board.append(temp_row)
+            return_board += temp_row
         return return_board
 
     @staticmethod
@@ -111,3 +143,6 @@ class NotIntegerHalfMoveValue(Exception):
 
 class NotIntegerFullMoveValue(Exception):
     """Raised when full move value is not integer."""
+
+class NoSquareInBoard(Exception):
+    """Raised when given square is not available in board."""
