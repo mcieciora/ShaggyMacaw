@@ -21,16 +21,16 @@ class Fen:
         parsed_fen["half_move_clock"] = self.parse_half_move(split_fen[4])
         parsed_fen["full_move_number"] = self.parse_full_move(split_fen[5])
 
-        for key, value in parsed_fen:
+        for key, value in parsed_fen.items():
             setattr(self, key, value)
 
     @staticmethod
     def generate_board_squares():
         """Generate list of possible chess board squares."""
-        files = ["a", "b", "c", "d", "e", "f", "g", "h"]
-        rows = list(range(1, 9))
+        files, rows = ["a", "b", "c", "d", "e", "f", "g", "h"], list(range(1, 9))
         product_list = list(product(files, rows))
-        return [''.join(map(str, x)) for x in product_list]
+        generated_squares = [''.join(map(str, x)) for x in product_list]
+        return generated_squares
 
     @staticmethod
     def parse_board_setup(fen):
@@ -43,10 +43,10 @@ class Fen:
             temp_row = []
             for square in row:
                 if square.isdigit():
-                    temp_row.append(square)
-                else:
                     for _ in range(int(square)):
                         temp_row.append('')
+                else:
+                    temp_row.append(square)
             if row_size := (len(temp_row)) != 8:
                 raise WrongBoardSize(f"{index} row size if incorrect. Expected is 8, but got: {row_size}")
             return_board.append(temp_row)
@@ -68,7 +68,7 @@ class Fen:
 
     def parse_en_passant(self, en_passant_square):
         """Parse and verify en passant value."""
-        if en_passant_square not in self.board_squares:
+        if en_passant_square not in self.board_squares and en_passant_square != "-":
             raise WrongEnPassantValue(f"En passant square has wrong value: {en_passant_square}")
         return en_passant_square
 
