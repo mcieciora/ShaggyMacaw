@@ -5,7 +5,6 @@ from src.fen import Fen, WrongBoardSize
 
 @mark.unittest
 def test__fen__parse_board_setup():
-    """Cover tc-0"""
     expected_data = [
             ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
             ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
@@ -28,7 +27,6 @@ def test__fen__parse_board_setup():
 
 @mark.unittest
 def test__fen__parse_board_setup__insufficient_rows():
-    """Cover tc-0"""
     original_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     test_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP"
     test_object = Fen(original_fen)
@@ -39,7 +37,6 @@ def test__fen__parse_board_setup__insufficient_rows():
 
 @mark.unittest
 def test__fen__parse_board_setup__insufficient_files():
-    """Cover tc-0"""
     original_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     test_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBN"
     test_object = Fen(original_fen)
