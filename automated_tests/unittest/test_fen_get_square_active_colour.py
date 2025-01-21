@@ -9,7 +9,7 @@ def test__unittest__fen__get_square_active_colour__is_white():
     test_object = Fen(original_fen)
     test_object.generate_board_setting()
     actual_data = test_object.get_square_active_colour("a1")
-    assert actual_data == True, f"Expected: True, actual: {actual_data}"
+    assert actual_data is True, f"Expected: True, actual: {actual_data}"
 
 
 @mark.unittest
@@ -18,7 +18,7 @@ def test__unittest__fen__get_square_active_colour__is_black():
     test_object = Fen(original_fen)
     test_object.generate_board_setting()
     actual_data = test_object.get_square_active_colour("a8")
-    assert actual_data == False, f"Expected: False, actual: {actual_data}"
+    assert actual_data is False, f"Expected: False, actual: {actual_data}"
 
 
 @mark.unittest

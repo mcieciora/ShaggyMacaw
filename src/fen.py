@@ -1,6 +1,3 @@
-from ast import Index
-
-
 class Fen:
     """FEN notation parser and verification class."""
 
@@ -28,16 +25,16 @@ class Fen:
         """Convert square value to board setup index."""
         try:
             return self.board_squares.index(square)
-        except ValueError:
-            raise NoSquareInBoard(f"Square {square} could not be found in board.")
+        except ValueError as exc:
+            raise NoSquareInBoard(f"Square {square} could not be found in board.") from exc
 
     def convert_index_to_square(self, index):
         """Convert board setup index to square value."""
         try:
             return self.board_squares[index]
-        except IndexError:
+        except IndexError as exc:
             raise NoSquareInBoard(f"Index {index} could not be found in board. Board is of 64 squares size counting "
-                                  f"from 0.")
+                                  f"from 0.") from exc
 
     def get_square_value(self, square):
         """Get pawn or piece value from given square."""
@@ -45,11 +42,11 @@ class Fen:
         return self.board_setup[square_index]
 
     def is_square_empty(self, square):
-        """Return true if given square value is -"""
+        """Return true if given square value is -."""
         return True if self.get_square_value(square) == "-" else False
 
     def get_square_active_colour(self, square):
-        """Get pawn's or piece's colour from given square"""
+        """Get pawn's or piece's colour from given square."""
         square_value = self.get_square_value(square)
         if not self.is_square_empty(square):
             return True if square_value.isupper() else False
@@ -109,16 +106,16 @@ class Fen:
         """Parse and verify half move value."""
         try:
             return int(half_move_value)
-        except ValueError:
-            raise NotIntegerHalfMoveValue(f"Half move value is not an integer: {half_move_value}")
+        except ValueError as exc:
+            raise NotIntegerHalfMoveValue(f"Half move value is not an integer: {half_move_value}") from exc
 
     @staticmethod
     def parse_full_move(full_move_value):
         """Parse and verify full move value."""
         try:
             return int(full_move_value)
-        except ValueError:
-            raise NotIntegerFullMoveValue(f"Full move value is not an integer: {full_move_value}")
+        except ValueError as exc:
+            raise NotIntegerFullMoveValue(f"Full move value is not an integer: {full_move_value}") from exc
 
 
 class WrongBoardSize(Exception):
@@ -143,6 +140,7 @@ class NotIntegerHalfMoveValue(Exception):
 
 class NotIntegerFullMoveValue(Exception):
     """Raised when full move value is not integer."""
+
 
 class NoSquareInBoard(Exception):
     """Raised when given square is not available in board."""

@@ -9,7 +9,7 @@ def test__unittest__fen__is_square_empty__is_empty():
     test_object = Fen(original_fen)
     test_object.generate_board_setting()
     actual_data = test_object.is_square_empty("a3")
-    assert actual_data == True, f"Expected: True, actual: {actual_data}"
+    assert actual_data is True, f"Expected: True, actual: {actual_data}"
 
 
 @mark.unittest
@@ -18,7 +18,7 @@ def test__unittest__fen__is_square_empty__is_not_empty():
     test_object = Fen(original_fen)
     test_object.generate_board_setting()
     actual_data = test_object.is_square_empty("a1")
-    assert actual_data == False, f"Expected: False, actual: {actual_data}"
+    assert actual_data is False, f"Expected: False, actual: {actual_data}"
 
 
 @mark.unittest
