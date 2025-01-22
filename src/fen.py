@@ -39,17 +39,19 @@ class Fen:
     def get_square_value(self, square):
         """Get pawn or piece value from given square."""
         square_index = self.convert_square_to_index(square)
-        return self.board_setup[square_index]
+        return getattr(self, "board_setup")[square_index]
 
     def is_square_empty(self, square):
         """Return true if given square value is -."""
-        return True if self.get_square_value(square) == "-" else False
+        return self.get_square_value(square) == "-"
 
     def get_square_active_colour(self, square):
         """Get pawn's or piece's colour from given square."""
         square_value = self.get_square_value(square)
+        active_colour = None
         if not self.is_square_empty(square):
-            return True if square_value.isupper() else False
+            active_colour = square_value.isupper()
+        return active_colour
 
     @staticmethod
     def generate_board_squares():
@@ -86,7 +88,7 @@ class Fen:
         """Parse and verify active colours value."""
         if active_colour not in ["w", "b"]:
             raise WrongActiveColourValue(f"Active colour has incorrect value: {active_colour}, expected: w/b")
-        return True if active_colour == "w" else False
+        return active_colour == "w"
 
     @staticmethod
     def parse_castling_rights(castling_rights):

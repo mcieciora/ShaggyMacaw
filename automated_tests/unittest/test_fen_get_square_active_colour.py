@@ -23,6 +23,15 @@ def test__unittest__fen__get_square_active_colour__is_black():
 
 @mark.unittest
 def test__unittest__fen__get_square_active_colour__is_empty():
+    original_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 2"
+    test_object = Fen(original_fen)
+    test_object.generate_board_setting()
+    actual_data = test_object.get_square_active_colour("a3")
+    assert actual_data is None, f"Expected: None, actual: {actual_data}"
+
+
+@mark.unittest
+def test__unittest__fen__get_square_active_colour__no_square():
     original_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 x"
     test_object = Fen(original_fen)
     with raises(NoSquareInBoard):
