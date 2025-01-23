@@ -21,7 +21,7 @@ def test__unittest__fen__parse_en_passant__no_square():
 
 @mark.unittest
 def test__unittest__fen__parse_en_passant__wrong_en_passant_square():
-    original_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq xX 0 1"
+    original_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     test_object = Fen(original_fen)
     with raises(WrongEnPassantValue):
         test_object.parse_en_passant("xX")

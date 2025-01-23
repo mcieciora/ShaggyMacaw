@@ -21,7 +21,7 @@ def test__unittest__fen__parse_active_colour__black_colour():
 
 @mark.unittest
 def test__unittest__fen__parse_active_colour__wrong_active_colour():
-    original_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR x KQkq - 0 1"
+    original_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     test_object = Fen(original_fen)
 
     with raises(WrongActiveColourValue):

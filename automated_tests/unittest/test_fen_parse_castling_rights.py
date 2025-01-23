@@ -14,7 +14,7 @@ def test__unittest__fen__parse_castling_rights():
 
 @mark.unittest
 def test__unittest__fen__parse_castling_rights__wrong_castling_rights():
-    original_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w XX - 0 1"
+    original_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     test_object = Fen(original_fen)
     with raises(WrongCastlingRights):
         test_object.parse_castling_rights("XX")

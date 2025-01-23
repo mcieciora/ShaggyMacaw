@@ -13,7 +13,7 @@ def test__unittest__fen__parse_full_move():
 
 @mark.unittest
 def test__unittest__fen__parse_full_move__not_integer():
-    original_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 x"
+    original_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 2"
     test_object = Fen(original_fen)
     with raises(NotIntegerFullMoveValue):
         test_object.parse_full_move("x")

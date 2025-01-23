@@ -6,20 +6,14 @@ class Fen:
         self.original_fen = fen
         self.board_squares = self.generate_board_squares()
 
-    def generate_board_setting(self):
-        """Generate board setting from original_fen and verifies each FEN element."""
-        parsed_fen = {}
         split_fen = self.original_fen.split()
 
-        parsed_fen["board_setup"] = self.parse_board_setup(split_fen[0])
-        parsed_fen["active_colour"] = self.parse_active_colour(split_fen[1])
-        parsed_fen["castling_rights"] = self.parse_castling_rights(split_fen[2])
-        parsed_fen["available_en_passant"] = self.parse_en_passant(split_fen[3])
-        parsed_fen["half_move_clock"] = self.parse_half_move(split_fen[4])
-        parsed_fen["full_move_number"] = self.parse_full_move(split_fen[5])
-
-        for key, value in parsed_fen.items():
-            setattr(self, key, value)
+        self.board_setup = self.parse_board_setup(split_fen[0])
+        self.active_colour = self.parse_active_colour(split_fen[1])
+        self.castling_rights = self.parse_castling_rights(split_fen[2])
+        self.available_en_passant = self.parse_en_passant(split_fen[3])
+        self.half_move_clock = self.parse_half_move(split_fen[4])
+        self.full_move_number = self.parse_full_move(split_fen[5])
 
     def convert_square_to_index(self, square):
         """Convert square value to board setup index."""
@@ -39,7 +33,7 @@ class Fen:
     def get_square_value(self, square):
         """Get pawn or piece value from given square."""
         square_index = self.convert_square_to_index(square)
-        return getattr(self, "board_setup")[square_index]
+        return self.board_setup[square_index]
 
     def is_square_empty(self, square):
         """Return true if given square value is -."""
@@ -48,10 +42,29 @@ class Fen:
     def get_square_active_colour(self, square):
         """Get pawn's or piece's colour from given square."""
         square_value = self.get_square_value(square)
-        active_colour = None
         if not self.is_square_empty(square):
-            active_colour = square_value.isupper()
-        return active_colour
+            return square_value.isupper()
+        else:
+            raise SquareEmpty
+
+    def is_white_an_active_colour(self):
+        """Check if white is and active colour."""
+        return self.active_colour == "w"
+
+    @staticmethod
+    def convert_index_to_coordinates(index):
+        """Convert index value to y, x coordinates on chess board."""
+        return int(index/8), index%8
+
+    @staticmethod
+    def convert_coordinates_to_index(y, x):
+        """Convert y, x coordinates on chess board to index."""
+        return y*8 + x
+
+    @staticmethod
+    def coordinates_in_boundaries(y, x):
+        """Check if coordinates y, x are in chess board boundaries."""
+        return 0 <= x < 8 and 0 <= y < 8
 
     @staticmethod
     def generate_board_squares():
@@ -146,3 +159,7 @@ class NotIntegerFullMoveValue(Exception):
 
 class NoSquareInBoard(Exception):
     """Raised when given square is not available in board."""
+
+
+class SquareEmpty(Exception):
+    """Raised when square checked for active colour is empty. Use with is_square_empty instead."""
