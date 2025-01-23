@@ -1,7 +1,10 @@
 from src.fen import Fen
 
 class ChessBoard:
+    """Moves generation and chess board management class."""
+
     def __init__(self, fen):
+        """Initialize ChessBoard object."""
         self.fen = Fen(fen)
         self.attacked_squares_dict = {
             True: [],
@@ -9,6 +12,7 @@ class ChessBoard:
         }
 
     def generate_all_possible_moves(self):
+        """Generate all possible moves."""
         all_possible_moves = []
         for index, piece in enumerate(self.fen.board_setup):
             match piece:
@@ -17,6 +21,7 @@ class ChessBoard:
         return all_possible_moves
 
     def generate_pawn_moves(self, index, piece):
+        """Generate pawn moves."""
         y, x = self.fen.convert_index_to_coordinates(index)
 
         pawn_movement_pattern = {
@@ -81,7 +86,3 @@ class ChessBoard:
             if self.fen.is_white_an_active_colour() is piece.isupper() and new_square == self.fen.available_en_passant:
                 default_return = f"{original_square[0]}x{new_square}"
         return default_return
-
-
-a = ChessBoard("r3r1k1/pp3p1p/1bn5/P5p1/3p1NbP/6P1/1P1NPPB1/R1R2K2 b - - 0 18")
-a.generate_all_possible_moves()
