@@ -49,7 +49,7 @@ class Fen:
 
     def is_white_an_active_colour(self):
         """Check if white is and active colour."""
-        return self.active_colour == "w"
+        return self.active_colour
 
     @staticmethod
     def convert_index_to_coordinates(index):
@@ -70,30 +70,30 @@ class Fen:
     def generate_board_squares():
         """Generate list of possible chess board squares."""
         generated_squares = []
-        files, rows = ["a", "b", "c", "d", "e", "f", "g", "h"], list(range(8, 0, -1))
-        for row in rows:
+        files, ranks = ["a", "b", "c", "d", "e", "f", "g", "h"], list(range(8, 0, -1))
+        for rank in ranks:
             for file in files:
-                generated_squares.append(f"{file}{row}")
+                generated_squares.append(f"{file}{rank}")
         return generated_squares
 
     @staticmethod
     def parse_board_setup(fen):
-        """Parse board setup and verify number of files and rows."""
+        """Parse board setup and verify number of files and ranks."""
         return_board = ""
-        rows = fen.split("/")
-        if rows_number := (len(rows)) != 8:
-            raise WrongBoardSize(f"Number of rows is incorrect. Expected is 8, but got: {rows_number}")
-        for index, row in enumerate(rows):
-            temp_row = ""
-            for square in row:
+        ranks = fen.split("/")
+        if ranks_number := (len(ranks)) != 8:
+            raise WrongBoardSize(f"Number of ranks is incorrect. Expected is 8, but got: {ranks_number}")
+        for index, rank in enumerate(ranks):
+            temp_rank = ""
+            for square in rank:
                 if square.isdigit():
                     for _ in range(int(square)):
-                        temp_row += '-'
+                        temp_rank += '-'
                 else:
-                    temp_row += square
-            if row_size := (len(temp_row)) != 8:
-                raise WrongBoardSize(f"{index} row size if incorrect. Expected is 8, but got: {row_size}")
-            return_board += temp_row
+                    temp_rank += square
+            if rank_size := (len(temp_rank)) != 8:
+                raise WrongBoardSize(f"{index} rank size if incorrect. Expected is 8, but got: {rank_size}")
+            return_board += temp_rank
         return return_board
 
     @staticmethod
@@ -134,7 +134,7 @@ class Fen:
 
 
 class WrongBoardSize(Exception):
-    """Raised when board file or rows has wrong length."""
+    """Raised when board file or ranks has wrong length."""
 
 
 class WrongActiveColourValue(Exception):

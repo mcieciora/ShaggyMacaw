@@ -144,17 +144,31 @@ pipeline {
                         }
                     }
                 }
-                stage ("Code coverage") {
+                stage ("Code coverage - unittest") {
                     steps {
                         script {
-                            sh "docker run --name code_coverage_container test_image python -m pytest --cov=src automated_tests/ --cov-fail-under=85 --cov-report=html"
-                            sh "docker container cp code_coverage_container:/app/htmlcov ./"
+                            sh "docker run --name code_coverage_container_unittest test_image python -m pytest --cov=src automated_tests/unittest --cov-fail-under=85 --cov-report=html"
                         }
                     }
                     post {
                         always {
-                            sh "docker rm code_coverage_container"
-                            archiveArtifacts artifacts: "htmlcov/*"
+                            sh "docker container cp code_coverage_container_unittest:/app/htmlcov ./html_cov_unittest"
+                            sh "docker rm code_coverage_container_unittest"
+                            archiveArtifacts artifacts: "html_cov_unittest/*"
+                        }
+                    }
+                }
+                stage ("Code coverage - smoke") {
+                    steps {
+                        script {
+                            sh "docker run --name code_coverage_container_smoke test_image python -m pytest --cov=src automated_tests/smoke --cov-fail-under=85 --cov-report=html"
+                        }
+                    }
+                    post {
+                        always {
+                            sh "docker container cp code_coverage_container_smoke:/app/htmlcov ./html_cov_smoke"
+                            sh "docker rm code_coverage_container_smoke"
+                            archiveArtifacts artifacts: "html_cov_smoke/*"
                         }
                     }
                 }
@@ -176,11 +190,11 @@ pipeline {
             steps {
                 script {
                     sh "docker run --name unit_test_container test_image python -m pytest -m unittest automated_tests -v --junitxml=results/unittests_results.xml"
-                    sh "docker container cp unit_test_container:/app/results ./"
                 }
             }
             post {
                 always {
+                    sh "docker container cp unit_test_container:/app/results ./"
                     sh "docker rm unit_test_container"
                     archiveArtifacts artifacts: "**/unittests_results.xml"
                 }
@@ -214,7 +228,6 @@ pipeline {
                                 if (env.TEST_GROUPS == "all" || env.TEST_GROUPS.contains(TEST_GROUP)) {
                                     echo "Running ${TEST_GROUP}"
                                     sh "docker run --name ${TEST_GROUP}_test test_image python -m pytest -m ${FLAG} -k ${TEST_GROUP} automated_tests -v --junitxml=results/${TEST_GROUP}_results.xml"
-                                    sh "docker container cp ${TEST_GROUP}_test:/app/results ./"
                                 }
                                 else {
                                     echo "Skipping execution."
@@ -223,6 +236,7 @@ pipeline {
                         }
                         post {
                             always {
+                                sh "docker container cp ${TEST_GROUP}_test:/app/results ./"
                                 sh "docker rm ${TEST_GROUP}_test"
                                 archiveArtifacts artifacts: "**/${TEST_GROUP}_results.xml"
                             }
@@ -289,9 +303,17 @@ pipeline {
                 allowMissing: false,
                 alwaysLinkToLastBuild: false,
                 keepAll: true,
-                reportDir: "htmlcov",
+                reportDir: "html_cov_unittest",
                 reportFiles: "index.html",
-                reportName: "PyTestCov"
+                reportName: "PyTestCov - unittest"
+            ]
+            publishHTML target: [
+                allowMissing: false,
+                alwaysLinkToLastBuild: false,
+                keepAll: true,
+                reportDir: "html_cov_smoke",
+                reportFiles: "index.html",
+                reportName: "PyTestCov - smoke"
             ]
             cleanWs()
         }

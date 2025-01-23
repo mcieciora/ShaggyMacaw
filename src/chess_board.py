@@ -54,6 +54,11 @@ class ChessBoard:
         """Check if pawn is in starting position."""
         return pawn.isupper() and y == 6 or pawn.islower() and y == 1
 
+    @staticmethod
+    def is_pawn_next_move_promotion(pawn, y):
+        """Check if pawn is on 7th rank"""
+        return pawn.isupper() and y == 1 or pawn.islower() and y == 6
+
     def is_move_possible(self, position, movement, expected_empty):
         """Calculate new position, verify if square is in board and check if it is expected to be empty."""
         default_return = False

@@ -81,18 +81,18 @@ test_data_dict = {
         "piece": "p",
         "expected_result": []
     },
-    # "test_resource_14": {
-    #     "fen": "r3r1k1/1P5p/2n2p2/6p1/2Pp1NbP/6P1/3NPPB1/R1R2K2 w - - 0 19 ",
-    #     "index": 9,
-    #     "piece": "P",
-    #     "expected_result": ["b8=Q", "b8=N", "b8=R", "b8=B", "bxa8=Q", "bxa8=N", "bxa8=R", "bxa8=B"]
-    # },
-    # "test_resource_15": {
-    #     "fen": "5k2/1R3p2/3N2p1/8/6Pp/2n2K1P/P2pr3/8 w - - 1 42",
-    #     "index": 51,
-    #     "piece": "p",
-    #     "expected_result": ["d1=Q", "d1=N", "d1=R", "d1=B"]
-    # }
+    "test_resource_14": {
+        "fen": "r3r1k1/1P5p/2n2p2/6p1/2Pp1NbP/6P1/3NPPB1/R1R2K2 w - - 0 19 ",
+        "index": 9,
+        "piece": "P",
+        "expected_result": ["b8=Q", "b8=N", "b8=R", "b8=B", "bxa8=Q", "bxa8=N", "bxa8=R", "bxa8=B"]
+    },
+    "test_resource_15": {
+        "fen": "5k2/1R3p2/3N2p1/8/6Pp/2n2K1P/P2pr3/8 w - - 1 42",
+        "index": 51,
+        "piece": "p",
+        "expected_result": ["d1=Q", "d1=N", "d1=R", "d1=B"]
+    }
 }
 
 

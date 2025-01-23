@@ -14,7 +14,7 @@ def test__unittest__fen__parse_board_setup():
 
 
 @mark.unittest
-def test__unittest__fen__parse_board_setup__insufficient_rows():
+def test__unittest__fen__parse_board_setup__insufficient_ranks():
     original_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     test_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP"
     test_object = Fen(original_fen)
