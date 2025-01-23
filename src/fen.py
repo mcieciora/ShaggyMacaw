@@ -54,7 +54,7 @@ class Fen:
     @staticmethod
     def convert_index_to_coordinates(index):
         """Convert index value to y, x coordinates on chess board."""
-        return int(index/8), index%8
+        return int(index/8), index % 8
 
     @staticmethod
     def convert_coordinates_to_index(y, x):

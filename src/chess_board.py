@@ -1,5 +1,6 @@
 from src.fen import Fen
 
+
 class ChessBoard:
     """Moves generation and chess board management class."""
 
