@@ -7,7 +7,7 @@ class ChessBoard:
     def __init__(self, fen):
         """Initialize ChessBoard object."""
         self.fen = Fen(fen)
-        self.attacked_squares_dict = {
+        self.possible_capture_dict = {
             True: [],
             False: []
         }
@@ -18,7 +18,7 @@ class ChessBoard:
         for index, piece in enumerate(self.fen.board_setup):
             match piece:
                 case "p" | "P":
-                    all_possible_moves.append(self.generate_pawn_moves(index, piece))
+                    all_possible_moves.extend(self.generate_pawn_moves(index, piece))
         return all_possible_moves
 
     def generate_pawn_moves(self, index, piece):
@@ -29,12 +29,12 @@ class ChessBoard:
             True: [(0, -1), (0, -2)] if self.is_pawn_in_starting_position(piece, y) else [(0, -1)],
             False: [(0, 1), (0, 2)] if self.is_pawn_in_starting_position(piece, y) else [(0, 1)]
         }
-        pawn_attack_pattern = {
+        pawn_capture_pattern = {
             True: [(-1, -1), (1, -1)],
             False: [(-1, 1), (1, 1)]
         }
         movement_pattern = pawn_movement_pattern[piece.isupper()]
-        capture_pattern = pawn_attack_pattern[piece.isupper()]
+        capture_pattern = pawn_capture_pattern[piece.isupper()]
 
         available_squares = []
         for movement in movement_pattern:
@@ -43,7 +43,7 @@ class ChessBoard:
             else:
                 break
         for capture in capture_pattern:
-            if new_square := self.check_attack_square((x, y), capture, index, piece):
+            if new_square := self.check_capture_square((x, y), capture, index, piece):
                 available_squares.append(new_square)
             if new_square := self.is_en_passant_possible((x, y), capture, index, piece):
                 available_squares.append(new_square)
@@ -71,23 +71,23 @@ class ChessBoard:
                 default_return = square
         return default_return
 
-    def check_attack_square(self, position, attack, index, piece):
+    def check_capture_square(self, position, capture, index, piece):
         """Verify if move is possible and check if square is occupied by opposite colour piece."""
         default_return = False
         original_square = self.fen.convert_index_to_square(index)
-        square = self.is_move_possible(position, attack, False)
-        # TODO verify attacked_squares_dict
+        square = self.is_move_possible(position, capture, False)
+        # TODO verify possible_capture_dict
         if square:
-            self.attacked_squares_dict[piece.isupper()].append(square)
+            self.possible_capture_dict[piece.isupper()].append(square)
         if square and self.fen.get_square_active_colour(square) is not piece.isupper():
             default_return = f"{original_square[0]}x{square}"
         return default_return
 
-    def is_en_passant_possible(self, position, attack, index, piece):
+    def is_en_passant_possible(self, position, capture, index, piece):
         """Verify if move is possible and check if square is occupied by opposite colour piece."""
         default_return = False
         original_square = self.fen.convert_index_to_square(index)
-        if new_square := self.is_move_possible((position[0], position[1]), attack, True):
+        if new_square := self.is_move_possible((position[0], position[1]), capture, True):
             if self.fen.is_white_an_active_colour() is piece.isupper() and new_square == self.fen.available_en_passant:
                 default_return = f"{original_square[0]}x{new_square}"
         return default_return
