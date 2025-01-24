@@ -34,7 +34,7 @@ class ChessBoard:
             False: [(-1, 1), (1, 1)]
         }
         movement_pattern = pawn_movement_pattern[piece.isupper()]
-        attack_pattern = pawn_attack_pattern[piece.isupper()]
+        capture_pattern = pawn_attack_pattern[piece.isupper()]
 
         available_squares = []
         for movement in movement_pattern:
@@ -42,10 +42,10 @@ class ChessBoard:
                 available_squares.append(new_square)
             else:
                 break
-        for attack in attack_pattern:
-            if new_square := self.check_attack_square((x, y), attack, index, piece):
+        for capture in capture_pattern:
+            if new_square := self.check_attack_square((x, y), capture, index, piece):
                 available_squares.append(new_square)
-            if new_square := self.is_en_passant_possible((x, y), attack, index, piece):
+            if new_square := self.is_en_passant_possible((x, y), capture, index, piece):
                 available_squares.append(new_square)
         return available_squares
 
@@ -56,7 +56,7 @@ class ChessBoard:
 
     @staticmethod
     def is_pawn_next_move_promotion(pawn, y):
-        """Check if pawn is on 7th rank"""
+        """Check if pawn is on 7th rank."""
         return pawn.isupper() and y == 1 or pawn.islower() and y == 6
 
     def is_move_possible(self, position, movement, expected_empty):
@@ -87,8 +87,7 @@ class ChessBoard:
         """Verify if move is possible and check if square is occupied by opposite colour piece."""
         default_return = False
         original_square = self.fen.convert_index_to_square(index)
-        new_square = self.is_move_possible((position[0], position[1]), attack, True)
-        if new_square:
+        if new_square := self.is_move_possible((position[0], position[1]), attack, True):
             if self.fen.is_white_an_active_colour() is piece.isupper() and new_square == self.fen.available_en_passant:
                 default_return = f"{original_square[0]}x{new_square}"
         return default_return

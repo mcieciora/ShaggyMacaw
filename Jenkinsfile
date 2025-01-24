@@ -147,14 +147,14 @@ pipeline {
                 stage ("Code coverage") {
                     steps {
                         script {
-                            sh "docker run --name code_coverage_container test_image coverage run --source=src -m pytest -k unittest; coverage html; coverage report --fail-under=85"
+                            sh "docker run --name code_coverage_container test_image sh -c 'coverage run --source=src -m pytest -k unittest; coverage html; coverage report --fail-under=85'"
                         }
                     }
                     post {
                         always {
                             sh "docker container cp code_coverage_container:/app/htmlcov ./"
                             sh "docker rm code_coverage_container"
-                            archiveArtifacts artifacts: "html_cov/*"
+                            archiveArtifacts artifacts: "htmlcov/*"
                         }
                     }
                 }

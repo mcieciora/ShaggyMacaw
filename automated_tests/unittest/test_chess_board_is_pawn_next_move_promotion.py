@@ -18,6 +18,7 @@ def test__unittest__chess_board__is_pawn_next_move_promotion__black_promotion():
     actual_data = test_object.is_pawn_next_move_promotion("p", 6)
     assert actual_data is True, f"Expected: True, actual: {actual_data}"
 
+
 @mark.unittest
 def test__unittest__chess_board__is_pawn_next_move_promotion__no_promotion_available():
     original_fen = "4k3/8/8/8/R7/6pr/8/6K1 w - - 0 1"

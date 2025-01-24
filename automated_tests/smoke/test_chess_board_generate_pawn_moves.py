@@ -82,7 +82,7 @@ test_data_dict = {
         "expected_result": []
     },
     "test_resource_14": {
-        "fen": "r3r1k1/1P5p/2n2p2/6p1/2Pp1NbP/6P1/3NPPB1/R1R2K2 w - - 0 19 ",
+        "fen": "r3r1k1/1P5p/2n2p2/6p1/2Pp1NbP/6P1/3NPPB1/R1R2K2 w - - 0 19",
         "index": 9,
         "piece": "P",
         "expected_result": ["b8=Q", "b8=N", "b8=R", "b8=B", "bxa8=Q", "bxa8=N", "bxa8=R", "bxa8=B"]
