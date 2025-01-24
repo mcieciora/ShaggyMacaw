@@ -147,12 +147,12 @@ pipeline {
                 stage ("Code coverage") {
                     steps {
                         script {
-                            sh "docker run --name code_coverage_container test_image python -m pytest --cov=src automated_tests/ --cov-fail-under=85 --cov-report=html"
-                            sh "docker container cp code_coverage_container:/app/htmlcov ./"
+                            sh "docker run --name code_coverage_container test_image sh -c 'coverage run --source=src -m pytest -k unittest; coverage html; coverage report --fail-under=85'"
                         }
                     }
                     post {
                         always {
+                            sh "docker container cp code_coverage_container:/app/htmlcov ./"
                             sh "docker rm code_coverage_container"
                             archiveArtifacts artifacts: "htmlcov/*"
                         }
@@ -176,11 +176,11 @@ pipeline {
             steps {
                 script {
                     sh "docker run --name unit_test_container test_image python -m pytest -m unittest automated_tests -v --junitxml=results/unittests_results.xml"
-                    sh "docker container cp unit_test_container:/app/results ./"
                 }
             }
             post {
                 always {
+                    sh "docker container cp unit_test_container:/app/results ./"
                     sh "docker rm unit_test_container"
                     archiveArtifacts artifacts: "**/unittests_results.xml"
                 }
@@ -214,7 +214,6 @@ pipeline {
                                 if (env.TEST_GROUPS == "all" || env.TEST_GROUPS.contains(TEST_GROUP)) {
                                     echo "Running ${TEST_GROUP}"
                                     sh "docker run --name ${TEST_GROUP}_test test_image python -m pytest -m ${FLAG} -k ${TEST_GROUP} automated_tests -v --junitxml=results/${TEST_GROUP}_results.xml"
-                                    sh "docker container cp ${TEST_GROUP}_test:/app/results ./"
                                 }
                                 else {
                                     echo "Skipping execution."
@@ -223,6 +222,7 @@ pipeline {
                         }
                         post {
                             always {
+                                sh "docker container cp ${TEST_GROUP}_test:/app/results ./"
                                 sh "docker rm ${TEST_GROUP}_test"
                                 archiveArtifacts artifacts: "**/${TEST_GROUP}_results.xml"
                             }
