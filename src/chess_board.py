@@ -1,5 +1,3 @@
-from types import new_class
-
 from src.fen import Fen
 
 
