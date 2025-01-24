@@ -144,31 +144,17 @@ pipeline {
                         }
                     }
                 }
-                stage ("Code coverage - unittest") {
+                stage ("Code coverage") {
                     steps {
                         script {
-                            sh "docker run --name code_coverage_container_unittest test_image python -m pytest --cov=src automated_tests/unittest --cov-fail-under=85 --cov-report=html"
+                            sh "docker run --name code_coverage_container test_image coverage run --source=src -m pytest -k unittest; coverage html; coverage report --fail-under=85"
                         }
                     }
                     post {
                         always {
-                            sh "docker container cp code_coverage_container_unittest:/app/htmlcov ./html_cov_unittest"
-                            sh "docker rm code_coverage_container_unittest"
-                            archiveArtifacts artifacts: "html_cov_unittest/*"
-                        }
-                    }
-                }
-                stage ("Code coverage - smoke") {
-                    steps {
-                        script {
-                            sh "docker run --name code_coverage_container_smoke test_image python -m pytest --cov=src automated_tests/smoke --cov-fail-under=85 --cov-report=html"
-                        }
-                    }
-                    post {
-                        always {
-                            sh "docker container cp code_coverage_container_smoke:/app/htmlcov ./html_cov_smoke"
-                            sh "docker rm code_coverage_container_smoke"
-                            archiveArtifacts artifacts: "html_cov_smoke/*"
+                            sh "docker container cp code_coverage_container:/app/htmlcov ./"
+                            sh "docker rm code_coverage_container"
+                            archiveArtifacts artifacts: "html_cov/*"
                         }
                     }
                 }
@@ -303,17 +289,9 @@ pipeline {
                 allowMissing: false,
                 alwaysLinkToLastBuild: false,
                 keepAll: true,
-                reportDir: "html_cov_unittest",
+                reportDir: "htmlcov",
                 reportFiles: "index.html",
-                reportName: "PyTestCov - unittest"
-            ]
-            publishHTML target: [
-                allowMissing: false,
-                alwaysLinkToLastBuild: false,
-                keepAll: true,
-                reportDir: "html_cov_smoke",
-                reportFiles: "index.html",
-                reportName: "PyTestCov - smoke"
+                reportName: "PyTestCov"
             ]
             cleanWs()
         }
