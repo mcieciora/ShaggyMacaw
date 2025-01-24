@@ -1,3 +1,5 @@
+from types import new_class
+
 from src.fen import Fen
 
 
@@ -38,12 +40,18 @@ class ChessBoard:
 
         available_squares = []
         for movement in movement_pattern:
-            if new_square := self.is_move_possible((x, y), movement, True):
+            new_square = self.is_move_possible((x, y), movement, True)
+            if self.is_pawn_next_move_promotion(piece, y) and new_square:
+                available_squares.extend([f"{new_square}={promotion_move}" for promotion_move in ["Q", "R", "N", "B"]])
+            elif new_square:
                 available_squares.append(new_square)
             else:
                 break
         for capture in capture_pattern:
-            if new_square := self.check_capture_square((x, y), capture, index, piece):
+            new_square = self.check_capture_square((x, y), capture, index, piece)
+            if self.is_pawn_next_move_promotion(piece, y) and new_square:
+                available_squares.extend([f"{new_square}={promotion_move}" for promotion_move in ["Q", "R", "N", "B"]])
+            elif new_square:
                 available_squares.append(new_square)
             if new_square := self.is_en_passant_possible((x, y), capture, index, piece):
                 available_squares.append(new_square)
