@@ -1,0 +1,46 @@
+pipeline {
+    agent {
+        label 'executor'
+    }
+    triggers {
+        cron("H/15 * * * *")
+    }
+    environment {
+        REPO_URL = "git@github.com:mcieciora/ShaggyMacaw.git"
+        DOCKERHUB_REPO = "mcieciora/shaggy_macaw"
+    }
+    options {
+        skipDefaultCheckout()
+    }
+    stages {
+        stage ("Pull merge bot image") {
+            steps {
+                script {
+                    sh "docker pull ${DOCKERHUB_REPO}:merge_bot"
+                    sh "docker tag ${DOCKERHUB_REPO}:merge_bot merge_bot"
+                }
+            }
+        }
+        stage("Merge branch") {
+            steps {
+                script {
+                    withCredentials([file(credentialsId: 'sm_dot_env', variable: 'sm_env_file')]) {
+                        sh 'cp $sm_env_file .env'
+                    }
+                    return_value = sh(script: "docker run --rm --env-file .env merge_bot --merge", returnStdout: true).trim()
+                    if (!return_value.contains("merged successfully.")) {
+                        unstable(return_value)
+                    }
+                }
+            }
+        }
+    }
+    post {
+        always {
+            script {
+                sh "docker rmi ${DOCKERHUB_REPO}:merge_bot"
+                cleanWs()
+            }
+        }
+    }
+}
