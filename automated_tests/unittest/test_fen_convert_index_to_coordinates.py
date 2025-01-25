@@ -7,7 +7,7 @@ from src.fen import Fen
 def test__unittest__fen__convert_index_to_coordinates():
     original_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     expected_data_dict = {
-        # 0: (0, 0),
+        0: (0, 0),
         7: (0, 7),
         8: (1, 0),
         18: (2, 2),

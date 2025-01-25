@@ -5,7 +5,7 @@ from src.fen import Fen, WrongBoardSize
 
 @mark.unittest
 def test__unittest__fen__parse_board_setup():
-    expected_data = "rnbqkbnrpppppppp--------------------------------PPPPPPPPRNBQKBNR"
+    expected_data = "RNBQKBNRPPPPPPPP--------------------------------pppppppprnbqkbnr"
     original_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     test_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
     test_object = Fen(original_fen)

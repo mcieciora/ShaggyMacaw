@@ -21,13 +21,13 @@ pipeline {
         stage ("Checkout branch") {
             steps {
                 script {
-                    def BRANCH_REV = env.BRANCH_TO_USE.equals("develop") || env.BRANCH_TO_USE.equals("master") ? "HEAD^1" : "develop"
+                    def BRANCH_REV = env.BRANCH_TO_USE.equals("develop") || env.BRANCH_TO_USE.equals("master") ? "HEAD^1" : "origin/develop"
                     withCredentials([sshUserPrivateKey(credentialsId: "agent_${env.NODE_NAME}", keyFileVariable: 'key')]) {
                         sh 'GIT_SSH_COMMAND="ssh -i $key"'
                         checkout scmGit(branches: [[name: "*/${BRANCH_TO_USE}"]], extensions: [], userRemoteConfigs: [[url: "${env.REPO_URL}"]])
                     }
                     currentBuild.description = "Branch: ${env.BRANCH_TO_USE}\nFlag: ${env.FLAG}\nGroups: ${env.TEST_GROUPS}"
-                    build_test_image = sh(script: "git diff --name-only \$(git rev-parse HEAD) \$(git rev-parse origin/${BRANCH_REV}) | grep -e automated_tests -e src -e requirements -e tools/python",
+                    build_test_image = sh(script: "git diff --name-only \$(git rev-parse HEAD) \$(git rev-parse ${BRANCH_REV}) | grep -e automated_tests -e src -e requirements -e tools/python",
                                           returnStatus: true)
                 }
             }
@@ -190,7 +190,7 @@ pipeline {
             steps {
                 script {
                     sh "chmod +x tools/shell_scripts/app_health_check.sh"
-                    sh "tools/shell_scripts/app_health_check.sh 30 1"
+                    sh "tools/shell_scripts/app_health_check.sh 5 1"
                 }
             }
             post {
@@ -204,7 +204,7 @@ pipeline {
                 axes {
                     axis {
                         name "TEST_GROUP"
-                        values "fen"
+                        values "fen", "chess_board"
                     }
                 }
                 stages {

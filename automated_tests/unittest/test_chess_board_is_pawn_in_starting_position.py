@@ -7,7 +7,7 @@ from src.chess_board import ChessBoard
 def test__unittest__chess_board__is_pawn_in_starting_position__white_starting_position():
     original_fen = "4k3/P7/8/8/R7/7r/6p1/6K1 b - - 0 1"
     test_object = ChessBoard(original_fen)
-    actual_data = test_object.is_pawn_in_starting_position("p", 1)
+    actual_data = test_object.is_pawn_in_starting_position("P", 1)
     assert actual_data is True, f"Expected: True, actual: {actual_data}"
 
 
@@ -15,7 +15,7 @@ def test__unittest__chess_board__is_pawn_in_starting_position__white_starting_po
 def test__unittest__chess_board__is_pawn_in_starting_position__black_starting_position():
     original_fen = "4k3/P7/8/8/R7/7r/6p1/6K1 b - - 0 1"
     test_object = ChessBoard(original_fen)
-    actual_data = test_object.is_pawn_in_starting_position("P", 6)
+    actual_data = test_object.is_pawn_in_starting_position("p", 6)
     assert actual_data is True, f"Expected: True, actual: {actual_data}"
 
 
