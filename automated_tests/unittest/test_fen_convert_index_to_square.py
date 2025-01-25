@@ -7,16 +7,16 @@ from src.fen import Fen, NoSquareInBoard
 def test__unittest__fen__convert_index_to_square():
     original_fen = "r1bqk1nr/1p3pbp/p1np2p1/4p3/2P1P3/2NB4/PP3PPP/RNBQK2R w KQkq - 2 9"
     expected_data_dict = {
-        59: "d1",
-        56: "a1",
-        53: "f2",
-        47: "h3",
-        32: "a4",
-        28: "e5",
-        17: "b6",
-        22: "g6",
-        9: "b7",
-        7: "h8"
+        0: "a1",
+        3: "d1",
+        13: "f2",
+        21: "f3",
+        28: "e4",
+        33: "b5",
+        47: "h6",
+        53: "f7",
+        59: "d8",
+        63: "h8"
     }
     test_object = Fen(original_fen)
     for test_data, expected_data in expected_data_dict.items():

@@ -57,12 +57,12 @@ class Fen:
         return int(index/8), index % 8
 
     @staticmethod
-    def convert_coordinates_to_index(y, x):
+    def convert_coordinates_to_index(x, y):
         """Convert y, x coordinates on chess board to index."""
         return y*8 + x
 
     @staticmethod
-    def coordinates_in_boundaries(y, x):
+    def coordinates_in_boundaries(x, y):
         """Check if coordinates y, x are in chess board boundaries."""
         return 0 <= x < 8 and 0 <= y < 8
 
@@ -70,7 +70,7 @@ class Fen:
     def generate_board_squares():
         """Generate list of possible chess board squares."""
         generated_squares = []
-        files, ranks = ["a", "b", "c", "d", "e", "f", "g", "h"], list(range(8, 0, -1))
+        files, ranks = ["a", "b", "c", "d", "e", "f", "g", "h"], list(range(1, 9))
         for rank in ranks:
             for file in files:
                 generated_squares.append(f"{file}{rank}")
@@ -81,6 +81,7 @@ class Fen:
         """Parse board setup and verify number of files and ranks."""
         return_board = ""
         ranks = fen.split("/")
+        ranks.reverse()
         if ranks_number := (len(ranks)) != 8:
             raise WrongBoardSize(f"Number of ranks is incorrect. Expected is 8, but got: {ranks_number}")
         for index, rank in enumerate(ranks):
