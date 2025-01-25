@@ -5,91 +5,91 @@ from src.chess_board import ChessBoard
 test_data_dict = {
     "test_resource_1": {
         "fen": "r1b1r1k1/1pb3p1/2nq1p2/2N3P1/pPRp3p/3N3P/P1Q1PPB1/5RK1 b - b3 4 23",
-        "index": 32,
+        "index": 24,
         "piece": "p",
         "expected_result": ["a3", "axb3"]
     },
     "test_resource_2": {
         "fen": "r1b1r1k1/1pb3p1/2nq1p2/2N3P1/pPRp3p/3N3P/P1Q1PPB1/5RK1 b - b3 4 23",
-        "index": 9,
+        "index": 49,
         "piece": "p",
         "expected_result": ["b6", "b5"]
     },
     "test_resource_3": {
         "fen": "r1b1r1k1/1pb3p1/2nq1p2/2N3P1/pPRp3p/3N3P/P1Q1PPB1/5RK1 b - b3 4 23",
-        "index": 35,
+        "index": 27,
         "piece": "p",
         "expected_result": []
     },
     "test_resource_4": {
         "fen": "r1b1r1k1/1pb3p1/2nq1p2/2N3P1/pPRp3p/3N3P/P1Q1PPB1/5RK1 b - b3 4 23",
-        "index": 21,
+        "index": 45,
         "piece": "p",
         "expected_result": ["f5", "fxg5"]
     },
     "test_resource_5": {
         "fen": "r1b1r1k1/1pb3p1/2nq1p2/2N3P1/pPRp3p/3N3P/P1Q1PPB1/5RK1 b - b3 4 23",
-        "index": 14,
+        "index": 54,
         "piece": "p",
         "expected_result": ["g6"]
     },
     "test_resource_6": {
         "fen": "r1b1r1k1/1pb3p1/2nq1p2/2N3P1/pPRp3p/3N3P/P1Q1PPB1/5RK1 b - b3 4 23",
-        "index": 39,
+        "index": 31,
         "piece": "p",
         "expected_result": []
     },
     "test_resource_7": {
         "fen": "r1b1r1k1/1pb3p1/2nq1p2/2N3P1/pPRp3p/3N3P/P1Q1PPB1/5RK1 b - b3 4 23",
-        "index": 48,
+        "index": 8,
         "piece": "P",
         "expected_result": ["a3"]
     },
     "test_resource_8": {
         "fen": "r1b1r1k1/1pb3p1/2nq1p2/2N3P1/pPRp3p/3N3P/P1Q1PPB1/5RK1 b - b3 4 23",
-        "index": 33,
+        "index": 25,
         "piece": "P",
         "expected_result": ["b5"]
     },
     "test_resource_9": {
         "fen": "r1b1r1k1/1pb3p1/2nq1p2/2N3P1/pPRp3p/3N3P/P1Q1PPB1/5RK1 b - b3 4 23",
-        "index": 52,
+        "index": 12,
         "piece": "P",
         "expected_result": ["e3", "e4"]
     },
     "test_resource_10": {
         "fen": "r1b1r1k1/1pb3p1/2nq1p2/2N3P1/pPRp3p/3N3P/P1Q1PPB1/5RK1 b - b3 4 23",
-        "index": 53,
+        "index": 13,
         "piece": "P",
         "expected_result": ["f3", "f4"]
     },
     "test_resource_11": {
         "fen": "r1b1r1k1/1pb3p1/2nq1p2/2N3P1/pPRp3p/3N3P/P1Q1PPB1/5RK1 b - b3 4 23",
-        "index": 30,
+        "index": 38,
         "piece": "P",
         "expected_result": ["g6", "gxf6"]
     },
     "test_resource_12": {
         "fen": "r1b1r1k1/1pb3p1/2nq1p2/2N3P1/pPRp3p/3N3P/P1Q1PPB1/5RK1 b - b3 4 23",
-        "index": 47,
+        "index": 23,
         "piece": "P",
         "expected_result": []
     },
     "test_resource_13": {
         "fen": "r3r1k1/pp3p1p/1bn5/P5p1/3p1NbP/6P1/1P1NPPB1/R1R2K2 w - - 0 18",
-        "index": 9,
+        "index": 49,
         "piece": "p",
         "expected_result": []
     },
     "test_resource_14": {
         "fen": "r3r1k1/1P5p/2n2p2/6p1/2Pp1NbP/6P1/3NPPB1/R1R2K2 w - - 0 19",
-        "index": 9,
+        "index": 49,
         "piece": "P",
         "expected_result": ["b8=Q", "b8=R", "b8=N", "b8=B", "bxa8=Q", "bxa8=R", "bxa8=N", "bxa8=B"]
     },
     "test_resource_15": {
         "fen": "5k2/1R3p2/3N2p1/8/6Pp/2n2K1P/P2pr3/8 w - - 1 42",
-        "index": 51,
+        "index": 11,
         "piece": "p",
         "expected_result": ["d1=Q", "d1=R", "d1=N", "d1=B"]
     }

@@ -5,7 +5,7 @@ from src.fen import Fen
 
 test_data_dict = {
     "test_resource_1": {
-        "board_setup": "rn-q-rk-pb-pppbp-p---np---P--------------P--PN--PBP-BPPPRN-Q-RK-",
+        "board_setup": "RN-Q-RK-PBP-BPPP-P--PN------------P------p---np-pb-pppbprn-q-rk-",
         "white_move": False,
         "castling_rights": "-",
         "available_en_passant": "-",
@@ -13,7 +13,7 @@ test_data_dict = {
         "full_move_number": 8
     },
     "test_resource_2": {
-        "board_setup": "r--q-rk-pb---pbp---ppnp---p-n-----P------PN-P---PBQNBPPPR----RK-",
+        "board_setup": "R----RK-PBQNBPPP-PN-P-----P-------p-n------ppnp-pb---pbpr--q-rk-",
         "white_move": False,
         "castling_rights": "-",
         "available_en_passant": "-",
@@ -21,7 +21,7 @@ test_data_dict = {
         "full_move_number": 13
     },
     "test_resource_3": {
-        "board_setup": "--rr--k-pb--qpbp-----np---ppn------------PN-P--PPBQNBPP----RR-K-",
+        "board_setup": "---RR-K-PBQNBPP--PN-P--P----------ppn--------np-pb--qpbp--rr--k-",
         "white_move": True,
         "castling_rights": "-",
         "available_en_passant": "-",
@@ -29,7 +29,7 @@ test_data_dict = {
         "full_move_number": 18
     },
     "test_resource_4": {
-        "board_setup": "r---r-k-pp---p-p-bn-----------p----p-Nb-------P-PP-NPPBPR-R--K--",
+        "board_setup": "R-R--K--PP-NPPBP------P----p-Nb-------p--bn-----pp---p-pr---r-k-",
         "white_move": True,
         "castling_rights": "-",
         "available_en_passant": "g6",
@@ -37,7 +37,7 @@ test_data_dict = {
         "full_move_number": 18
     },
     "test_resource_5": {
-        "board_setup": "--r---k-p-r--p-p------p---N-R-----N------P-----PP----P--------K-",
+        "board_setup": "------K-P----P---P-----P--N-------N-R---------p-p-r--p-p--r---k-",
         "white_move": True,
         "castling_rights": "-",
         "available_en_passant": "-",
@@ -45,7 +45,7 @@ test_data_dict = {
         "full_move_number": 31
     },
     "test_resource_6": {
-        "board_setup": "r-bqkbnrpp-ppppp--n----------------pP--------N--PPP--PPPRNBQKB-R",
+        "board_setup": "RNBQKB-RPPP--PPP-----N-----pP-------------n-----pp-pppppr-bqkbnr",
         "white_move": True,
         "castling_rights": "KQkq",
         "available_en_passant": "-",
@@ -53,7 +53,7 @@ test_data_dict = {
         "full_move_number": 4
     },
     "test_resource_7": {
-        "board_setup": "r-bqk-nr-p---pbpp-np--p-----p-----P-P-----NB----PP---PPPRNBQK--R",
+        "board_setup": "RNBQK--RPP---PPP--NB------P-P-------p---p-np--p--p---pbpr-bqk-nr",
         "white_move": True,
         "castling_rights": "KQkq",
         "available_en_passant": "-",
@@ -61,7 +61,7 @@ test_data_dict = {
         "full_move_number": 9
     },
     "test_resource_8": {
-        "board_setup": "-rn--rk--p-q-pbpp-npb-p----Np-----P-P-----NBB---PP---PPPR--Q-RK-",
+        "board_setup": "R--Q-RK-PP---PPP--NBB-----P-P------Np---p-npb-p--p-q-pbp-rn--rk-",
         "white_move": True,
         "castling_rights": "-",
         "available_en_passant": "-",
@@ -69,7 +69,7 @@ test_data_dict = {
         "full_move_number": 15
     },
     "test_resource_9": {
-        "board_setup": "-rn--rk--p-q--bpp--pb-p----N----P-Pp-N-----B-----P---PPPR--Q-RK-",
+        "board_setup": "R--Q-RK--P---PPP---B----P-Pp-N-----N----p--pb-p--p-q--bp-rn--rk-",
         "white_move": False,
         "castling_rights": "-",
         "available_en_passant": "-",
@@ -77,7 +77,7 @@ test_data_dict = {
         "full_move_number": 21
     },
     "test_resource_10": {
-        "board_setup": "rnbqkbnrpppppppp--------------------P-----------PPPP-PPPRNBQKBNR",
+        "board_setup": "RNBQKBNRPPPP-PPP------------P-------------------pppppppprnbqkbnr",
         "white_move": False,
         "castling_rights": "KQkq",
         "available_en_passant": "e3",
