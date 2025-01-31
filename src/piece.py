@@ -6,7 +6,7 @@ class Pawn:
 
     def __init__(self, letter, position):
         """Initialize Pawn object."""
-        self.piece_type = SquareValue.Pawn
+        self.piece_type = SquareValue.PAWN
         self.active_colour_white = letter.isupper()
         self.position = position
 
@@ -37,13 +37,13 @@ class Piece:
     """Piece static values and behaviour declaration class."""
 
     letter_to_square_value_map = {
-        "N": SquareValue.Knight,
-        "B": SquareValue.Bishop,
-        "R": SquareValue.Rook,
-        "Q": SquareValue.Queen
+        "N": SquareValue.KNIGHT,
+        "B": SquareValue.BISHOP,
+        "R": SquareValue.ROOK,
+        "Q": SquareValue.QUEEN
     }
     movement_patterns = {
-        "-": SquareValue.Empty,
+        "-": SquareValue.EMPTY,
         "N": [(2, 1), (1, 2), (2, -1), (1, -2), (-2, 1), (-1, 2), (-2, -1), (-1, -2)],
         "B": [(1, 1), (1, -1), (-1, 1), (-1, -1)],
         "R": [(0, 1), (0, -1), (1, 0), (-1, 0)],
