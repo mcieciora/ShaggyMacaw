@@ -16,13 +16,16 @@ class ChessBoard:
         """Generate all possible moves."""
         all_possible_moves = []
         for index, piece in enumerate(self.fen.board_setup):
+            square = self.fen.convert_index_to_square(index)
             match piece:
                 case "p" | "P":
-                    all_possible_moves.extend(self.generate_pawn_moves(index, piece))
+                    all_possible_moves.extend(self.generate_pawn_moves(square))
         return all_possible_moves
 
-    def generate_pawn_moves(self, index, piece):
+    def generate_pawn_moves(self, square):
         """Generate pawn moves."""
+        index = self.fen.convert_square_to_index(square)
+        piece = self.fen.get_square_value(square)
         y, x = self.fen.convert_index_to_coordinates(index)
 
         pawn_movement_pattern = {
@@ -42,7 +45,7 @@ class ChessBoard:
             if self.is_pawn_next_move_promotion(piece, y) and new_square:
                 available_squares.extend([f"{new_square}={promotion_move}" for promotion_move in ["Q", "R", "N", "B"]])
             elif new_square:
-                available_squares.append(new_square)
+                available_squares.append(f"{square}{new_square}")
             else:
                 break
         for capture in capture_pattern:
@@ -87,7 +90,7 @@ class ChessBoard:
         if square:
             self.possible_capture_dict[piece.isupper()].append(square)
         if square and self.fen.get_square_active_colour(square) is not piece.isupper():
-            default_return = f"{original_square[0]}x{square}"
+            default_return = f"{original_square}{square}"
         return default_return
 
     def is_en_passant_possible(self, position, capture, piece):
@@ -97,5 +100,5 @@ class ChessBoard:
         original_square = self.fen.convert_index_to_square(original_square_index)
         if new_square := self.is_move_possible((position[0], position[1]), capture, True):
             if self.fen.is_white_an_active_colour() is piece.isupper() and new_square == self.fen.available_en_passant:
-                default_return = f"{original_square[0]}x{new_square}"
+                default_return = f"{original_square}{new_square}"
         return default_return
