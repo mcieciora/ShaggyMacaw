@@ -81,6 +81,7 @@ class ChessBoard:
         original_square_index = self.fen.convert_coordinates_to_index(position[0], position[1])
         original_square = self.fen.convert_index_to_square(original_square_index)
         if new_square := self.is_move_possible((position[0], position[1]), capture, True):
-            if self.fen.is_white_an_active_colour() is piece.active_colour_white and new_square == self.fen.available_en_passant:
+            if (self.fen.is_white_an_active_colour() is piece.active_colour_white and new_square ==
+                    self.fen.available_en_passant):
                 default_return = f"{original_square}{new_square}"
         return default_return

@@ -3,10 +3,11 @@ from enum import Enum
 
 class SquareValue(Enum):
     """Enumeration of all possible values of square."""
-    Empty = 0
-    Pawn = 1
-    Knight = 2
-    Bishop = 3
-    Rook = 4
-    Queen = 5
-    King = 6
+    
+    EMPTY = 0
+    PAWN = 1
+    KNIGHT = 2
+    BISHOP = 3
+    ROOK = 4
+    QUEEN = 5
+    KING = 6

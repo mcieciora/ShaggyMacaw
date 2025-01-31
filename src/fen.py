@@ -44,8 +44,7 @@ class Fen:
         square_value = self.get_square_value(square)
         if not self.is_square_empty(square):
             return square_value.isupper()
-        else:
-            raise SquareEmpty
+        raise SquareEmpty
 
     def is_white_an_active_colour(self):
         """Check if white is and active colour."""
