@@ -92,6 +92,12 @@ test_data_dict = {
         "index": 11,
         "piece": "p",
         "expected_result": ["d1=Q", "d1=R", "d1=N", "d1=B"]
+    },
+    "test_resource_16": {
+        # TODO Check
+    },
+    "test_resource_17": {
+        # TODO Mate
     }
 }
 

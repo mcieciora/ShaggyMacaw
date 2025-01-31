@@ -19,6 +19,8 @@ class ChessBoard:
             match piece:
                 case "p" | "P":
                     all_possible_moves.extend(self.generate_pawn_moves(index, piece))
+                case "r" | "R":
+                    all_possible_moves.extend(self.generate_rook_moves(index, piece))
         return all_possible_moves
 
     def generate_pawn_moves(self, index, piece):
@@ -54,6 +56,13 @@ class ChessBoard:
             if new_square := self.is_en_passant_possible((x, y), capture, piece):
                 available_squares.append(new_square)
         return available_squares
+
+    def generate_rook_moves(self, index, piece):
+        """Generate rook moves."""
+
+        y, x = self.fen.convert_index_to_coordinates(index)
+        movement_pattern = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        return []
 
     @staticmethod
     def is_pawn_in_starting_position(pawn, y):
