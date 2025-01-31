@@ -94,6 +94,12 @@ test_data_dict = {
         "value": "p",
         "position": (3, 1),
         "expected_result": ["d1=Q", "d1=R", "d1=N", "d1=B"]
+    },
+    "test_resource_16": {
+        # TODO Check
+    },
+    "test_resource_17": {
+        # TODO Mate
     }
 }
 

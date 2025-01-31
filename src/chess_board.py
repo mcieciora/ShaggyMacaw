@@ -1,5 +1,5 @@
 from src.fen import Fen
-from src.piece import Pawn
+from src.piece import Pawn, Piece
 
 
 class ChessBoard:
@@ -16,9 +16,33 @@ class ChessBoard:
             for piece in rank:
                 if type(piece) is Pawn:
                     all_possible_moves.extend(self.generate_pawn_moves(piece))
+                elif type(piece) is Piece:
+                    all_possible_moves.extend(self.generate_rook_moves(piece))
         return all_possible_moves
 
     def generate_pawn_moves(self, piece):
+        """Generate pawn moves."""
+        available_squares = []
+        for movement in piece.movement_pattern:
+            new_square = self.is_move_possible(piece.position, movement, True)
+            if piece.is_pawn_next_move_promotion() and new_square:
+                available_squares.extend([f"{new_square}={promotion_move}" for promotion_move in ["Q", "R", "N", "B"]])
+            elif new_square:
+                square_value = self.fen.convert_coordinates_to_square(piece.position[0], piece.position[1])
+                available_squares.append(f"{square_value}{new_square}")
+            else:
+                break
+        for capture in piece.capture_pattern:
+            new_square = self.check_capture_square(piece.position, capture, piece)
+            if piece.is_pawn_next_move_promotion() and new_square:
+                available_squares.extend([f"{new_square}={promotion_move}" for promotion_move in ["Q", "R", "N", "B"]])
+            elif new_square:
+                available_squares.append(new_square)
+            if new_square := self.is_en_passant_possible(piece.position, capture, piece):
+                available_squares.append(new_square)
+        return available_squares
+
+    def generate_rook_moves(self, piece):
         """Generate pawn moves."""
         available_squares = []
         for movement in piece.movement_pattern:
