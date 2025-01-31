@@ -164,6 +164,3 @@ class NoSquareInBoard(Exception):
 
 class SquareEmpty(Exception):
     """Raised when square checked for active colour is empty. Use with is_square_empty instead."""
-
-
-

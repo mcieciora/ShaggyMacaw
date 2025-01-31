@@ -19,12 +19,13 @@ class ChessBoard:
             square = self.fen.convert_index_to_square(index)
             match piece:
                 case "p" | "P":
-                    all_possible_moves.extend(self.generate_pawn_moves(square, piece))
+                    all_possible_moves.extend(self.generate_pawn_moves(square))
         return all_possible_moves
 
-    def generate_pawn_moves(self, square, piece):
+    def generate_pawn_moves(self, square):
         """Generate pawn moves."""
         index = self.fen.convert_square_to_index(square)
+        piece = self.fen.get_square_value(square)
         y, x = self.fen.convert_index_to_coordinates(index)
 
         pawn_movement_pattern = {
