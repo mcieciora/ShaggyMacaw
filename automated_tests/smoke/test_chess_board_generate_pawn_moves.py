@@ -5,92 +5,77 @@ from src.chess_board import ChessBoard
 test_data_dict = {
     "test_resource_1": {
         "fen": "r1b1r1k1/1pb3p1/2nq1p2/2N3P1/pPRp3p/3N3P/P1Q1PPB1/5RK1 b - b3 4 23",
-        "index": 24,
-        "piece": "p",
-        "expected_result": ["a3", "axb3"]
+        "square": "a4",
+        "expected_result": ["a4a3", "a4b3"]
     },
     "test_resource_2": {
         "fen": "r1b1r1k1/1pb3p1/2nq1p2/2N3P1/pPRp3p/3N3P/P1Q1PPB1/5RK1 b - b3 4 23",
-        "index": 49,
-        "piece": "p",
-        "expected_result": ["b6", "b5"]
+        "square": "b7",
+        "expected_result": ["b7b6", "b7b5"]
     },
     "test_resource_3": {
         "fen": "r1b1r1k1/1pb3p1/2nq1p2/2N3P1/pPRp3p/3N3P/P1Q1PPB1/5RK1 b - b3 4 23",
-        "index": 27,
-        "piece": "p",
+        "square": "d4",
         "expected_result": []
     },
     "test_resource_4": {
         "fen": "r1b1r1k1/1pb3p1/2nq1p2/2N3P1/pPRp3p/3N3P/P1Q1PPB1/5RK1 b - b3 4 23",
-        "index": 45,
-        "piece": "p",
-        "expected_result": ["f5", "fxg5"]
+        "square": "f6",
+        "expected_result": ["f6f5", "f6g5"]
     },
     "test_resource_5": {
         "fen": "r1b1r1k1/1pb3p1/2nq1p2/2N3P1/pPRp3p/3N3P/P1Q1PPB1/5RK1 b - b3 4 23",
-        "index": 54,
-        "piece": "p",
-        "expected_result": ["g6"]
+        "square": "g7",
+        "expected_result": ["g7g6"]
     },
     "test_resource_6": {
         "fen": "r1b1r1k1/1pb3p1/2nq1p2/2N3P1/pPRp3p/3N3P/P1Q1PPB1/5RK1 b - b3 4 23",
-        "index": 31,
-        "piece": "p",
+        "square": "h4",
         "expected_result": []
     },
     "test_resource_7": {
         "fen": "r1b1r1k1/1pb3p1/2nq1p2/2N3P1/pPRp3p/3N3P/P1Q1PPB1/5RK1 b - b3 4 23",
-        "index": 8,
-        "piece": "P",
-        "expected_result": ["a3"]
+        "square": "a2",
+        "expected_result": ["a2a3"]
     },
     "test_resource_8": {
         "fen": "r1b1r1k1/1pb3p1/2nq1p2/2N3P1/pPRp3p/3N3P/P1Q1PPB1/5RK1 b - b3 4 23",
-        "index": 25,
-        "piece": "P",
-        "expected_result": ["b5"]
+        "square": "b4",
+        "expected_result": ["b4b5"]
     },
     "test_resource_9": {
         "fen": "r1b1r1k1/1pb3p1/2nq1p2/2N3P1/pPRp3p/3N3P/P1Q1PPB1/5RK1 b - b3 4 23",
-        "index": 12,
-        "piece": "P",
-        "expected_result": ["e3", "e4"]
+        "square": "e2",
+        "expected_result": ["e2e3", "e2e4"]
     },
     "test_resource_10": {
         "fen": "r1b1r1k1/1pb3p1/2nq1p2/2N3P1/pPRp3p/3N3P/P1Q1PPB1/5RK1 b - b3 4 23",
-        "index": 13,
-        "piece": "P",
-        "expected_result": ["f3", "f4"]
+        "square": "f2",
+        "expected_result": ["f2f3", "f2f4"]
     },
     "test_resource_11": {
         "fen": "r1b1r1k1/1pb3p1/2nq1p2/2N3P1/pPRp3p/3N3P/P1Q1PPB1/5RK1 b - b3 4 23",
-        "index": 38,
-        "piece": "P",
-        "expected_result": ["g6", "gxf6"]
+        "square": "g5",
+        "expected_result": ["g5g6", "g5f6"]
     },
     "test_resource_12": {
         "fen": "r1b1r1k1/1pb3p1/2nq1p2/2N3P1/pPRp3p/3N3P/P1Q1PPB1/5RK1 b - b3 4 23",
-        "index": 23,
-        "piece": "P",
+        "square": "h3",
         "expected_result": []
     },
     "test_resource_13": {
         "fen": "r3r1k1/pp3p1p/1bn5/P5p1/3p1NbP/6P1/1P1NPPB1/R1R2K2 w - - 0 18",
-        "index": 49,
-        "piece": "p",
+        "square": "b7",
         "expected_result": []
     },
     "test_resource_14": {
         "fen": "r3r1k1/1P5p/2n2p2/6p1/2Pp1NbP/6P1/3NPPB1/R1R2K2 w - - 0 19",
-        "index": 49,
-        "piece": "P",
-        "expected_result": ["b8=Q", "b8=R", "b8=N", "b8=B", "bxa8=Q", "bxa8=R", "bxa8=N", "bxa8=B"]
+        "square": "b7",
+        "expected_result": ["b8=Q", "b8=R", "b8=N", "b8=B", "b7a8=Q", "b7a8=R", "b7a8=N", "b7a8=B"]
     },
     "test_resource_15": {
         "fen": "5k2/1R3p2/3N2p1/8/6Pp/2n2K1P/P2pr3/8 w - - 1 42",
-        "index": 11,
-        "piece": "p",
+        "square": "d2",
         "expected_result": ["d1=Q", "d1=R", "d1=N", "d1=B"]
     }
 }
@@ -107,7 +92,7 @@ def get_parametrized_test_set():
 @mark.parametrize("test_key,test_data,expected_output", get_parametrized_test_set(), ids=test_data_dict.keys())
 def test__smoke__chess_board__generate_pawn_moves(test_key, test_data, expected_output):
     test_object = ChessBoard(test_data["fen"])
-    actual_result = test_object.generate_pawn_moves(test_data["index"], test_data["piece"])
+    actual_result = test_object.generate_pawn_moves(test_data["square"])
     assert actual_result == test_data["expected_result"], (f"Failed on {test_key}, expected: "
                                                            f"{test_data['expected_result']}, actual: "
                                                            f"{actual_result}")

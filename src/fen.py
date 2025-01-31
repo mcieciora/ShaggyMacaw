@@ -18,7 +18,7 @@ class Fen:
     def convert_square_to_index(self, square):
         """Convert square value to board setup index."""
         try:
-            return self.board_squares.index(square)
+            return self.board_squares
         except ValueError as exc:
             raise NoSquareInBoard(f"Square {square} could not be found in board.") from exc
 
@@ -164,3 +164,6 @@ class NoSquareInBoard(Exception):
 
 class SquareEmpty(Exception):
     """Raised when square checked for active colour is empty. Use with is_square_empty instead."""
+
+
+

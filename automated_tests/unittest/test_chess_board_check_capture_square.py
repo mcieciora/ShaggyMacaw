@@ -8,7 +8,7 @@ def test__unittest__chess_board__check_capture_square():
     original_fen = "r1b1r1k1/1pb3p1/2nq1p2/2N3P1/pPRp3p/3N3P/P1Q1PPB1/5RK1 b - b3 4 23"
     test_object = ChessBoard(original_fen)
     actual_data = test_object.check_capture_square((6, 4), (-1, 1), "P")
-    assert actual_data == "gxf6", f"Expected: gxf6, actual: {actual_data}"
+    assert actual_data == "g5f6", f"Expected: g5f6, actual: {actual_data}"
 
 
 @mark.unittest
