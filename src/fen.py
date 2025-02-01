@@ -1,5 +1,3 @@
-from ast import Index
-
 from src.piece import create_piece
 from src.square_value import PieceValue
 

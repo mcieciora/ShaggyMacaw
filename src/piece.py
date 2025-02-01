@@ -32,7 +32,9 @@ pawn_capture_pattern = {
     False: [(-1, -1), (1, -1)]
 }
 
+
 def create_piece(value, position=None):
+    """Piece factory function."""
     if value.isdigit():
         return PieceValue.EMPTY
     elif value in ["p", "P"]:

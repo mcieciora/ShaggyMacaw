@@ -1,5 +1,5 @@
 from src.fen import Fen
-from src.piece import Pawn, Piece
+from src.piece import Pawn
 
 
 class ChessBoard:
