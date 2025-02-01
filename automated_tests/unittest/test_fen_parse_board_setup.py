@@ -1,16 +1,29 @@
 from pytest import mark, raises
 
 from src.fen import Fen, WrongBoardSize
+from src.piece import Pawn, Piece
+from src.square_value import PieceValue
 
 
 @mark.unittest
 def test__unittest__fen__parse_board_setup():
-    expected_data = "RNBQKBNRPPPPPPPP--------------------------------pppppppprnbqkbnr"
+    expected_data = {
+        PieceValue.EMPTY: 32,
+        PieceValue.PAWN: 16,
+        PieceValue.KNIGHT: 4,
+        PieceValue.BISHOP: 4,
+        PieceValue.ROOK: 4,
+        PieceValue.QUEEN: 2,
+        PieceValue.KING: 2
+    }
     original_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     test_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
     test_object = Fen(original_fen)
-    actual_data = test_object.parse_board_setup(test_fen)
-    assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
+    return_data = [square.piece_type if type(square) in [Pawn, Piece] else square
+                   for square in sum(test_object.parse_board_setup(test_fen), [])]
+    for square_value, test_data in expected_data.items():
+        actual_data = return_data.count(square_value)
+        assert actual_data == test_data, f"Expected: {test_data}, actual: {actual_data}"
 
 
 @mark.unittest

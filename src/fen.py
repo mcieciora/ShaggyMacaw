@@ -1,3 +1,7 @@
+from src.piece import create_piece
+from src.square_value import PieceValue
+
+
 class Fen:
     """FEN notation parser and verification class."""
 
@@ -15,51 +19,35 @@ class Fen:
         self.half_move_clock = self.parse_half_move(split_fen[4])
         self.full_move_number = self.parse_full_move(split_fen[5])
 
-    def convert_square_to_index(self, square):
-        """Convert square value to board setup index."""
-        try:
-            return self.board_squares.index(square)
-        except ValueError as exc:
-            raise NoSquareInBoard(f"Square {square} could not be found in board.") from exc
-
-    def convert_index_to_square(self, index):
-        """Convert board setup index to square value."""
-        try:
-            return self.board_squares[index]
-        except IndexError as exc:
-            raise NoSquareInBoard(f"Index {index} could not be found in board. Board is of 64 squares size counting "
-                                  f"from 0.") from exc
-
     def get_square_value(self, square):
         """Get pawn or piece value from given square."""
-        square_index = self.convert_square_to_index(square)
-        return self.board_setup[square_index]
+        files = ["a", "b", "c", "d", "e", "f", "g", "h"]
+        try:
+            file, rank = square[0], int(square[1])-1
+            return self.board_setup[rank][files.index(file)]
+        except (ValueError, IndexError) as exc:
+            raise NoSquareInBoard(f"Square {square} not found in board.") from exc
 
     def is_square_empty(self, square):
         """Return true if given square value is -."""
-        return self.get_square_value(square) == "-"
+        return self.get_square_value(square) == PieceValue.EMPTY
 
     def get_square_active_colour(self, square):
         """Get pawn's or piece's colour from given square."""
         square_value = self.get_square_value(square)
         if not self.is_square_empty(square):
-            return square_value.isupper()
-        else:
-            raise SquareEmpty
+            return square_value.active_colour_white
+        raise SquareEmpty(f"{square} is empty.")
 
     def is_white_an_active_colour(self):
         """Check if white is and active colour."""
         return self.active_colour
 
     @staticmethod
-    def convert_index_to_coordinates(index):
-        """Convert index value to y, x coordinates on chess board."""
-        return int(index/8), index % 8
-
-    @staticmethod
-    def convert_coordinates_to_index(x, y):
-        """Convert y, x coordinates on chess board to index."""
-        return y*8 + x
+    def convert_coordinates_to_square(x, y):
+        """Convert x, y coordinates to square value."""
+        files = ["a", "b", "c", "d", "e", "f", "g", "h"]
+        return f"{files[x]}{y+1}"
 
     @staticmethod
     def coordinates_in_boundaries(x, y):
@@ -76,25 +64,23 @@ class Fen:
                 generated_squares.append(f"{file}{rank}")
         return generated_squares
 
-    @staticmethod
-    def parse_board_setup(fen):
+    def parse_board_setup(self, fen):
         """Parse board setup and verify number of files and ranks."""
-        return_board = ""
+        return_board = []
         ranks = fen.split("/")
         ranks.reverse()
         if ranks_number := (len(ranks)) != 8:
             raise WrongBoardSize(f"Number of ranks is incorrect. Expected is 8, but got: {ranks_number}")
-        for index, rank in enumerate(ranks):
-            temp_rank = ""
-            for square in rank:
-                if square.isdigit():
-                    for _ in range(int(square)):
-                        temp_rank += '-'
+        for rank_index, rank in enumerate(ranks):
+            temporary_rank = []
+            for square_index, value in enumerate(rank):
+                if value.isdigit():
+                    temporary_rank.extend([create_piece(value)]*int(value))
                 else:
-                    temp_rank += square
-            if rank_size := (len(temp_rank)) != 8:
-                raise WrongBoardSize(f"{index} rank size if incorrect. Expected is 8, but got: {rank_size}")
-            return_board += temp_rank
+                    temporary_rank.append(create_piece(value, position=(square_index, rank_index)))
+            return_board.append(temporary_rank)
+            if (rank_size := len(temporary_rank)) != 8:
+                raise WrongBoardSize(f"{rank_index} rank size if incorrect. Expected is 8, but got: {rank_size}")
         return return_board
 
     @staticmethod
