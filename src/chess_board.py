@@ -42,27 +42,12 @@ class ChessBoard:
                 available_squares.append(new_square)
         return available_squares
 
-    def generate_rook_moves(self, piece):
-        """Generate pawn moves."""
-        available_squares = []
-        for movement in piece.movement_pattern:
-            new_square = self.is_move_possible(piece.position, movement, True)
-            if piece.is_pawn_next_move_promotion() and new_square:
-                available_squares.extend([f"{new_square}={promotion_move}" for promotion_move in ["Q", "R", "N", "B"]])
-            elif new_square:
-                square_value = self.fen.convert_coordinates_to_square(piece.position[0], piece.position[1])
-                available_squares.append(f"{square_value}{new_square}")
-            else:
-                break
-        for capture in piece.capture_pattern:
-            new_square = self.check_capture_square(piece.position, capture, piece)
-            if piece.is_pawn_next_move_promotion() and new_square:
-                available_squares.extend([f"{new_square}={promotion_move}" for promotion_move in ["Q", "R", "N", "B"]])
-            elif new_square:
-                available_squares.append(new_square)
-            if new_square := self.is_en_passant_possible(piece.position, capture, piece):
-                available_squares.append(new_square)
-        return available_squares
+    def generate_rook_moves(self, index, piece):
+        """Generate rook moves."""
+
+        y, x = self.fen.convert_index_to_coordinates(index)
+        movement_pattern = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        return []
 
     def is_move_possible(self, cur_position, movement, expected_empty):
         """Calculate new position, verify if square is in board and check if it is expected to be empty."""
