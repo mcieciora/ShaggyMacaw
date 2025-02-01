@@ -44,7 +44,6 @@ class ChessBoard:
 
     def generate_rook_moves(self, piece):
         """Generate rook moves."""
-
         available_squares = []
         for movement in piece.movement_pattern:
             for multiplier in range(1, 8):
