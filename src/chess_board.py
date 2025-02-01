@@ -69,7 +69,3 @@ class ChessBoard:
                     self.fen.available_en_passant):
                 default_return = f"{original_square}{new_square}"
         return default_return
-
-
-chess_board_a = ChessBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
-chess_board_a.generate_all_possible_moves()
