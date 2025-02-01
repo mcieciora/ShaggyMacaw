@@ -33,7 +33,7 @@ class ChessBoard:
             else:
                 break
         for capture in piece.capture_pattern:
-            new_square = self.check_capture_square(piece.position, capture, piece)
+            new_square = self.check_capture_square(piece, capture)
             if piece.is_pawn_next_move_promotion() and new_square:
                 available_squares.extend([f"{new_square}={promotion_move}" for promotion_move in ["Q", "R", "N", "B"]])
             elif new_square:
@@ -42,12 +42,22 @@ class ChessBoard:
                 available_squares.append(new_square)
         return available_squares
 
-    def generate_rook_moves(self, index, piece):
+    def generate_rook_moves(self, piece):
         """Generate rook moves."""
 
-        y, x = self.fen.convert_index_to_coordinates(index)
-        movement_pattern = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-        return []
+        available_squares = []
+        for movement in piece.movement_pattern:
+            for multiplier in range(1, 8):
+                multiplied_movement = tuple([multiplier*x for x in movement])
+                if new_square := self.is_move_possible(piece.position, multiplied_movement, True):
+                    square_value = self.fen.convert_coordinates_to_square(piece.position[0], piece.position[1])
+                    available_squares.append(f"{square_value}{new_square}")
+                elif new_square := self.check_capture_square(piece, multiplied_movement):
+                    available_squares.append(new_square)
+                    break
+                else:
+                    break
+        return available_squares
 
     def is_move_possible(self, cur_position, movement, expected_empty):
         """Calculate new position, verify if square is in board and check if it is expected to be empty."""
@@ -60,11 +70,11 @@ class ChessBoard:
                 default_return = square
         return default_return
 
-    def check_capture_square(self, cur_position, capture, piece):
+    def check_capture_square(self, piece, capture):
         """Verify if move is possible and check if square is occupied by opposite colour piece."""
         default_return = False
-        original_square = self.fen.convert_coordinates_to_square(cur_position[0], cur_position[1])
-        square = self.is_move_possible(cur_position, capture, False)
+        original_square = self.fen.convert_coordinates_to_square(piece.position[0], piece.position[1])
+        square = self.is_move_possible(piece.position, capture, False)
         if square and self.fen.get_square_active_colour(square) is not piece.active_colour_white:
             default_return = f"{original_square}{square}"
         return default_return

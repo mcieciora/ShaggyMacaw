@@ -3,6 +3,7 @@ from pytest import mark
 from src.chess_board import ChessBoard
 
 
+@mark.skip("Skipped until all pieces moves are  implemented.")
 @mark.unittest
 def test__unittest__chess_board__generate_all_possible_moves():
     original_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 0"

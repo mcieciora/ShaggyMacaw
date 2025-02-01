@@ -93,7 +93,7 @@ class Fen:
     @staticmethod
     def parse_castling_rights(castling_rights):
         """Parse and verify castling rights value."""
-        if castling_rights not in ["-", "KQkq", "Kkq", "Qkq", "KQk", "Kk", "Qk", "KQq", "Kq", "Qq"]:
+        if castling_rights not in ["-", "KQkq", "Kkq", "Qkq", "KQk", "Kk", "Qk", "KQq", "Kq", "KQ", "Qq"]:
             raise WrongCastlingRights(f"Castling rights have wrong value: {castling_rights}")
         return castling_rights
 
