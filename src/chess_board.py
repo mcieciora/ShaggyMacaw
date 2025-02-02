@@ -1,5 +1,5 @@
-from src.fen import Fen
-from src.piece import Pawn, Piece
+from src.fen import Fen, SquareEmpty
+from src.piece import PieceType, Piece
 
 
 class ChessBoard:
@@ -14,10 +14,14 @@ class ChessBoard:
         all_possible_moves = []
         for rank in self.fen.board_setup:
             for piece in rank:
-                if type(piece) is Pawn:
+                if piece is PieceType.EMPTY:
+                    continue
+                if piece.piece_type is PieceType.PAWN:
                     all_possible_moves.extend(self.generate_pawn_moves(piece))
-                elif type(piece) is Piece:
+                elif piece.piece_type is PieceType.ROOK:
                     all_possible_moves.extend(self.generate_rook_moves(piece))
+                else:
+                    pass
         return all_possible_moves
 
     def generate_pawn_moves(self, piece):

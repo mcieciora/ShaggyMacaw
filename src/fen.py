@@ -1,5 +1,5 @@
 from src.piece import create_piece
-from src.square_value import PieceValue
+from src.piece import PieceType
 
 
 class Fen:
@@ -30,7 +30,7 @@ class Fen:
 
     def is_square_empty(self, square):
         """Return true if given square value is -."""
-        return self.get_square_value(square) == PieceValue.EMPTY
+        return self.get_square_value(square) == PieceType.EMPTY
 
     def get_square_active_colour(self, square):
         """Get pawn's or piece's colour from given square."""

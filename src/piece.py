@@ -1,11 +1,24 @@
-from src.square_value import PieceValue
+from enum import Enum
+
+
+class PieceType(Enum):
+    """Enumeration of all possible values of square."""
+
+    EMPTY = 0
+    PAWN = 1
+    KNIGHT = 2
+    BISHOP = 3
+    ROOK = 4
+    QUEEN = 5
+    KING = 6
+
 
 value_to_square_value_map = {
-    "N": PieceValue.KNIGHT,
-    "B": PieceValue.BISHOP,
-    "R": PieceValue.ROOK,
-    "Q": PieceValue.QUEEN,
-    "K": PieceValue.KING
+    "N": PieceType.KNIGHT,
+    "B": PieceType.BISHOP,
+    "R": PieceType.ROOK,
+    "Q": PieceType.QUEEN,
+    "K": PieceType.KING
 }
 
 movement_patterns = {
@@ -36,7 +49,7 @@ pawn_capture_pattern = {
 def create_piece(value, position=None):
     """Piece factory function."""
     if value.isdigit():
-        return PieceValue.EMPTY
+        return PieceType.EMPTY
     elif value in ["p", "P"]:
         return Pawn(value, position)
     else:
@@ -50,7 +63,7 @@ class Pawn:
         """Initialize Pawn object."""
         self.value = value
         self.position = position
-        self.piece_type = PieceValue.PAWN
+        self.piece_type = PieceType.PAWN
         self.active_colour_white = self.value.isupper()
         self.movement_pattern = pawn_movement_pattern[self.active_colour_white][self.is_pawn_in_starting_position()]
         self.capture_pattern = pawn_capture_pattern[self.active_colour_white]
