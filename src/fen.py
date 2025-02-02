@@ -1,5 +1,5 @@
 from src.piece import create_piece
-from src.square_value import PieceValue
+from src.piece import PieceType
 
 
 class Fen:
@@ -30,7 +30,7 @@ class Fen:
 
     def is_square_empty(self, square):
         """Return true if given square value is -."""
-        return self.get_square_value(square) == PieceValue.EMPTY
+        return self.get_square_value(square) == PieceType.EMPTY
 
     def get_square_active_colour(self, square):
         """Get pawn's or piece's colour from given square."""
@@ -93,7 +93,7 @@ class Fen:
     @staticmethod
     def parse_castling_rights(castling_rights):
         """Parse and verify castling rights value."""
-        if castling_rights not in ["-", "KQkq", "Kkq", "Qkq", "KQk", "Kk", "Qk", "KQq", "Kq", "Qq"]:
+        if castling_rights not in ["-", "KQkq", "Kkq", "Qkq", "KQk", "Kk", "Qk", "KQq", "Kq", "KQ", "Qq"]:
             raise WrongCastlingRights(f"Castling rights have wrong value: {castling_rights}")
         return castling_rights
 
