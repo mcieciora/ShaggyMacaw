@@ -20,6 +20,22 @@ def test__unittest__fen__parse_active_colour__black_colour():
 
 
 @mark.unittest
+def test__unittest__fen__parse_active_colour__true():
+    original_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+    test_object = Fen(original_fen)
+    actual_data = test_object.parse_active_colour(True)
+    assert actual_data == "w", f"Expected: w, actual: {actual_data}"
+
+
+@mark.unittest
+def test__unittest__fen__parse_active_colour__false():
+    original_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1"
+    test_object = Fen(original_fen)
+    actual_data = test_object.parse_active_colour(False)
+    assert actual_data == "b", f"Expected: b, actual: {actual_data}"
+
+
+@mark.unittest
 def test__unittest__fen__parse_active_colour__wrong_active_colour():
     original_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     test_object = Fen(original_fen)
