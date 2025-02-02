@@ -1,5 +1,5 @@
-from src.fen import Fen, SquareEmpty
-from src.piece import PieceType, Piece
+from src.fen import Fen
+from src.piece import PieceType
 
 
 class ChessBoard:
