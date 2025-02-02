@@ -58,10 +58,10 @@ def get_parametrized_test_set():
 
 @mark.smoke
 @mark.parametrize("test_key,test_data,expected_output", get_parametrized_test_set(), ids=test_data_dict.keys())
-def test__smoke__chess_board__generate_rook_moves(test_key, test_data, expected_output):
+def test__smoke__chess_board__generate_piece_moves(test_key, test_data, expected_output):
     test_object = ChessBoard(test_data["fen"])
     piece = Piece(test_data["value"], test_data["position"])
-    actual_result = test_object.generate_rook_moves(piece)
+    actual_result = test_object.generate_piece_moves(piece)
     assert actual_result == test_data["expected_result"], (f"Failed on {test_key}, expected: "
                                                            f"{test_data['expected_result']}, actual: "
                                                            f"{actual_result}")

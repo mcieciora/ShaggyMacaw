@@ -18,8 +18,8 @@ class ChessBoard:
                     continue
                 if piece.piece_type is PieceType.PAWN:
                     all_possible_moves.extend(self.generate_pawn_moves(piece))
-                elif piece.piece_type is PieceType.ROOK:
-                    all_possible_moves.extend(self.generate_rook_moves(piece))
+                elif piece.piece_type in [PieceType.ROOK, PieceType.BISHOP]:
+                    all_possible_moves.extend(self.generate_piece_moves(piece))
                 else:
                     pass
         return all_possible_moves
@@ -46,7 +46,7 @@ class ChessBoard:
                 available_squares.append(new_square)
         return available_squares
 
-    def generate_rook_moves(self, piece):
+    def generate_piece_moves(self, piece):
         """Generate rook moves."""
         available_squares = []
         for movement in piece.movement_pattern:
