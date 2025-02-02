@@ -176,10 +176,8 @@ class Fen:
             ranks.append(temp_rank)
 
         board = "/".join(ranks)
-        return (
-            f"{board} {self.parse_active_colour(self.active_colour)} "
-            f"{self.castling_rights} {self.available_en_passant} {self.half_move_clock} {self.full_move_number}"
-        )
+        return (f"{board} {self.parse_active_colour(self.active_colour)} "
+                f"{self.castling_rights} {self.available_en_passant} {self.half_move_clock} {self.full_move_number}")
 
 
 class WrongBoardSize(Exception):
