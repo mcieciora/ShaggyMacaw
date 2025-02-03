@@ -23,7 +23,7 @@ class Fen:
         """Get pawn or piece value from given square."""
         files = ["a", "b", "c", "d", "e", "f", "g", "h"]
         try:
-            file, rank = square[0], int(square[1])-1
+            file, rank = square[0], int(square[1]) - 1
             return self.board_setup[rank][files.index(file)]
         except (ValueError, IndexError) as exc:
             raise NoSquareInBoard(f"Square {square} not found in board.") from exc
@@ -47,7 +47,7 @@ class Fen:
     def convert_coordinates_to_square(x, y):
         """Convert x, y coordinates to square value."""
         files = ["a", "b", "c", "d", "e", "f", "g", "h"]
-        return f"{files[x]}{y+1}"
+        return f"{files[x]}{y + 1}"
 
     @staticmethod
     def coordinates_in_boundaries(x, y):
@@ -70,37 +70,61 @@ class Fen:
         ranks = fen.split("/")
         ranks.reverse()
         if ranks_number := (len(ranks)) != 8:
-            raise WrongBoardSize(f"Number of ranks is incorrect. Expected is 8, but got: {ranks_number}")
+            raise WrongBoardSize(
+                f"Number of ranks is incorrect. Expected is 8, but got: {ranks_number}"
+            )
         for rank_index, rank in enumerate(ranks):
             temporary_rank = []
             for square_index, value in enumerate(rank):
                 if value.isdigit():
-                    temporary_rank.extend([create_piece(value)]*int(value))
+                    temporary_rank.extend([create_piece(value)] * int(value))
                 else:
-                    temporary_rank.append(create_piece(value, position=(square_index, rank_index)))
+                    temporary_rank.append(
+                        create_piece(value, position=(square_index, rank_index))
+                    )
             return_board.append(temporary_rank)
             if (rank_size := len(temporary_rank)) != 8:
-                raise WrongBoardSize(f"{rank_index} rank size if incorrect. Expected is 8, but got: {rank_size}")
+                raise WrongBoardSize(
+                    f"{rank_index} rank size if incorrect. Expected is 8, but got: {rank_size}"
+                )
         return return_board
 
     @staticmethod
     def parse_active_colour(active_colour):
         """Parse and verify active colours value."""
         if active_colour not in ["w", "b"]:
-            raise WrongActiveColourValue(f"Active colour has incorrect value: {active_colour}, expected: w/b")
+            raise WrongActiveColourValue(
+                f"Active colour has incorrect value: {active_colour}, expected: w/b"
+            )
         return active_colour == "w"
 
     @staticmethod
     def parse_castling_rights(castling_rights):
         """Parse and verify castling rights value."""
-        if castling_rights not in ["-", "KQkq", "Kkq", "Qkq", "KQk", "Kk", "Qk", "KQq", "Kq", "KQ", "Qq"]:
-            raise WrongCastlingRights(f"Castling rights have wrong value: {castling_rights}")
+        if castling_rights not in [
+            "-",
+            "KQkq",
+            "Kkq",
+            "Qkq",
+            "KQk",
+            "Kk",
+            "Qk",
+            "KQq",
+            "Kq",
+            "KQ",
+            "Qq",
+        ]:
+            raise WrongCastlingRights(
+                f"Castling rights have wrong value: {castling_rights}"
+            )
         return castling_rights
 
     def parse_en_passant(self, en_passant_square):
         """Parse and verify en passant value."""
         if en_passant_square not in self.board_squares and en_passant_square != "-":
-            raise WrongEnPassantValue(f"En passant square has wrong value: {en_passant_square}")
+            raise WrongEnPassantValue(
+                f"En passant square has wrong value: {en_passant_square}"
+            )
         return en_passant_square
 
     @staticmethod
@@ -109,7 +133,9 @@ class Fen:
         try:
             return int(half_move_value)
         except ValueError as exc:
-            raise NotIntegerHalfMoveValue(f"Half move value is not an integer: {half_move_value}") from exc
+            raise NotIntegerHalfMoveValue(
+                f"Half move value is not an integer: {half_move_value}"
+            ) from exc
 
     @staticmethod
     def parse_full_move(full_move_value):
@@ -117,7 +143,9 @@ class Fen:
         try:
             return int(full_move_value)
         except ValueError as exc:
-            raise NotIntegerFullMoveValue(f"Full move value is not an integer: {full_move_value}") from exc
+            raise NotIntegerFullMoveValue(
+                f"Full move value is not an integer: {full_move_value}"
+            ) from exc
 
 
 class WrongBoardSize(Exception):
