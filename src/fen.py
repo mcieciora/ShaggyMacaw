@@ -176,30 +176,10 @@ class Fen:
             ranks.append(temp_rank)
 
         board = "/".join(ranks)
-        return (f"{board} {self.parse_active_colour(self.active_colour)} "
-                f"{self.castling_rights} {self.available_en_passant} {self.half_move_clock} {self.full_move_number}")
-
-    def regenerate_fen(self):
-        """Generate FEN from existing configuration."""
-        ranks = []
-        for rank in reversed(self.board_setup):
-            temp_rank = ''
-            empty_count = 0
-            for square in rank:
-                if square.value == 0:
-                    empty_count += 1
-                else:
-                    if empty_count > 0:
-                        temp_rank += str(empty_count)
-                    temp_rank += square.value
-                    empty_count = 0
-            if empty_count > 0:
-                temp_rank += str(empty_count)
-            ranks.append(temp_rank)
-
-        board = "/".join(ranks)
-        return (f"{board} {self.parse_active_colour(self.active_colour)} "
-                f"{self.castling_rights} {self.available_en_passant} {self.half_move_clock} {self.full_move_number}")
+        return (
+            f"{board} {self.parse_active_colour(self.active_colour)} "
+            f"{self.castling_rights} {self.available_en_passant} {self.half_move_clock} {self.full_move_number}"
+        )
 
 
 class WrongBoardSize(Exception):
