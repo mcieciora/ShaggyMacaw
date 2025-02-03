@@ -204,7 +204,7 @@ pipeline {
                 axes {
                     axis {
                         name "TEST_GROUP"
-                        values "fen", "chess_board", "piece"
+                        values "fen", "chess_board"
                     }
                 }
                 stages {

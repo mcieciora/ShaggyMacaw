@@ -98,7 +98,7 @@ def test__smoke__fen__generate_board_setting():
 
 @mark.smoke
 @mark.parametrize("test_data,expected_output", get_parametrized_test_set("fen_0"), ids=test_data_dict.keys())
-def test__smoke__fen__generate_chess_board_from_fen(test_data, expected_output):
+def test__smoke__fen__generate_board_from_fen(test_data, expected_output):
     for test_key, test_value in test_data.__dict__.items():
         if test_key in expected_output:
             assert test_value == expected_output[test_key], (f"Failed on {test_key}, "
