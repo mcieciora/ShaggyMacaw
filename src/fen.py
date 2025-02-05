@@ -83,7 +83,9 @@ class Fen:
                     position_offset += real_normalized
                 else:
                     temporary_rank.append(
-                        create_piece(value, position=(square_index + position_offset, rank_index))
+                        create_piece(
+                            value, position=(square_index + position_offset, rank_index)
+                        )
                     )
             return_board.append(temporary_rank)
             if (rank_size := len(temporary_rank)) != 8:
