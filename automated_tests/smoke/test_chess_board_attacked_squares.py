@@ -5,10 +5,11 @@ from src.chess_board import ChessBoard
 
 test_data_dict = {
     "test_resource_1": {
-        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 0",
+        "fen": "6k1/7p/6p1/p3r3/6P1/7P/1B3K2/3R4 b - - 2 9",
         "expected_result": {
-            True: ["a3", "b3", "c3", "d3", "e3", "f3", "g3", "h3"],
-            False: ["a6", "b6", "c6", "d6", "e6", "f6", "g6", "h6"]
+            True: ["a1", "a3", "b1", "c1", "c3", "d2", "d3", "d4", "d5", "d6", "d7", "d8", "e1", "e5", "f1", "f5",
+                   "g1", "h1", "h5"],
+            False: ["b4", "b5", "c5", "d5", "e1", "e2", "e3", "e4", "e6", "e7", "e8", "f5", "g5", "h5"]
         }
     }
 }
