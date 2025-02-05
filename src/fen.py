@@ -75,12 +75,17 @@ class Fen:
             )
         for rank_index, rank in enumerate(ranks):
             temporary_rank = []
+            position_offset = 0
             for square_index, value in enumerate(rank):
                 if value.isdigit():
                     temporary_rank.extend([create_piece(value)] * int(value))
+                    real_normalized = int(value) - 1
+                    position_offset += real_normalized
                 else:
                     temporary_rank.append(
-                        create_piece(value, position=(square_index, rank_index))
+                        create_piece(
+                            value, position=(square_index + position_offset, rank_index)
+                        )
                     )
             return_board.append(temporary_rank)
             if (rank_size := len(temporary_rank)) != 8:
