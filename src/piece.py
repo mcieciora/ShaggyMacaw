@@ -13,6 +13,22 @@ class PieceType(Enum):
     KING = 6
 
 
+class PieceMove(Enum):
+    """Enumeration of moves types."""
+
+    MOVE = 0
+    CAPTURE = 1
+    MOVE_OR_CAPTURE = 2
+
+
+class Move:
+    """Support class for move setup."""
+    def __init__(self, is_move_legal=False, is_capture=False, square=None):
+        self.is_move_legal = is_move_legal
+        self.is_capture = is_capture
+        self.square = square
+
+
 value_to_square_value_map = {
     "N": PieceType.KNIGHT,
     "B": PieceType.BISHOP,
