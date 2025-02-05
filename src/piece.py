@@ -23,6 +23,7 @@ class PieceMove(Enum):
 
 class Move:
     """Support class for move setup."""
+
     def __init__(self, is_move_legal=False, is_capture=False, square=None):
         self.is_move_legal = is_move_legal
         self.is_capture = is_capture
