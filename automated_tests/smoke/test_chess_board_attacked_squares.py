@@ -10,14 +10,7 @@ test_data_dict = {
             True: ["a3", "b3", "c3", "d3", "e3", "f3", "g3", "h3"],
             False: ["a6", "b6", "c6", "d6", "e6", "f6", "g6", "h6"]
         }
-    },
-    # "test_resource_2": {
-    #     "fen": "4qk2/2r3bp/1p1pb1p1/p4r2/1nPPpn2/2NB3P/5NP1/R1BQK2R w KQ - 2 9",
-    #     "expected_result": {
-    #         True: [],
-    #         False: []
-    #     }
-    # }
+    }
 }
 
 
