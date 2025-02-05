@@ -127,7 +127,7 @@ def test__smoke__fen__parse_board_setup__verify_fields(test_key, test_data, expe
 
 
 @mark.smoke
-def test__smoke__fen__parse_board_setup__verify_fields():
+def test__smoke__fen__parse_board_setup__verify_positions():
     test_object = Fen("r1b1r1k1/1pb3p1/2nq1p2/2N3P1/pPRp3p/3N3P/P1Q1PPB1/5RK1 b - b3 4 23")
     return_data = test_object.parse_board_setup("r1b1r1k1/1pb3p1/2nq1p2/2N3P1/pPRp3p/3N3P/P1Q1PPB1/5RK1")
     for file in range(8):
