@@ -21,6 +21,10 @@ class ChessBoard:
                     all_possible_moves.extend(self.generate_pawn_moves(piece))
                 elif piece.piece_type in [PieceType.ROOK, PieceType.BISHOP]:
                     all_possible_moves.extend(self.generate_piece_moves(piece))
+                elif piece.piece_type is PieceType.KNIGHT:
+                    all_possible_moves.extend(
+                        self.generate_piece_moves(piece, not_continuous_movement=True)
+                    )
                 else:
                     pass
         return all_possible_moves
@@ -64,7 +68,7 @@ class ChessBoard:
                 available_squares.append(new_square)
         return available_squares
 
-    def generate_piece_moves(self, piece):
+    def generate_piece_moves(self, piece, not_continuous_movement=False):
         """Generate rook moves."""
         available_squares = []
         square_value = self.fen.convert_coordinates_to_square(
@@ -81,6 +85,8 @@ class ChessBoard:
                     if move.is_capture:
                         break
                 else:
+                    break
+                if not_continuous_movement:
                     break
         return available_squares
 
