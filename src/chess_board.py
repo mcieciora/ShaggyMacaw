@@ -22,7 +22,9 @@ class ChessBoard:
                 elif piece.piece_type in [PieceType.ROOK, PieceType.BISHOP]:
                     all_possible_moves.extend(self.generate_piece_moves(piece))
                 elif piece.piece_type is PieceType.KNIGHT:
-                    all_possible_moves.extend(self.generate_piece_moves(piece, not_continuous_movement=True))
+                    all_possible_moves.extend(
+                        self.generate_piece_moves(piece, not_continuous_movement=True)
+                    )
                 else:
                     pass
         return all_possible_moves
