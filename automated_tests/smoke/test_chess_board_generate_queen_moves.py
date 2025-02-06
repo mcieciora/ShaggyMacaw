@@ -45,7 +45,6 @@ def test__smoke__chess_board__generate_queen_moves(test_key, test_data, expected
     test_object = ChessBoard(test_data["fen"])
     piece = Piece(test_data["value"], test_data["position"])
     actual_result = test_object.generate_piece_moves(piece)
-    a = list(set(test_data["expected_result"]) - set(actual_result))
     assert actual_result == test_data["expected_result"], (f"Failed on {test_key}, expected: "
                                                            f"{test_data['expected_result']}, actual: "
                                                            f"{actual_result}")
