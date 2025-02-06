@@ -158,7 +158,9 @@ class Fen:
 
     def regenerate_fen(self):
         """Generate FEN from current configuration."""
-        board = "/".join([self.parse_rank_to_fen(rank) for rank in reversed(self.board_setup)])
+        board = "/".join(
+            [self.parse_rank_to_fen(rank) for rank in reversed(self.board_setup)]
+        )
 
         return (
             f"{board} {self.parse_active_colour(self.active_colour)} "
@@ -182,7 +184,9 @@ class Fen:
                 active_value = (square, 1)
         if active_value:
             return_list.append(active_value)
-        return "".join([str(x[1]) if x[0] == PieceType.EMPTY else x[0].value for x in return_list])
+        return "".join(
+            [str(x[1]) if x[0] == PieceType.EMPTY else x[0].value for x in return_list]
+        )
 
 
 class WrongBoardSize(Exception):
