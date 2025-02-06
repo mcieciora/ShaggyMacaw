@@ -51,5 +51,5 @@ def get_parametrized_test_set(test_file):
 @mark.smoke
 @mark.parametrize("test_data,expected_output", get_parametrized_test_set("fen_1"), ids=test_data_dict.keys())
 def test__smoke__fen__generate_board_from_fen(test_data, expected_output):
-        assert test_data == expected_output["expected_result"], (f"Expected: {expected_output['expected_result']}, "
-                                                                 f"actual: {test_data}")
+    assert test_data == expected_output["expected_result"], (f"Expected: {expected_output['expected_result']}, "
+                                                             f"actual: {test_data}")
