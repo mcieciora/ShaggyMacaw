@@ -64,7 +64,8 @@ class Fen:
                 generated_squares.append(f"{file}{rank}")
         return generated_squares
 
-    def parse_board_setup(self, fen):
+    @staticmethod
+    def parse_board_setup(fen):
         """Parse board setup and verify number of files and ranks."""
         return_board = []
         ranks = fen.split("/")
@@ -97,11 +98,14 @@ class Fen:
     @staticmethod
     def parse_active_colour(active_colour):
         """Parse and verify active colours value."""
-        if active_colour not in ["w", "b"]:
-            raise WrongActiveColourValue(
-                f"Active colour has incorrect value: {active_colour}, expected: w/b"
-            )
-        return active_colour == "w"
+        if active_colour in ["w", "b"]:
+            return active_colour == "w"
+        if isinstance(active_colour, bool):
+            return {True: "w", False: "b"}[active_colour]
+        raise WrongActiveColourValue(
+            f"Active colour has incorrect value: {active_colour}, "
+            f"expected: w/b or True/False"
+        )
 
     @staticmethod
     def parse_castling_rights(castling_rights):
@@ -151,6 +155,38 @@ class Fen:
             raise NotIntegerFullMoveValue(
                 f"Full move value is not an integer: {full_move_value}"
             ) from exc
+
+    def regenerate_fen(self):
+        """Generate FEN from current configuration."""
+        board = "/".join(
+            [self.parse_rank_to_fen(rank) for rank in reversed(self.board_setup)]
+        )
+
+        return (
+            f"{board} {self.parse_active_colour(self.active_colour)} "
+            f"{self.castling_rights} {self.available_en_passant} {self.half_move_clock} {self.full_move_number}"
+        )
+
+    @staticmethod
+    def parse_rank_to_fen(rank_list):
+        """Parse given rank back to FEN notation."""
+        return_list = []
+
+        active_value = None
+        for square in rank_list:
+            try:
+                if active_value[0] == square:
+                    active_value = (square, active_value[1] + 1)
+                else:
+                    return_list.append(active_value)
+                    active_value = (square, 1)
+            except TypeError:
+                active_value = (square, 1)
+        if active_value:
+            return_list.append(active_value)
+        return "".join(
+            [str(x[1]) if x[0] == PieceType.EMPTY else x[0].value for x in return_list]
+        )
 
 
 class WrongBoardSize(Exception):
