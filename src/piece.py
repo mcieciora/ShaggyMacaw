@@ -58,10 +58,9 @@ def create_piece(value, position=None):
     """Piece factory function."""
     if value.isdigit():
         return PieceType.EMPTY
-    elif value in ["p", "P"]:
+    if value in ["p", "P"]:
         return Pawn(value, position)
-    else:
-        return Piece(value, position)
+    return Piece(value, position)
 
 
 class Pawn:
