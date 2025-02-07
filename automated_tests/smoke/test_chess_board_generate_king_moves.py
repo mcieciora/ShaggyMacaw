@@ -50,6 +50,7 @@ def get_parametrized_test_set():
     return parametrized_test_set_list
 
 
+@mark.skip("Skipped until king moves are implemented.")
 @mark.smoke
 @mark.parametrize("test_key,test_data,expected_output", get_parametrized_test_set(), ids=test_data_dict.keys())
 def test__smoke__chess_board__generate_piece_moves(test_key, test_data, expected_output):

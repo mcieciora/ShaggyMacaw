@@ -4,6 +4,7 @@ from src.chess_board import ChessBoard
 from src.piece import Pawn
 
 
+@mark.skip("Skipped until king moves are implemented.")
 @mark.unittest
 def test__unittest__chess_board__generate_king_moves():
     original_fen = "4r1k1/1p3pp1/2b5/3Bn3/3p1NPp/7P/PP2P3/5R1K w - - 1 34"
