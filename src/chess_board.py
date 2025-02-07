@@ -8,6 +8,7 @@ class ChessBoard:
     def __init__(self, fen):
         """Initialize ChessBoard object."""
         self.fen = Fen(fen)
+        self.defended_pieces = {True: [], False: []}
         self.attacked_squares_map = {True: [], False: []}
 
     def generate_all_possible_moves(self):
@@ -116,6 +117,8 @@ class ChessBoard:
                     move.is_move_legal
                     and move.square
                     not in self.attacked_squares_map[not king.active_colour_white]
+                    and move.square
+                    not in self.defended_pieces[not king.active_colour_white]
                 ):
                     possible_shared_squares_dict[king.active_colour_white][
                         move.square
@@ -188,6 +191,8 @@ class ChessBoard:
                         self.attacked_squares_map[piece.active_colour_white].append(
                             square
                         )
+                else:
+                    self.defended_pieces[piece.active_colour_white].append(square)
         return move
 
     def is_en_passant_possible(self, position, capture, piece):

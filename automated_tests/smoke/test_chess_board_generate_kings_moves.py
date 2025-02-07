@@ -3,7 +3,6 @@ from pytest import mark
 from src.chess_board import ChessBoard
 
 test_data_dict = {
-    # FIXME Fails on active_colour == False trying to take b3 while its defended by b2
     "test_resource_1": {
         "fen": "8/8/p7/1p6/1k6/1P6/1K6/8 w - - 0 58",
         "value": "k",
@@ -16,7 +15,6 @@ test_data_dict = {
         "square": "b2",
         "expected_result": ["b2a2", "b2a1", "b2b1", "b2c1", "b2c2"]
     },
-    # FIXME Fails on active_colour == False trying to take g4 while its defended by h3
     "test_resource_3": {
         "fen": "4R3/5p1N/6p1/8/3p1kPp/2n4P/P2r4/4K3 b - - 21 52",
         "value": "k",
