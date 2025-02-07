@@ -90,11 +90,6 @@ class Evaluation:
                 pieces_value_map[piece.active_colour_white] += pieces_value[
                     piece.piece_type
                 ]
-                a = self.get_position_value(piece)
-                if piece.active_colour_white:
-                    print(
-                        f"piece: {piece.piece_type}; position: {piece.position}; value: {a}"
-                    )
                 position_value_map[
                     piece.active_colour_white
                 ] += self.get_position_value(piece)
