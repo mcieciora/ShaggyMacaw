@@ -29,7 +29,7 @@ def get_parametrized_test_set():
 def test__smoke__evaluation__evaluate(test_key, test_data):
     chess_board = ChessBoard(test_data["fen"])
     test_object = Evaluation(chess_board)
-    pieces_value_map, position_value_map = test_object.evaluate()
+    pieces_value_map, position_value_map = test_object.evaluate(return_values_as_map=True)
     for active_colour in [True, False]:
         expected_value = test_data["pieces_value_map"][active_colour]
         assert pieces_value_map[active_colour] == expected_value, (f"Expected: {expected_value}, "

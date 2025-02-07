@@ -80,7 +80,7 @@ class Evaluation:
     def __init__(self, chess_board):
         self.chess_board = chess_board
 
-    def evaluate(self):
+    def evaluate(self, return_values_as_map=False):
         """Evaluate total pieces value and position value."""
         pieces_value_map = {True: 0, False: 0}
         position_value_map = {True: 0, False: 0}
@@ -93,7 +93,12 @@ class Evaluation:
                 position_value_map[
                     piece.active_colour_white
                 ] += self.get_position_value(piece)
-        return pieces_value_map, position_value_map
+
+        if return_values_as_map:
+            return pieces_value_map, position_value_map
+        evaluation = ((pieces_value_map[True] + position_value_map[True]) /
+                      (pieces_value_map[False] + position_value_map[False]))
+        return round(evaluation, 2)
 
     def get_position_value(self, piece):
         """Get piece value based on square position map."""
