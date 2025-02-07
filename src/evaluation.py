@@ -96,8 +96,9 @@ class Evaluation:
 
         if return_values_as_map:
             return pieces_value_map, position_value_map
-        evaluation = ((pieces_value_map[True] + position_value_map[True]) /
-                      (pieces_value_map[False] + position_value_map[False]))
+        evaluation = (pieces_value_map[True] + position_value_map[True]) / (
+            pieces_value_map[False] + position_value_map[False]
+        )
         return round(evaluation, 2)
 
     def get_position_value(self, piece):
