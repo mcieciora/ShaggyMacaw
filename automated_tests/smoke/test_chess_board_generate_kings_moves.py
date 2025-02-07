@@ -1,7 +1,6 @@
 from pytest import mark
 
 from src.chess_board import ChessBoard
-from src.piece import Piece
 
 test_data_dict = {
     # FIXME Fails on active_colour == False trying to take b3 while its defended by b2

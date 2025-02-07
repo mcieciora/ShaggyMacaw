@@ -12,8 +12,9 @@ def test__unittest__chess_board__mask_colliding_moves():
     moves_dict = {
         False: {"e3": "f4e3", "e4": "f4e4", "e5": "f4e5", "f3": "f4f3", "g3": "f4g3", "g4": "f4g4"},
         True: {"c2": "d3c2", "c3": "d3c3", "c4": "d3c4", "d2": "d3d2", "d4": "d3d4", "e2": "d3e2", "e3": "d3e3",
-            "e4": "d3e4"}}
-    
+               "e4": "d3e4"}
+    }
+
     actual_data = test_object.mask_colliding_moves(moves_dict)
     white_king_moves_number = len([move for move in actual_data if move.startswith("d3")])
     black_king_moves_number = len([move for move in actual_data if move.startswith("f4")])

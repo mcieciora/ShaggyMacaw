@@ -1,7 +1,6 @@
 from pytest import mark
 
 from src.chess_board import ChessBoard
-from src.piece import Pawn
 
 
 @mark.unittest
