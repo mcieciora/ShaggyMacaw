@@ -18,4 +18,4 @@ def test__unittest__fen__get_position_from_square__no_square_in_board():
     test_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     test_data = Fen(test_fen)
     with raises(NoSquareInBoard):
-        actual_value = test_data.get_position_from_square("x1")
+        test_data.get_position_from_square("x1")
