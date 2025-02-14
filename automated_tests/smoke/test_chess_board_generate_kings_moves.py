@@ -3,6 +3,12 @@ from pytest import mark
 from src.chess_board import ChessBoard
 
 test_data_dict = {
+    "test_resource_5": {
+        "fen": "r3k1nr/1pbq1pbp/p1np2p1/4p3/2P1P3/2NB4/PP3PPP/RNBQK2R w KQkq - 2 9",
+        "value": "k",
+        "square": "e8",
+        "expected_result": ["e8f8", "e8d8", "e8c8", "e8e7"]
+    },
     "test_resource_1": {
         "fen": "8/8/p7/1p6/1k6/1P6/1K6/8 w - - 0 58",
         "value": "k",
@@ -26,12 +32,6 @@ test_data_dict = {
         "value": "K",
         "square": "e1",
         "expected_result": ["e1d2", "e1f1"]
-    },
-    "test_resource_5": {
-        "fen": "r3k1nr/1pbq1pbp/p1np2p1/4p3/2P1P3/2NB4/PP3PPP/RNBQK2R w KQkq - 2 9",
-        "value": "k",
-        "square": "e8",
-        "expected_result": ["e8f8", "e8d8", "e8c8", "e8e7"]
     },
     "test_resource_6": {
         "fen": "r1bqk1nr/1p3pbp/p1np2p1/4p3/2P1P3/2NB4/PP3PPP/RNBQK2R w KQkq - 2 9",
@@ -63,6 +63,12 @@ test_data_dict = {
         "square": "e1",
         "expected_result": ["e1f1", "e1d1", "e1f2", "e1d2"]
     },
+    "test_resource_11": {
+        "fen": "2r1kb1r/pp2p1pp/4pn2/2p5/P1K1P3/2N5/1P4PP/n1B3NR w k - 2 13",
+        "value": "K",
+        "square": "c4",
+        "expected_result": ["c4b5", "c4d3"]
+    }
 }
 
 
@@ -78,11 +84,11 @@ def get_parametrized_test_set():
 def test__smoke__chess_board__generate_kings_moves(test_key, test_data, expected_output):
     test_object = ChessBoard(test_data["fen"])
     actual_data = test_object.generate_all_possible_moves()
-    king_moves = [move for move in actual_data if move.startswith(test_data["square"])]
+    king_moves = [str(move) for move in actual_data if move.original_square == test_data["square"]]
     king_moves_number = len(king_moves)
+
+    for move in test_data['expected_result']:
+        assert move in king_moves, f"Expected: {move} not in {actual_data}"
 
     expected_data = len(test_data["expected_result"])
     assert king_moves_number == expected_data, f"Expected: {test_data['expected_result']}, actual: {king_moves}"
-
-    for move in test_data['expected_result']:
-        assert move in actual_data, f"Expected: {move} not in {actual_data}"

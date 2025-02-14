@@ -85,14 +85,14 @@ class Evaluation:
         pieces_value_map = {True: 0, False: 0}
         position_value_map = {True: 0, False: 0}
         all_pieces = sum(self.chess_board.fen.board_setup, [])
-        for index, piece in enumerate(all_pieces):
+        for piece in all_pieces:
             if piece is not PieceType.EMPTY:
                 pieces_value_map[piece.active_colour_white] += pieces_value[
                     piece.piece_type
                 ]
-                position_value_map[
-                    piece.active_colour_white
-                ] += self.get_position_value(piece)
+                position_value_map[piece.active_colour_white] += (
+                    self.get_position_value(piece)
+                )
 
         if return_values_as_map:
             return pieces_value_map, position_value_map

@@ -19,14 +19,19 @@ class Fen:
         self.half_move_clock = self.parse_half_move(split_fen[4])
         self.full_move_number = self.parse_full_move(split_fen[5])
 
-    def get_square_value(self, square):
-        """Get pawn or piece value from given square."""
-        files = ["a", "b", "c", "d", "e", "f", "g", "h"]
+    @staticmethod
+    def get_position_from_square(square):
+        """Get piece position from square value."""
         try:
-            file, rank = square[0], int(square[1]) - 1
-            return self.board_setup[rank][files.index(file)]
+            files = ["a", "b", "c", "d", "e", "f", "g", "h"]
+            return files.index(square[0]), int(square[1]) - 1
         except (ValueError, IndexError) as exc:
             raise NoSquareInBoard(f"Square {square} not found in board.") from exc
+
+    def get_square_value(self, square):
+        """Get pawn or piece value from given square."""
+        x, y = self.get_position_from_square(square)
+        return self.board_setup[y][x]
 
     def is_square_empty(self, square):
         """Return true if given square value is -."""
@@ -122,6 +127,10 @@ class Fen:
             "Kq",
             "KQ",
             "Qq",
+            "K",
+            "Q",
+            "k",
+            "q",
         ]:
             raise WrongCastlingRights(
                 f"Castling rights have wrong value: {castling_rights}"

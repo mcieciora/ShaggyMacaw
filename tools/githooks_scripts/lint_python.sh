@@ -6,6 +6,9 @@ echo "Installing latest dependencies..."
 python -m pip install -r requirements/testing/requirements.txt
 python -m pip install -r requirements/example_app/requirements.txt
 
+echo "Running black in src"
+python -m black src
+
 echo "Running flake8 in src"
 python -m flake8 --max-line-length 120 --max-complexity 10 src
 
@@ -14,9 +17,6 @@ python -m pylint src --max-line-length=120 --disable=C0114 --fail-under=9.0
 
 echo "Running ruff in src"
 python -m ruff format src
-
-echo "Running black in src"
-python -m black src
 
 echo "Running pydocstyle in src"
 python -m pydocstyle --ignore D100,D104,D107,D203,D212 src

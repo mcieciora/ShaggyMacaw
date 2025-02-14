@@ -10,7 +10,7 @@ def test__unittest__chess_board__is_move_possible__pawn():
     test_object = ChessBoard(original_fen)
     pawn = Pawn("P", (1, 3))
     actual_data = test_object.is_move_legal(pawn, (0, 1), PieceMove.MOVE)
-    assert actual_data.square == "b5", f"Expected: b5, actual: {actual_data}"
+    assert actual_data.target_square == "b5", f"Expected: b5, actual: {actual_data}"
 
 
 @mark.unittest
@@ -55,4 +55,4 @@ def test__unittest__chess_board__is_move_possible__capture__pawn():
     test_object = ChessBoard(original_fen)
     pawn = Pawn("P", (6, 4))
     actual_data = test_object.is_move_legal(pawn, (-1, 1), PieceMove.CAPTURE)
-    assert actual_data.square == "f6", f"Expected: f6, actual: {actual_data}"
+    assert actual_data.target_square == "f6", f"Expected: f6, actual: {actual_data}"

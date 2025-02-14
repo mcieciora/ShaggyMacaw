@@ -10,7 +10,7 @@ def test__unittest__chess_board__is_move_possible__piece():
     test_object = ChessBoard(original_fen)
     piece = Piece("Q", (2, 1))
     actual_data = test_object.is_move_legal(piece, (0, -1), PieceMove.MOVE_OR_CAPTURE)
-    assert actual_data.square == "c1", f"Expected: c1, actual: {actual_data}"
+    assert actual_data.target_square == "c1", f"Expected: c1, actual: {actual_data}"
 
 
 @mark.unittest
@@ -46,4 +46,4 @@ def test__unittest__chess_board__is_move_possible__capture__piece():
     test_object = ChessBoard(original_fen)
     piece = Piece("N", (2, 4))
     actual_data = test_object.is_move_legal(piece, (-1, 2), PieceMove.MOVE_OR_CAPTURE)
-    assert actual_data.square == "b7", f"Expected: b7, actual: {actual_data}"
+    assert actual_data.target_square == "b7", f"Expected: b7, actual: {actual_data}"

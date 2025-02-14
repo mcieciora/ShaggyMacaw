@@ -24,10 +24,34 @@ class PieceMove(Enum):
 class Move:
     """Support class for move setup."""
 
-    def __init__(self, is_move_legal=False, is_capture=False, square=None):
+    def __init__(
+        self,
+        original_square=None,
+        is_move_legal=False,
+        is_capture=False,
+        is_en_passant=False,
+        is_castling=False,
+        is_promotion=False,
+        promotion_piece=None,
+        target_square=None,
+    ):
+        self.original_square = original_square
         self.is_move_legal = is_move_legal
         self.is_capture = is_capture
-        self.square = square
+        self.is_en_passant = is_en_passant
+        self.is_castling = is_castling
+        self.is_promotion = is_promotion
+        self.promotion_piece = promotion_piece
+        self.target_square = target_square
+
+    def __str__(self):
+        """Return object in coordinates notation."""
+        if self.is_promotion and self.is_capture:
+            return f"{self.original_square}{self.target_square}={self.promotion_piece}"
+        elif self.is_promotion:
+            return f"{self.target_square}={self.promotion_piece}"
+        else:
+            return f"{self.original_square}{self.target_square}"
 
 
 value_to_square_value_map = {
@@ -47,11 +71,12 @@ movement_patterns = {
 }
 
 pawn_movement_pattern = {
-    True: {True: [(0, 1), (0, 2)], False: [(0, 1)]},
-    False: {True: [(0, -1), (0, -2)], False: [(0, -1)]},
+    PieceMove.MOVE: {
+        True: {True: [(0, 1), (0, 2)], False: [(0, 1)]},
+        False: {True: [(0, -1), (0, -2)], False: [(0, -1)]},
+    },
+    PieceMove.CAPTURE: {True: [(-1, 1), (1, 1)], False: [(-1, -1), (1, -1)]},
 }
-
-pawn_capture_pattern = {True: [(-1, 1), (1, 1)], False: [(-1, -1), (1, -1)]}
 
 
 def create_piece(value, position=None):
@@ -72,10 +97,14 @@ class Pawn:
         self.position = position
         self.piece_type = PieceType.PAWN
         self.active_colour_white = self.value.isupper()
-        self.movement_pattern = pawn_movement_pattern[self.active_colour_white][
-            self.is_pawn_in_starting_position()
-        ]
-        self.capture_pattern = pawn_capture_pattern[self.active_colour_white]
+        self.movement_pattern = {
+            move_type: (
+                movement[self.active_colour_white][self.is_pawn_in_starting_position()]
+                if move_type is PieceMove.MOVE
+                else movement[self.active_colour_white]
+            )
+            for move_type, movement in pawn_movement_pattern.items()
+        }
 
     def is_pawn_in_starting_position(self):
         """Check if pawn is in starting position."""
