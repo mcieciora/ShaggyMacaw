@@ -211,6 +211,6 @@ class ChessBoard:
             move, (original_x, original_y), (target_x, target_y)
         )
         self.fen.update_castling_rights(move)
-        self.fen.update_en_passant(move, target_x, original_y)
+        self.fen.update_en_passant(move, (target_x, target_y), original_y)
         self.fen.update_clocks(move)
         self.fen.update_active_colour()

@@ -2,6 +2,9 @@ from src.piece import create_piece
 from src.piece import Piece, PieceType
 
 
+files = ["a", "b", "c", "d", "e", "f", "g", "h"]
+
+
 class Fen:
     """FEN notation parser and verification class."""
 
@@ -23,7 +26,6 @@ class Fen:
     def get_position_from_square(square):
         """Get piece position from square value."""
         try:
-            files = ["a", "b", "c", "d", "e", "f", "g", "h"]
             return files.index(square[0]), int(square[1]) - 1
         except (ValueError, IndexError) as exc:
             raise NoSquareInBoard(f"Square {square} not found in board.") from exc
@@ -51,7 +53,6 @@ class Fen:
     @staticmethod
     def convert_coordinates_to_square(x, y):
         """Convert x, y coordinates to square value."""
-        files = ["a", "b", "c", "d", "e", "f", "g", "h"]
         return f"{files[x]}{y + 1}"
 
     @staticmethod
@@ -63,7 +64,7 @@ class Fen:
     def generate_board_squares():
         """Generate list of possible chess board squares."""
         generated_squares = []
-        files, ranks = ["a", "b", "c", "d", "e", "f", "g", "h"], list(range(1, 9))
+        ranks = list(range(1, 9))
         for rank in ranks:
             for file in files:
                 generated_squares.append(f"{file}{rank}")
@@ -178,7 +179,6 @@ class Fen:
 
     @staticmethod
     def parse_rank_to_fen(rank_list):
-        # TODO tests
         """Parse given rank back to FEN notation."""
         return_list = []
 
@@ -199,7 +199,6 @@ class Fen:
         )
 
     def update_board_setup(self, move, original, target):
-        # TODO tests
         """Update board setup."""
         original_x, original_y = original[0], original[1]
         target_x, target_y = target[0], target[1]
@@ -247,7 +246,6 @@ class Fen:
         self.active_colour = not self.active_colour
 
     def update_castling_rights(self, move):
-        # TODO tests
         """Update castling rights."""
         if move.piece_value in ["K", "k"] or move.is_castling:
             original_square = {
@@ -273,11 +271,10 @@ class Fen:
                 if self.castling_rights == "":
                     self.castling_rights = "-"
 
-    def update_en_passant(self, move, target_x, original_y):
-        # TODO tests
+    def update_en_passant(self, move, target, original_y):
         """Update en passant possibilities."""
-        if move.piece_value in ["P", "p"] and target_x - original_y == 2:
-            files = ["a", "b", "c", "d", "e", "f", "g", "h"]
+        target_x, target_y = target[0], target[1]
+        if move.piece_value in ["P", "p"] and target_y - original_y == 2:
             self.available_en_passant = f"{files[target_x]}3"
         else:
             self.available_en_passant = "-"
