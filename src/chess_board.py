@@ -1,5 +1,8 @@
+from copy import deepcopy
+
 from src.fen import Fen
-from src.piece import PieceType, PieceMove, Move
+from src.piece import PieceType, PieceMove
+from src.move import Move
 
 
 class ChessBoard:
@@ -37,56 +40,45 @@ class ChessBoard:
     def generate_pawn_moves(self, piece):
         """Generate pawn moves."""
         available_squares = []
-        for movement in piece.movement_pattern:
-            move = self.is_move_legal(piece, movement, PieceMove.MOVE)
-            if piece.is_pawn_next_move_promotion() and move.is_move_legal:
-                available_squares.extend(
-                    [
-                        f"{move.square}={promotion_move}"
-                        for promotion_move in ["Q", "R", "N", "B"]
-                    ]
-                )
-            elif move.is_move_legal:
-                square_value = self.fen.convert_coordinates_to_square(
-                    piece.position[0], piece.position[1]
-                )
-                available_squares.append(f"{square_value}{move.square}")
-            else:
-                break
-        for capture in piece.capture_pattern:
-            move = self.is_move_legal(piece, capture, PieceMove.CAPTURE)
-            original_square = self.fen.convert_coordinates_to_square(
-                piece.position[0], piece.position[1]
-            )
-            if piece.is_pawn_next_move_promotion() and move.is_move_legal:
-                available_squares.extend(
-                    [
-                        f"{original_square}{move.square}={promotion_move}"
-                        for promotion_move in ["Q", "R", "N", "B"]
-                    ]
-                )
-            elif move.is_capture:
-                available_squares.append(f"{original_square}{move.square}")
-            if new_square := self.is_en_passant_possible(
-                piece.position, capture, piece
-            ):
-                available_squares.append(new_square)
+        original_square = self.fen.convert_coordinates_to_square(
+            piece.position[0], piece.position[1]
+        )
+        for move_type, movements in piece.movement_pattern.items():
+            for movement in movements:
+                move = self.check_if_move_is_legal(piece, movement, move_type)
+                if move.is_move_legal:
+                    move.original_square = original_square
+                    move.is_promotion = piece.is_pawn_next_move_promotion()
+                    if move.is_promotion:
+                        for promotion_move in ["Q", "R", "N", "B"]:
+                            temp_move = deepcopy(move)
+                            temp_move.promotion_piece = (
+                                promotion_move
+                                if piece.active_colour_white
+                                else promotion_move.lower()
+                            )
+                            available_squares.append(temp_move)
+                    else:
+                        available_squares.append(move)
+                elif move_type is PieceMove.MOVE:
+                    break
         return available_squares
 
     def generate_piece_moves(self, piece, not_continuous_movement=False):
         """Generate piece moves."""
         available_squares = []
-        square_value = self.fen.convert_coordinates_to_square(
+        original_square = self.fen.convert_coordinates_to_square(
             piece.position[0], piece.position[1]
         )
         for movement in piece.movement_pattern:
             for multiplier in range(1, 8):
                 multiplied_movement = tuple([multiplier * x for x in movement])
-                move = self.is_move_legal(
+                move = self.check_if_move_is_legal(
                     piece, multiplied_movement, PieceMove.MOVE_OR_CAPTURE
                 )
                 if move.is_move_legal:
-                    available_squares.append(f"{square_value}{move.square}")
+                    move.original_square = original_square
+                    available_squares.append(move)
                     if move.is_capture:
                         break
                 else:
@@ -107,7 +99,7 @@ class ChessBoard:
                 king.position[0], king.position[1]
             )
             for movement in king.movement_pattern:
-                move = self.is_move_legal(
+                move = self.check_if_move_is_legal(
                     king,
                     movement,
                     PieceMove.MOVE_OR_CAPTURE,
@@ -115,14 +107,15 @@ class ChessBoard:
                 )
                 if (
                     move.is_move_legal
-                    and move.square
+                    and move.target_square
                     not in self.attacked_squares_map[not king.active_colour_white]
-                    and move.square
+                    and move.target_square
                     not in self.defended_pieces[not king.active_colour_white]
                 ):
+                    move.original_square = square_value
                     possible_shared_squares_dict[king.active_colour_white][
-                        move.square
-                    ] = f"{square_value}{move.square}"
+                        move.target_square
+                    ] = move
             for castling_right, squares in castling_rights[
                 king.active_colour_white
             ].items():
@@ -140,9 +133,15 @@ class ChessBoard:
                         and squares[-1]
                         not in self.attacked_squares_map[not king.active_colour_white]
                     ):
+                        castling_move = Move(
+                            original_square=square_value,
+                            target_square=squares[-1],
+                            is_move_legal=True,
+                            is_castling=True,
+                        )
                         possible_shared_squares_dict[king.active_colour_white][
                             squares[-1]
-                        ] = f"{square_value}{squares[-1]}"
+                        ] = castling_move
         return self.mask_colliding_moves(possible_shared_squares_dict)
 
     @staticmethod
@@ -161,7 +160,9 @@ class ChessBoard:
         unique_list = list(set(self.attacked_squares_map[active_colour]))
         return sorted(unique_list)
 
-    def is_move_legal(self, piece, movement, move_type, extend_attacked_squares=True):
+    def check_if_move_is_legal(
+        self, piece, movement, move_type, extend_attacked_squares=True
+    ):
         """Calculate new position, verify if square is in board and return Move object."""
         move = Move()
         x = piece.position[0] + movement[0]
@@ -171,10 +172,17 @@ class ChessBoard:
             is_empty = self.fen.is_square_empty(square)
             if is_empty and move_type in [PieceMove.MOVE, PieceMove.MOVE_OR_CAPTURE]:
                 move.is_move_legal = True
-                move.square = square
+                move.target_square = square
                 if move_type is PieceMove.MOVE_OR_CAPTURE and extend_attacked_squares:
                     self.attacked_squares_map[piece.active_colour_white].append(square)
             if is_empty and move_type is PieceMove.CAPTURE and extend_attacked_squares:
+                if (
+                    self.fen.is_white_an_active_colour() is piece.active_colour_white
+                    and square == self.fen.available_en_passant
+                ):
+                    move.is_move_legal = True
+                    move.target_square = square
+                    move.is_en_passant = True
                 self.attacked_squares_map[piece.active_colour_white].append(square)
             if not is_empty and move_type in [
                 PieceMove.CAPTURE,
@@ -185,27 +193,24 @@ class ChessBoard:
                     is not piece.active_colour_white
                 ):
                     move.is_move_legal = True
-                    move.square = square
+                    move.target_square = square
                     move.is_capture = True
                     if extend_attacked_squares:
                         self.attacked_squares_map[piece.active_colour_white].append(
                             square
                         )
-                else:
-                    self.defended_pieces[piece.active_colour_white].append(square)
+                self.defended_pieces[piece.active_colour_white].append(square)
         return move
 
-    def is_en_passant_possible(self, position, capture, piece):
-        """Verify if move is possible and check if square is occupied by opposite colour piece."""
-        default_return = False
-        original_square = self.fen.convert_coordinates_to_square(
-            position[0], position[1]
+    def move_piece(self, move):
+        """Move piece and update current FEN value."""
+        original_x, original_y = self.fen.get_position_from_square(move.original_square)
+        target_x, target_y = self.fen.get_position_from_square(move.target_square)
+
+        self.fen.update_board_setup(
+            move, (original_x, original_y), (target_x, target_y)
         )
-        move = self.is_move_legal(piece, capture, PieceMove.MOVE)
-        if move.is_move_legal:
-            if (
-                self.fen.is_white_an_active_colour() is piece.active_colour_white
-                and move.square == self.fen.available_en_passant
-            ):
-                default_return = f"{original_square}{move.square}"
-        return default_return
+        self.fen.update_castling_rights(move)
+        self.fen.update_en_passant(move, (target_x, target_y), original_y)
+        self.fen.update_clocks(move)
+        self.fen.update_active_colour()

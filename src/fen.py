@@ -1,5 +1,8 @@
 from src.piece import create_piece
-from src.piece import PieceType
+from src.piece import Piece, PieceType
+
+
+files = ["a", "b", "c", "d", "e", "f", "g", "h"]
 
 
 class Fen:
@@ -19,14 +22,18 @@ class Fen:
         self.half_move_clock = self.parse_half_move(split_fen[4])
         self.full_move_number = self.parse_full_move(split_fen[5])
 
-    def get_square_value(self, square):
-        """Get pawn or piece value from given square."""
-        files = ["a", "b", "c", "d", "e", "f", "g", "h"]
+    @staticmethod
+    def get_position_from_square(square):
+        """Get piece position from square value."""
         try:
-            file, rank = square[0], int(square[1]) - 1
-            return self.board_setup[rank][files.index(file)]
+            return files.index(square[0]), int(square[1]) - 1
         except (ValueError, IndexError) as exc:
             raise NoSquareInBoard(f"Square {square} not found in board.") from exc
+
+    def get_square_value(self, square):
+        """Get pawn or piece value from given square."""
+        x, y = self.get_position_from_square(square)
+        return self.board_setup[y][x]
 
     def is_square_empty(self, square):
         """Return true if given square value is -."""
@@ -46,7 +53,6 @@ class Fen:
     @staticmethod
     def convert_coordinates_to_square(x, y):
         """Convert x, y coordinates to square value."""
-        files = ["a", "b", "c", "d", "e", "f", "g", "h"]
         return f"{files[x]}{y + 1}"
 
     @staticmethod
@@ -58,7 +64,7 @@ class Fen:
     def generate_board_squares():
         """Generate list of possible chess board squares."""
         generated_squares = []
-        files, ranks = ["a", "b", "c", "d", "e", "f", "g", "h"], list(range(1, 9))
+        ranks = list(range(1, 9))
         for rank in ranks:
             for file in files:
                 generated_squares.append(f"{file}{rank}")
@@ -122,6 +128,10 @@ class Fen:
             "Kq",
             "KQ",
             "Qq",
+            "K",
+            "Q",
+            "k",
+            "q",
         ]:
             raise WrongCastlingRights(
                 f"Castling rights have wrong value: {castling_rights}"
@@ -187,6 +197,87 @@ class Fen:
         return "".join(
             [str(x[1]) if x[0] == PieceType.EMPTY else x[0].value for x in return_list]
         )
+
+    def update_board_setup(self, move, original, target):
+        """Update board setup."""
+        original_x, original_y = original[0], original[1]
+        target_x, target_y = target[0], target[1]
+        if move.is_promotion:
+            new_piece = Piece(
+                move.promotion_piece, self.get_position_from_square(move.target_square)
+            )
+            self.board_setup[target_y][target_x] = new_piece
+
+            self.board_setup[original_y][original_x] = PieceType.EMPTY
+        elif move.is_castling:
+            rook_original_x = 0 if target_x == 2 else 7
+            rook_target_x = 3 if target_x == 2 else 5
+            self.board_setup[original_y][rook_target_x] = self.board_setup[original_y][
+                rook_original_x
+            ]
+            self.board_setup[original_y][rook_original_x] = PieceType.EMPTY
+            self.board_setup[target_y][target_x] = self.board_setup[original_y][
+                original_x
+            ]
+            self.board_setup[original_y][original_x] = PieceType.EMPTY
+        elif move.is_en_passant:
+            self.board_setup[target_y][target_x] = self.board_setup[original_y][
+                original_x
+            ]
+            self.board_setup[original_y][target_x] = PieceType.EMPTY
+            self.board_setup[original_y][original_x] = PieceType.EMPTY
+        else:
+            self.board_setup[target_y][target_x] = self.board_setup[original_y][
+                original_x
+            ]
+            self.board_setup[original_y][original_x] = PieceType.EMPTY
+
+    def update_clocks(self, move):
+        """Update half move and full move clock."""
+        if move.is_capture or move.is_promotion or move.is_en_passant:
+            self.half_move_clock = 0
+        elif self.full_move_number > 1:
+            self.half_move_clock += 1
+        if not self.active_colour:
+            self.full_move_number += 1
+
+    def update_active_colour(self):
+        """Update active colour."""
+        self.active_colour = not self.active_colour
+
+    def update_castling_rights(self, move):
+        """Update castling rights."""
+        if move.piece_value in ["K", "k"] or move.is_castling:
+            original_square = {
+                "K": "e1",
+                "k": "e8",
+            }
+            if move.original_square == original_square[move.piece_value]:
+                replacement_value = {"K": "KQ", "k": "kq"}
+                for value in replacement_value[move.piece_value]:
+                    self.castling_rights = self.castling_rights.replace(value, "")
+                    if self.castling_rights == "":
+                        self.castling_rights = "-"
+
+        if move.piece_value in ["R", "r"]:
+            original_square = {
+                "R": {"a1": "Q", "h1": "K"},
+                "r": {"a8": "q", "h8": "k"},
+            }
+            if move.original_square in original_square[move.piece_value].keys():
+                self.castling_rights = self.castling_rights.replace(
+                    original_square[move.piece_value][move.original_square], ""
+                )
+                if self.castling_rights == "":
+                    self.castling_rights = "-"
+
+    def update_en_passant(self, move, target, original_y):
+        """Update en passant possibilities."""
+        target_x, target_y = target[0], target[1]
+        if move.piece_value in ["P", "p"] and target_y - original_y == 2:
+            self.available_en_passant = f"{files[target_x]}3"
+        else:
+            self.available_en_passant = "-"
 
 
 class WrongBoardSize(Exception):

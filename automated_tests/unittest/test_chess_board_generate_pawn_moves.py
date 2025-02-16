@@ -7,11 +7,11 @@ from src.piece import Pawn
 @mark.unittest
 def test__unittest__chess_board__generate_pawn_moves__single_push():
     original_fen = "r1b3k1/1p2P1p1/2nq1p2/pPN3P1/r1Rp3p/3Nb2P/P1Q1PBP1/5RK1 w - - 4 23"
-    expected_data = ["a2a3"]
+    expected_data = "a2a3"
     test_object = ChessBoard(original_fen)
     pawn = Pawn("P", (0, 1))
     actual_data = test_object.generate_pawn_moves(pawn)
-    assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
+    assert str(actual_data[0]) == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
 
 
 @mark.unittest
@@ -31,7 +31,7 @@ def test__unittest__chess_board__generate_pawn_moves__double_push():
     test_object = ChessBoard(original_fen)
     pawn = Pawn("P", (6, 1))
     actual_data = test_object.generate_pawn_moves(pawn)
-    assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
+    assert [str(result) for result in actual_data] == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
 
 
 @mark.unittest
@@ -51,7 +51,7 @@ def test__unittest__chess_board__generate_pawn_moves__capture():
     test_object = ChessBoard(original_fen)
     pawn = Pawn("P", (6, 4))
     actual_data = test_object.generate_pawn_moves(pawn)
-    assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
+    assert [str(result) for result in actual_data] == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
 
 
 @mark.unittest
@@ -61,7 +61,7 @@ def test__unittest__chess_board__generate_pawn_moves__en_passant():
     test_object = ChessBoard(original_fen)
     pawn = Pawn("P", (1, 4))
     actual_data = test_object.generate_pawn_moves(pawn)
-    assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
+    assert [str(result) for result in actual_data] == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
 
 
 @mark.unittest
@@ -71,7 +71,7 @@ def test__unittest__chess_board__generate_pawn_moves__promotion():
     test_object = ChessBoard(original_fen)
     pawn = Pawn("P", (4, 6))
     actual_data = test_object.generate_pawn_moves(pawn)
-    assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
+    assert [str(result) for result in actual_data] == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
 
 
 @mark.unittest
@@ -81,7 +81,7 @@ def test__unittest__chess_board__generate_pawn_moves__promotion_with_capture():
     test_object = ChessBoard(original_fen)
     pawn = Pawn("P", (4, 6))
     actual_data = test_object.generate_pawn_moves(pawn)
-    assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
+    assert [str(result) for result in actual_data] == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
 
 
 @mark.unittest
@@ -91,4 +91,4 @@ def test__unittest__chess_board__generate_pawn_moves__blocked_promotion():
     test_object = ChessBoard(original_fen)
     pawn = Pawn("P", (4, 6))
     actual_data = test_object.generate_pawn_moves(pawn)
-    assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
+    assert [str(result) for result in actual_data] == expected_data, f"Expected: {expected_data}, actual: {actual_data}"

@@ -63,6 +63,12 @@ test_data_dict = {
         "square": "e1",
         "expected_result": ["e1f1", "e1d1", "e1f2", "e1d2"]
     },
+    "test_resource_11": {
+        "fen": "2r1kb1r/pp2p1pp/4pn2/2p5/P1K1P3/2N5/1P4PP/n1B3NR w k - 2 13",
+        "value": "K",
+        "square": "c4",
+        "expected_result": ["c4b5", "c4d3"]
+    }
 }
 
 
@@ -78,11 +84,11 @@ def get_parametrized_test_set():
 def test__smoke__chess_board__generate_kings_moves(test_key, test_data, expected_output):
     test_object = ChessBoard(test_data["fen"])
     actual_data = test_object.generate_all_possible_moves()
-    king_moves = [move for move in actual_data if move.startswith(test_data["square"])]
+    king_moves = [str(move) for move in actual_data if move.original_square == test_data["square"]]
     king_moves_number = len(king_moves)
+
+    for move in test_data['expected_result']:
+        assert move in king_moves, f"Expected: {move} not in {actual_data}"
 
     expected_data = len(test_data["expected_result"])
     assert king_moves_number == expected_data, f"Expected: {test_data['expected_result']}, actual: {king_moves}"
-
-    for move in test_data['expected_result']:
-        assert move in actual_data, f"Expected: {move} not in {actual_data}"
