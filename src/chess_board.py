@@ -52,8 +52,11 @@ class ChessBoard:
                     if move.is_promotion:
                         for promotion_move in ["Q", "R", "N", "B"]:
                             temp_move = deepcopy(move)
-                            temp_move.promotion_piece = promotion_move if piece.active_colour_white \
+                            temp_move.promotion_piece = (
+                                promotion_move
+                                if piece.active_colour_white
                                 else promotion_move.lower()
+                            )
                             available_squares.append(temp_move)
                     else:
                         available_squares.append(move)
@@ -157,7 +160,9 @@ class ChessBoard:
         unique_list = list(set(self.attacked_squares_map[active_colour]))
         return sorted(unique_list)
 
-    def check_if_move_is_legal(self, piece, movement, move_type, extend_attacked_squares=True):
+    def check_if_move_is_legal(
+        self, piece, movement, move_type, extend_attacked_squares=True
+    ):
         """Calculate new position, verify if square is in board and return Move object."""
         move = Move()
         x = piece.position[0] + movement[0]
@@ -202,7 +207,9 @@ class ChessBoard:
         original_x, original_y = self.fen.get_position_from_square(move.original_square)
         target_x, target_y = self.fen.get_position_from_square(move.target_square)
 
-        self.fen.update_board_setup(move, (original_x, original_y), (target_x, target_y))
+        self.fen.update_board_setup(
+            move, (original_x, original_y), (target_x, target_y)
+        )
         self.fen.update_castling_rights(move)
         self.fen.update_en_passant(move, target_x, original_y)
         self.fen.update_clocks(move)

@@ -11,7 +11,7 @@ class Move:
         is_promotion=False,
         promotion_piece=None,
         target_square=None,
-        piece_value=None
+        piece_value=None,
     ):
         self.original_square = original_square
         self.is_move_legal = is_move_legal

@@ -202,14 +202,18 @@ class Fen:
         original_x, original_y = original[0], original[1]
         target_x, target_y = target[0], target[1]
         if move.is_promotion:
-            new_piece = Piece(move.promotion_piece, self.get_position_from_square(move.target_square))
+            new_piece = Piece(
+                move.promotion_piece, self.get_position_from_square(move.target_square)
+            )
             self.board_setup[target_y][target_x] = new_piece
 
             self.board_setup[original_y][original_x] = PieceType.EMPTY
         elif move.is_castling:
-            rook_original_x = 0  if target_x == 2 else 7
+            rook_original_x = 0 if target_x == 2 else 7
             rook_target_x = 3 if target_x == 2 else 5
-            self.board_setup[original_y][rook_target_x] = self.board_setup[original_y][rook_original_x]
+            self.board_setup[original_y][rook_target_x] = self.board_setup[original_y][
+                rook_original_x
+            ]
             self.board_setup[original_y][rook_original_x] = PieceType.EMPTY
             self.board_setup[target_y][target_x] = self.board_setup[original_y][
                 original_x
@@ -248,10 +252,7 @@ class Fen:
                 "k": "e8",
             }
             if move.original_square == original_square[move.piece_value]:
-                replacement_value = {
-                    "K": "KQ",
-                    "k": "kq"
-                }
+                replacement_value = {"K": "KQ", "k": "kq"}
                 for value in replacement_value[move.piece_value]:
                     self.castling_rights = self.castling_rights.replace(value, "")
                     if self.castling_rights == "":
@@ -259,18 +260,13 @@ class Fen:
 
         if move.piece_value in ["R", "r"]:
             original_square = {
-                "R": {
-                    "a1": "Q",
-                    "h1": "K"
-                },
-                "r": {
-                    "a8": "q",
-                    "h8": "k"
-                },
+                "R": {"a1": "Q", "h1": "K"},
+                "r": {"a8": "q", "h8": "k"},
             }
             if move.original_square in original_square[move.piece_value].keys():
                 self.castling_rights = self.castling_rights.replace(
-                    original_square[move.piece_value][move.original_square], "")
+                    original_square[move.piece_value][move.original_square], ""
+                )
                 if self.castling_rights == "":
                     self.castling_rights = "-"
 
