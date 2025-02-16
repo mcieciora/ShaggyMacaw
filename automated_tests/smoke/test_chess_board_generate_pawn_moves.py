@@ -93,7 +93,7 @@ test_data_dict = {
         "fen": "5k2/1R3p2/3N2p1/8/6Pp/2n2K1P/P2pr3/8 w - - 1 42",
         "value": "p",
         "position": (3, 1),
-        "expected_result": ["d1=Q", "d1=R", "d1=N", "d1=B"]
+        "expected_result": ["d1=q", "d1=r", "d1=n", "d1=b"]
     }
 }
 

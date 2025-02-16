@@ -1,7 +1,8 @@
 from copy import deepcopy
 
 from src.fen import Fen
-from src.piece import PieceType, PieceMove, Move
+from src.piece import PieceType, PieceMove
+from src.move import Move
 
 
 class ChessBoard:
@@ -44,14 +45,15 @@ class ChessBoard:
         )
         for move_type, movements in piece.movement_pattern.items():
             for movement in movements:
-                move = self.is_move_legal(piece, movement, move_type)
+                move = self.check_if_move_is_legal(piece, movement, move_type)
                 if move.is_move_legal:
                     move.original_square = original_square
                     move.is_promotion = piece.is_pawn_next_move_promotion()
                     if move.is_promotion:
                         for promotion_move in ["Q", "R", "N", "B"]:
                             temp_move = deepcopy(move)
-                            temp_move.promotion_piece = promotion_move
+                            temp_move.promotion_piece = promotion_move if piece.active_colour_white \
+                                else promotion_move.lower()
                             available_squares.append(temp_move)
                     else:
                         available_squares.append(move)
@@ -68,7 +70,7 @@ class ChessBoard:
         for movement in piece.movement_pattern:
             for multiplier in range(1, 8):
                 multiplied_movement = tuple([multiplier * x for x in movement])
-                move = self.is_move_legal(
+                move = self.check_if_move_is_legal(
                     piece, multiplied_movement, PieceMove.MOVE_OR_CAPTURE
                 )
                 if move.is_move_legal:
@@ -94,7 +96,7 @@ class ChessBoard:
                 king.position[0], king.position[1]
             )
             for movement in king.movement_pattern:
-                move = self.is_move_legal(
+                move = self.check_if_move_is_legal(
                     king,
                     movement,
                     PieceMove.MOVE_OR_CAPTURE,
@@ -155,7 +157,7 @@ class ChessBoard:
         unique_list = list(set(self.attacked_squares_map[active_colour]))
         return sorted(unique_list)
 
-    def is_move_legal(self, piece, movement, move_type, extend_attacked_squares=True):
+    def check_if_move_is_legal(self, piece, movement, move_type, extend_attacked_squares=True):
         """Calculate new position, verify if square is in board and return Move object."""
         move = Move()
         x = piece.position[0] + movement[0]
@@ -197,4 +199,11 @@ class ChessBoard:
 
     def move_piece(self, move):
         """Move piece and update current FEN value."""
-        pass
+        original_x, original_y = self.fen.get_position_from_square(move.original_square)
+        target_x, target_y = self.fen.get_position_from_square(move.target_square)
+
+        self.fen.update_board_setup(move, (original_x, original_y), (target_x, target_y))
+        self.fen.update_castling_rights(move)
+        self.fen.update_en_passant(move, target_x, original_y)
+        self.fen.update_clocks(move)
+        self.fen.update_active_colour()
