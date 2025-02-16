@@ -3,12 +3,6 @@ from pytest import mark
 from src.chess_board import ChessBoard
 
 test_data_dict = {
-    "test_resource_5": {
-        "fen": "r3k1nr/1pbq1pbp/p1np2p1/4p3/2P1P3/2NB4/PP3PPP/RNBQK2R w KQkq - 2 9",
-        "value": "k",
-        "square": "e8",
-        "expected_result": ["e8f8", "e8d8", "e8c8", "e8e7"]
-    },
     "test_resource_1": {
         "fen": "8/8/p7/1p6/1k6/1P6/1K6/8 w - - 0 58",
         "value": "k",
@@ -32,6 +26,12 @@ test_data_dict = {
         "value": "K",
         "square": "e1",
         "expected_result": ["e1d2", "e1f1"]
+    },
+    "test_resource_5": {
+        "fen": "r3k1nr/1pbq1pbp/p1np2p1/4p3/2P1P3/2NB4/PP3PPP/RNBQK2R w KQkq - 2 9",
+        "value": "k",
+        "square": "e8",
+        "expected_result": ["e8f8", "e8d8", "e8c8", "e8e7"]
     },
     "test_resource_6": {
         "fen": "r1bqk1nr/1p3pbp/p1np2p1/4p3/2P1P3/2NB4/PP3PPP/RNBQK2R w KQkq - 2 9",

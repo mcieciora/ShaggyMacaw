@@ -178,6 +178,7 @@ class Fen:
 
     @staticmethod
     def parse_rank_to_fen(rank_list):
+        # TODO tests
         """Parse given rank back to FEN notation."""
         return_list = []
 
@@ -198,6 +199,7 @@ class Fen:
         )
 
     def update_board_setup(self, move, original, target):
+        # TODO tests
         """Update board setup."""
         original_x, original_y = original[0], original[1]
         target_x, target_y = target[0], target[1]
@@ -245,6 +247,7 @@ class Fen:
         self.active_colour = not self.active_colour
 
     def update_castling_rights(self, move):
+        # TODO tests
         """Update castling rights."""
         if move.piece_value in ["K", "k"] or move.is_castling:
             original_square = {
@@ -271,6 +274,7 @@ class Fen:
                     self.castling_rights = "-"
 
     def update_en_passant(self, move, target_x, original_y):
+        # TODO tests
         """Update en passant possibilities."""
         if move.piece_value in ["P", "p"] and target_x - original_y == 2:
             files = ["a", "b", "c", "d", "e", "f", "g", "h"]
