@@ -9,4 +9,4 @@ def test__unittest__fen__update_active_colour():
     test_object = Fen(original_fen)
     test_object.update_active_colour()
     actual_data = test_object.active_colour
-    assert actual_data == False, f"Expected: False, actual: {actual_data}"
+    assert actual_data is False, f"Expected: False, actual: {actual_data}"
