@@ -71,3 +71,13 @@ def test__unittest__fen__update_castling_rights__king_moves():
             actual_data = test_object.castling_rights
             assert actual_data == test_data["expected_value"], (f"Expected: {test_data['expected_value']}, "
                                                                 f"actual: {actual_data}")
+
+
+@mark.unittest
+def test__unittest__fen__update_castling_rights__empty_castling_rights():
+    original_fen = "2kr1b1r/pp1q1ppp/2n1bn2/2pp4/1P1P4/B1N2NP1/P2QPPBP/R3K2R w KQ - 2 7"
+    test_object = Fen(original_fen)
+    move = Move(original_square="e1", target_square="f1", piece_value="K")
+    test_object.update_castling_rights(move)
+    actual_data = test_object.castling_rights
+    assert actual_data == "-", f"Expected: -, actual: {actual_data}"
