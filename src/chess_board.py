@@ -170,6 +170,7 @@ class ChessBoard:
         if self.fen.coordinates_in_boundaries(x, y):
             square = self.fen.convert_coordinates_to_square(x, y)
             is_empty = self.fen.is_square_empty(square)
+            move.active_colour = piece.active_colour_white
             if is_empty and move_type in [PieceMove.MOVE, PieceMove.MOVE_OR_CAPTURE]:
                 move.is_move_legal = True
                 move.target_square = square

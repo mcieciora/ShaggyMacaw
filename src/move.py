@@ -12,6 +12,7 @@ class Move:
         promotion_piece=None,
         target_square=None,
         piece_value=None,
+        active_colour=None,
     ):
         self.original_square = original_square
         self.is_move_legal = is_move_legal
@@ -22,6 +23,7 @@ class Move:
         self.promotion_piece = promotion_piece
         self.target_square = target_square
         self.piece_value = piece_value
+        self.active_colour = active_colour
 
     def __str__(self):
         """Return object in coordinates notation."""
