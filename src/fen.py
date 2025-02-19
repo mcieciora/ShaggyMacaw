@@ -252,6 +252,9 @@ class Fen:
                 "K": "e1",
                 "k": "e8",
             }
+            if move.piece_value is None:
+                # FIXME bug on castling move
+                pass
             if move.original_square == original_square[move.piece_value]:
                 replacement_value = {"K": "KQ", "k": "kq"}
                 for value in replacement_value[move.piece_value]:
