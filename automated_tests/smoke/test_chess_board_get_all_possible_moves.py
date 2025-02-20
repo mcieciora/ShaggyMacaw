@@ -26,6 +26,7 @@ def get_parametrized_test_set():
 def test__smoke__chess_board__generate_all_possible_moves(test_key, test_data, expected_output):
     test_object = ChessBoard(test_data["fen"])
     for active_colour, expected_value in test_data['expected_result'].items():
-        actual_data = [str(move) for move in test_object.generate_all_possible_moves() if move.active_colour is active_colour]
+        actual_data = [str(move) for move in test_object.generate_all_possible_moves()
+                       if move.active_colour is active_colour]
         assert len(actual_data) == test_data['expected_result'][active_colour], \
             f"Expected: {test_data['expected_result']}, actual: {len(actual_data)}"
