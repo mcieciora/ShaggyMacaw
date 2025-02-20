@@ -1,6 +1,6 @@
-from pytest import mark
+from pytest import mark, raises
 
-from src.chess_board import ChessBoard
+from src.chess_board import ChessBoard, UnknownPieceType
 
 
 @mark.unittest

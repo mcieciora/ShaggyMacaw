@@ -24,7 +24,11 @@ class ChessBoard:
                     continue
                 if piece.piece_type is PieceType.PAWN:
                     all_possible_moves.extend(self.generate_pawn_moves(piece))
-                elif piece.piece_type in [PieceType.ROOK, PieceType.BISHOP]:
+                elif piece.piece_type in [
+                    PieceType.ROOK,
+                    PieceType.BISHOP,
+                    PieceType.QUEEN,
+                ]:
                     all_possible_moves.extend(self.generate_piece_moves(piece))
                 elif piece.piece_type is PieceType.KNIGHT:
                     all_possible_moves.extend(
@@ -33,7 +37,7 @@ class ChessBoard:
                 elif piece.piece_type is PieceType.KING:
                     kings[piece.active_colour_white] = piece
                 else:
-                    pass
+                    raise UnknownPieceType(f"{type(piece)} not supported.")
         all_possible_moves.extend(self.generate_kings_moves(kings))
         return all_possible_moves
 
@@ -121,11 +125,7 @@ class ChessBoard:
             ].items():
                 if castling_right in self.fen.castling_rights:
                     squares_empty = [
-                        (
-                            True
-                            if self.fen.get_square_value(square) is PieceType.EMPTY
-                            else False
-                        )
+                        self.fen.get_square_value(square) is PieceType.EMPTY
                         for square in squares
                     ]
                     if (
@@ -138,6 +138,7 @@ class ChessBoard:
                             target_square=squares[-1],
                             is_move_legal=True,
                             is_castling=True,
+                            active_colour=king.active_colour_white,
                         )
                         possible_shared_squares_dict[king.active_colour_white][
                             squares[-1]
@@ -170,6 +171,7 @@ class ChessBoard:
         if self.fen.coordinates_in_boundaries(x, y):
             square = self.fen.convert_coordinates_to_square(x, y)
             is_empty = self.fen.is_square_empty(square)
+            move.active_colour = piece.active_colour_white
             if is_empty and move_type in [PieceMove.MOVE, PieceMove.MOVE_OR_CAPTURE]:
                 move.is_move_legal = True
                 move.target_square = square
@@ -214,3 +216,7 @@ class ChessBoard:
         self.fen.update_en_passant(move, (target_x, target_y), original_y)
         self.fen.update_clocks(move)
         self.fen.update_active_colour()
+
+
+class UnknownPieceType(Exception):
+    """Raised when square parsed by get_all_possible_moves function is not known for logic."""
