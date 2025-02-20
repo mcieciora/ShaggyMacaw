@@ -90,9 +90,9 @@ class Evaluation:
                 pieces_value_map[piece.active_colour_white] += pieces_value[
                     piece.piece_type
                 ]
-                position_value_map[
-                    piece.active_colour_white
-                ] += self.get_position_value(piece)
+                position_value_map[piece.active_colour_white] += (
+                    self.get_position_value(piece)
+                )
 
         if return_values_as_map:
             return pieces_value_map, position_value_map
