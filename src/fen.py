@@ -12,15 +12,15 @@ class Fen:
         """Initialize FEN object."""
         self.original_fen = fen
         self.board_squares = self.generate_board_squares()
+        self.current_fen = self.original_fen
 
-        split_fen = self.original_fen.split()
-
-        self.board_setup = self.parse_board_setup(split_fen[0])
-        self.active_colour = self.parse_active_colour(split_fen[1])
-        self.castling_rights = self.parse_castling_rights(split_fen[2])
-        self.available_en_passant = self.parse_en_passant(split_fen[3])
-        self.half_move_clock = self.parse_half_move(split_fen[4])
-        self.full_move_number = self.parse_full_move(split_fen[5])
+        fen_list = self.original_fen.split()
+        self.board_setup = self.parse_board_setup(fen_list[0])
+        self.active_colour = self.parse_active_colour(fen_list[1])
+        self.castling_rights = self.parse_castling_rights(fen_list[2])
+        self.available_en_passant = self.parse_en_passant(fen_list[3])
+        self.half_move_clock = self.parse_half_move(fen_list[4])
+        self.full_move_number = self.parse_full_move(fen_list[5])
 
     @staticmethod
     def get_position_from_square(square):
