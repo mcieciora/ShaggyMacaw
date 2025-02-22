@@ -139,7 +139,7 @@ class ChessBoard:
                             is_move_legal=True,
                             is_castling=True,
                             active_colour=king.active_colour_white,
-                            piece_value=king.value
+                            piece_value=king.value,
                         )
                         possible_shared_squares_dict[king.active_colour_white][
                             squares[-1]
