@@ -8,7 +8,7 @@ from src.evaluation import Evaluation
 def test__unittest__evaluation__evaluate():
     board = ChessBoard("8/P7/5k2/5B2/6Pp/1P3K1P/8/8 b - - 4 23")
     test_object = Evaluation(board)
-    actual_data = test_object.evaluate()
+    actual_data = round(test_object.evaluate(), 2)
     assert actual_data == 18.83, f"Expected: 18.83, actual: {actual_data}"
 
 
@@ -27,7 +27,7 @@ def test__unittest__evaluation__evaluate__return_values_as_map():
 def test__unittest__evaluation__evaluate__starting_position():
     board = ChessBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
     test_object = Evaluation(board)
-    actual_data = test_object.evaluate()
+    actual_data = round(test_object.evaluate(), 2)
     assert actual_data == 1.01, f"Expected: 1.01, actual: {actual_data}"
 
 

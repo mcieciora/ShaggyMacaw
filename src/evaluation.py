@@ -1,3 +1,4 @@
+from copy import deepcopy
 from src.piece import PieceType
 
 
@@ -99,7 +100,7 @@ class Evaluation:
         evaluation = (pieces_value_map[True] + position_value_map[True]) / (
             pieces_value_map[False] + position_value_map[False]
         )
-        return round(evaluation, 2)
+        return round(evaluation, 9)
 
     def get_position_value(self, piece):
         """Get piece value based on square position map."""
@@ -117,4 +118,22 @@ class Evaluation:
 
     def get_best_move(self, n):
         """Get best move in position."""
-        pass
+        return_sequence = []
+        for move_number in range(n):
+            _chess_board_deep_copy = deepcopy(self.chess_board)
+            active_colour = self.chess_board.fen.active_colour
+            all_moves = self.chess_board.generate_all_possible_moves()
+
+            _temp_evaluations = {}
+
+            for move in all_moves:
+                if move.active_colour is active_colour:
+                    self.chess_board.move_piece(move)
+                    _temp_evaluations[move] = self.evaluate(return_values_as_map=False)
+
+            best_move = max(_temp_evaluations, key=_temp_evaluations.get)
+            return_sequence.append(best_move)
+            self.chess_board = _chess_board_deep_copy
+            self.chess_board.move_piece(best_move)
+            self.chess_board.fen.current_fen = self.chess_board.fen.regenerate_fen()
+        return return_sequence
