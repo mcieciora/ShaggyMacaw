@@ -56,7 +56,7 @@ def get_parametrized_test_set(test_file):
             actual_data = {}
             for active_colour in [True, False]:
                 actual_data[active_colour] = [str(move) for move in test_object.generate_all_possible_moves()
-                               if move.active_colour is active_colour]
+                                              if move.active_colour is active_colour]
             parametrized_test_set_list.append((actual_data, test_data_dict[f"test_resource_{index+1}"]))
     return parametrized_test_set_list
 
