@@ -109,21 +109,21 @@ test_data_dict = {
 
 def get_parametrized_test_set():
     parametrized_test_set_list = []
-    for test_key, test_data in test_data_dict.items():
-        parametrized_test_set_list.append((test_key, test_data, test_data["expected_result"]))
+    for test_data in test_data_dict.values():
+        parametrized_test_set_list.append((test_data, test_data["expected_result"]))
     return parametrized_test_set_list
 
 
 @mark.smoke
-@mark.parametrize("test_key,test_data,expected_output", get_parametrized_test_set(), ids=test_data_dict.keys())
-def test__smoke__fen__parse_board_setup__verify_fields(test_key, test_data, expected_output):
+@mark.parametrize("test_data,expected_output", get_parametrized_test_set(), ids=test_data_dict.keys())
+def test__smoke__fen__parse_board_setup__verify_fields(test_data, expected_output):
     test_object = Fen(test_data["fen"])
     return_data = test_object.parse_board_setup(test_data["test_fen"])
     x, y = test_data["piece_indexes"][0], test_data["piece_indexes"][1]
     tested_piece = return_data[x][y]
-    for test_key, test_value in test_data["expected_result"].items():
-        actual_data = getattr(tested_piece, test_key)
-        assert actual_data == test_value, f"Expected: {test_value}, actual: {actual_data}"
+    for expected_key, expected_value in expected_output.items():
+        actual_data = getattr(tested_piece, expected_key)
+        assert actual_data == expected_value, f"Expected: {expected_value}, actual: {actual_data}"
 
 
 @mark.smoke

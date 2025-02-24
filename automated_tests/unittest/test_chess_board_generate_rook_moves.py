@@ -11,9 +11,9 @@ def test__unittest__chess_board__generate_piece_moves__rook():
     test_object = ChessBoard(original_fen)
     piece = Piece("R", (0, 0))
     actual_data = test_object.generate_piece_moves(piece)
-    assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
+    assert [str(result) for result in actual_data] == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
 
     expected_data = ["h1h2", "h1g1", "h1f1"]
     piece = Piece("R", (7, 0))
     actual_data = test_object.generate_piece_moves(piece)
-    assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
+    assert [str(result) for result in actual_data] == expected_data, f"Expected: {expected_data}, actual: {actual_data}"

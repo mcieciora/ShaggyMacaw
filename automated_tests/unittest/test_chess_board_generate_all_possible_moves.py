@@ -12,4 +12,4 @@ def test__unittest__chess_board__generate_all_possible_moves():
                      "b8c6", "b8a6", "g8h6", "g8f6"]
     test_object = ChessBoard(original_fen)
     actual_data = test_object.generate_all_possible_moves()
-    assert actual_data == expected_data, f"Expected: {actual_data}, actual: {expected_data}"
+    assert [str(result) for result in actual_data] == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
