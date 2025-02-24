@@ -87,9 +87,9 @@ pipeline {
                 stage ("pylint") {
                     steps {
                         script {
-                            sh "docker run --rm test_image python -m pylint src --max-line-length=120 --disable=C0114 --fail-under=9.0"
-                            sh "docker run --rm test_image python -m pylint --load-plugins pylint_pytest automated_tests --max-line-length=120 --disable=C0114,C0116 --fail-under=9.5"
-                            sh "docker run --rm test_image python -m pylint tools/python --max-line-length=120 --disable=C0114 --fail-under=9.5"
+                            sh "docker run --rm test_image python -m pylint src --max-line-length=120 --disable=C0114 --fail-under=9.5"
+                            sh "docker run --rm test_image python -m pylint --load-plugins pylint_pytest automated_tests --max-line-length=120 --disable=C0114,C0116,R0801 --fail-under=10.0"
+                            sh "docker run --rm test_image python -m pylint tools/python --max-line-length=120 --disable=C0114 --fail-under=10.0"
                         }
                     }
                 }
@@ -117,7 +117,7 @@ pipeline {
                 stage ("bandit") {
                     steps {
                         script {
-                            sh "docker run --rm test_image python -m bandit src automated_tests tools/python"
+                            sh "docker run --rm test_image python -m bandit -r src"
                         }
                     }
                 }

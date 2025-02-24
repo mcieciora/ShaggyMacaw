@@ -20,13 +20,12 @@ test_data_dict = {
 
 
 def get_parametrized_test_set():
-    parametrized_test_set_list = [(test_key, test_data) for test_key, test_data in test_data_dict.items()]
-    return parametrized_test_set_list
+    return test_data_dict.values()
 
 
 @mark.smoke
-@mark.parametrize("test_key,test_data", get_parametrized_test_set(), ids=test_data_dict.keys())
-def test__smoke__evaluation__evaluate(test_key, test_data):
+@mark.parametrize("test_data", get_parametrized_test_set(), ids=test_data_dict.keys())
+def test__smoke__evaluation__evaluate(test_data):
     chess_board = ChessBoard(test_data["fen"])
     test_object = Evaluation(chess_board)
     pieces_value_map, position_value_map = test_object.evaluate(return_values_as_map=True)

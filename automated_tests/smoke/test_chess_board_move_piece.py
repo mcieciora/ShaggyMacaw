@@ -63,8 +63,7 @@ test_data_dict = {
 
 
 def get_parametrized_test_set():
-    parametrized_test_set_list = [(test_key, test_data) for test_key, test_data in test_data_dict.items()]
-    return parametrized_test_set_list
+    return test_data_dict.items()
 
 
 @mark.smoke

@@ -74,21 +74,21 @@ test_data_dict = {
 
 def get_parametrized_test_set():
     parametrized_test_set_list = []
-    for test_key, test_data in test_data_dict.items():
-        parametrized_test_set_list.append((test_key, test_data, test_data["expected_result"]))
+    for test_data in test_data_dict.values():
+        parametrized_test_set_list.append((test_data, test_data["expected_result"]))
     return parametrized_test_set_list
 
 
 @mark.smoke
-@mark.parametrize("test_key,test_data,expected_output", get_parametrized_test_set(), ids=test_data_dict.keys())
-def test__smoke__chess_board__generate_kings_moves(test_key, test_data, expected_output):
+@mark.parametrize("test_data,expected_output", get_parametrized_test_set(), ids=test_data_dict.keys())
+def test__smoke__chess_board__generate_kings_moves(test_data, expected_output):
     test_object = ChessBoard(test_data["fen"])
     actual_data = test_object.generate_all_possible_moves()
     king_moves = [str(move) for move in actual_data if move.original_square == test_data["square"]]
     king_moves_number = len(king_moves)
 
-    for move in test_data['expected_result']:
+    for move in expected_output:
         assert move in king_moves, f"Expected: {move} not in {actual_data}"
 
-    expected_data = len(test_data["expected_result"])
-    assert king_moves_number == expected_data, f"Expected: {test_data['expected_result']}, actual: {king_moves}"
+    expected_data = len(expected_output)
+    assert king_moves_number == expected_data, f"Expected: {expected_output}, actual: {king_moves}"

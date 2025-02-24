@@ -20,28 +20,48 @@ test_data_dict = {
             False: ["a2", "a4", "a6", "a7", "a8", "b5", "b7", "b8", "c2", "c4", "c5", "c6", "c8", "d3", "d4", "d5",
                     "d7", "d8", "e2", "e5", "e7", "f3", "f6", "f7", "g2", "g5", "g8", "h3", "h5", "h6", "h8"]
         }
+    },
+    "test_resource_3": {
+        "fen": "1rn2rk1/1p1q1pbp/p1npb1p1/3Np3/2P1P3/2NBB3/PP3PPP/R2Q1RK1 w - - 14 15",
+        "expected_result": {
+            True: ["a3", "a4", "a7", "b1", "b3", "b4", "b5", "b6", "c1", "c2", "c5", "c7", "d2", "d4", "e1", "e2",
+                   "e7", "f3", "f4", "f5", "f6", "g3", "g4", "g5", "h3", "h5", "h6"],
+            False: ["a5", "a7", "a8", "b4", "b5", "b6", "c5", "c7", "d4", "d5", "d8", "e7", "e8", "f4", "f5", "f6",
+                    "g4", "h3", "h5", "h6", "h8"]
+        }
+    },
+    "test_resource_4": {
+        "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+        "expected_result": {
+            True: ["a3", "a6", "b3", "b5", "c3", "c4", "d3", "d5", "e2", "e3", "f3", "f5", "g3", "g4", "h3", "h5"],
+            False: ["a6", "b6", "c6", "d6", "e6", "f6", "g6", "h6"]
+        }
+    },
+    "test_resource_5": {
+        "fen": "5k2/1R3p2/3N2p1/8/3p2Pp/2n2K1P/P3r3/8 b - - 1 42",
+        "expected_result": {
+            True: ["a7", "b1", "b2", "b3", "b4", "b5", "b6", "b8", "c4", "c7", "c8", "d7", "e2", "e3", "e4",
+                   "e7", "e8", "f2", "f4", "f5", "f7", "g2", "g3", "h5"],
+            False: ["a2", "b2", "c2", "d2", "e1", "f2", "g2", "h2", "e3", "e4", "e5", "e6", "e7", "e8", "b1", "d1",
+                    "a4", "b5", "d5", "f5", "g3", "h5"]
+        }
     }
 }
 
 
 def get_parametrized_test_set():
     parametrized_test_set_list = []
-    for test_key, test_data in test_data_dict.items():
-        parametrized_test_set_list.append((test_key, test_data, test_data["expected_result"]))
+    for test_data in test_data_dict.values():
+        parametrized_test_set_list.append((test_data, test_data["expected_result"]))
     return parametrized_test_set_list
 
 
 @mark.smoke
-@mark.parametrize("test_key,test_data,expected_output", get_parametrized_test_set(), ids=test_data_dict.keys())
-def test__smoke__chess_board__get_attacked_squares(test_key, test_data, expected_output):
+@mark.parametrize("test_data,expected_output", get_parametrized_test_set(), ids=test_data_dict.keys())
+def test__smoke__chess_board__get_attacked_squares(test_data, expected_output):
     test_object = ChessBoard(test_data["fen"])
     test_object.generate_all_possible_moves()
-    actual_result = sorted(test_object.get_attacked_squares(True))
-    assert actual_result == test_data["expected_result"][True], (f"Failed on {test_key}, expected: "
-                                                                 f"{test_data['expected_result']}, "
-                                                                 f"actual: {actual_result}")
-
-    actual_result = sorted(test_object.get_attacked_squares(False))
-    assert actual_result == test_data["expected_result"][False], (f"Failed on {test_key}, expected: "
-                                                                  f"{test_data['expected_result']}, "
-                                                                  f"actual: {actual_result}")
+    for active_colour in expected_output:
+        actual_result = sorted(test_object.get_attacked_squares(active_colour))
+        assert actual_result == expected_output[active_colour], \
+            f"Expected: {test_data['expected_result']}, actual: {actual_result}"
