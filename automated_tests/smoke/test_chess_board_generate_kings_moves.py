@@ -74,7 +74,7 @@ test_data_dict = {
 
 def get_parametrized_test_set():
     parametrized_test_set_list = []
-    for test_key, test_data in test_data_dict.items():
+    for test_data in test_data_dict.values():
         parametrized_test_set_list.append((test_data, test_data["expected_result"]))
     return parametrized_test_set_list
 
