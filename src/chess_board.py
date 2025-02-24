@@ -146,8 +146,7 @@ class ChessBoard:
                         ] = castling_move
         return self.mask_colliding_moves(possible_shared_squares_dict)
 
-    @staticmethod
-    def mask_colliding_moves(moves_dict):
+    def mask_colliding_moves(self, moves_dict):
         """Get only unique moves out of connected kings moves list."""
         return_list = []
         for active_colour, moves in moves_dict.items():
@@ -155,11 +154,17 @@ class ChessBoard:
                 set(moves_dict[active_colour]) - set(moves_dict[not active_colour])
             ):
                 return_list.append(moves[move])
+                self.attacked_squares_map[moves[move].active_colour].append(moves[move].target_square)
         return return_list
 
     def get_attacked_squares(self, active_colour):
         """Return unique and sorted attacked squares list for selected active colour."""
         unique_list = list(set(self.attacked_squares_map[active_colour]))
+        return sorted(unique_list)
+
+    def get_defended_pieces(self, active_colour):
+        """Return unique and sorted list of defended pieces of given colour."""
+        unique_list = list(set(self.defended_pieces[active_colour]))
         return sorted(unique_list)
 
     def check_if_move_is_legal(
@@ -202,7 +207,8 @@ class ChessBoard:
                         self.attacked_squares_map[piece.active_colour_white].append(
                             square
                         )
-                self.defended_pieces[piece.active_colour_white].append(square)
+                else:
+                    self.defended_pieces[piece.active_colour_white].append(square)
         return move
 
     def move_piece(self, move):
