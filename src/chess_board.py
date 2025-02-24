@@ -13,6 +13,9 @@ class ChessBoard:
         self.fen = Fen(fen)
         self.defended_pieces = {True: [], False: []}
         self.attacked_squares_map = {True: [], False: []}
+        self.in_check = False
+        self.in_check_mate = False
+        self.in_stale_mate = False
 
     def generate_all_possible_moves(self):
         """Generate all possible moves."""
@@ -39,6 +42,14 @@ class ChessBoard:
                 else:
                     raise UnknownPieceType(f"{type(piece)} not supported.")
         all_possible_moves.extend(self.generate_kings_moves(kings))
+
+        king_position = self.fen.convert_coordinates_to_square(
+            kings[self.fen.active_colour].position[0],
+            kings[self.fen.active_colour].position[1],
+        )
+        if king_position in self.attacked_squares_map[not self.fen.active_colour]:
+            self.in_check = True
+
         return all_possible_moves
 
     def generate_pawn_moves(self, piece):
