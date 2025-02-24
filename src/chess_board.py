@@ -154,7 +154,9 @@ class ChessBoard:
                 set(moves_dict[active_colour]) - set(moves_dict[not active_colour])
             ):
                 return_list.append(moves[move])
-                self.attacked_squares_map[moves[move].active_colour].append(moves[move].target_square)
+                self.attacked_squares_map[moves[move].active_colour].append(
+                    moves[move].target_square
+                )
         return return_list
 
     def get_attacked_squares(self, active_colour):
