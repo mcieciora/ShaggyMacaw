@@ -51,17 +51,17 @@ test_data_dict = {
 
 def get_parametrized_test_set():
     parametrized_test_set_list = []
-    for test_key, test_data in test_data_dict.items():
-        parametrized_test_set_list.append((test_key, test_data, test_data["expected_result"]))
+    for test_data in test_data_dict.values():
+        parametrized_test_set_list.append((test_data, test_data["expected_result"]))
     return parametrized_test_set_list
 
 
 @mark.smoke
-@mark.parametrize("test_key,test_data,expected_output", get_parametrized_test_set(), ids=test_data_dict.keys())
-def test__smoke__chess_board__get_attacked_squares(test_key, test_data, expected_output):
+@mark.parametrize("test_data,expected_output", get_parametrized_test_set(), ids=test_data_dict.keys())
+def test__smoke__chess_board__get_attacked_squares(test_data, expected_output):
     test_object = ChessBoard(test_data["fen"])
     test_object.generate_all_possible_moves()
     for active_colour in expected_output:
         actual_result = sorted(test_object.get_attacked_squares(active_colour))
         assert actual_result == expected_output[active_colour], \
-            f"Failed on {test_key}, expected: {test_data['expected_result']}, actual: {actual_result}"
+            f"Expected: {test_data['expected_result']}, actual: {actual_result}"
