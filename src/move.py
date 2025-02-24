@@ -29,7 +29,6 @@ class Move:
         """Return object in coordinates notation."""
         if self.is_promotion and self.is_capture:
             return f"{self.original_square}{self.target_square}={self.promotion_piece}"
-        elif self.is_promotion:
+        if self.is_promotion:
             return f"{self.target_square}={self.promotion_piece}"
-        else:
-            return f"{self.original_square}{self.target_square}"
+        return f"{self.original_square}{self.target_square}"

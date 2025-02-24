@@ -91,9 +91,9 @@ class Evaluation:
                 pieces_value_map[piece.active_colour_white] += pieces_value[
                     piece.piece_type
                 ]
-                position_value_map[piece.active_colour_white] += (
-                    self.get_position_value(piece)
-                )
+                position_value_map[
+                    piece.active_colour_white
+                ] += self.get_position_value(piece)
 
         if return_values_as_map:
             return pieces_value_map, position_value_map
@@ -119,7 +119,7 @@ class Evaluation:
     def get_best_move(self, n):
         """Get best move in position."""
         return_sequence = []
-        for move_number in range(n):
+        for _ in range(n):
             _chess_board_deep_copy = deepcopy(self.chess_board)
             active_colour = self.chess_board.fen.active_colour
             all_moves = self.chess_board.generate_all_possible_moves()
