@@ -9,7 +9,7 @@ def test__unittest__chess_board__in_check__no_check():
     test_object = ChessBoard(original_fen)
     test_object.generate_all_possible_moves()
     actual_data = test_object.in_check
-    assert actual_data == False, f"Expected: False, actual: {actual_data}"
+    assert actual_data is False, f"Expected: False, actual: {actual_data}"
 
 
 @mark.unittest
@@ -18,4 +18,4 @@ def test__unittest__chess_board__in_check__check():
     test_object = ChessBoard(original_fen)
     test_object.generate_all_possible_moves()
     actual_data = test_object.in_check
-    assert actual_data == True, f"Expected: True, actual: {actual_data}"
+    assert actual_data is True, f"Expected: True, actual: {actual_data}"
