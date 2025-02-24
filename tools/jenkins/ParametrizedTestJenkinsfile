@@ -137,7 +137,7 @@ pipeline {
                 stage ("bandit") {
                     steps {
                         script {
-                            sh "docker run --rm test_image python -m bandit src automated_tests tools/python"
+                            sh "docker run --rm test_image python -m bandit -r src tools/python"
                         }
                     }
                 }

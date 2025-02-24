@@ -44,16 +44,16 @@ test_data_dict = {
 def get_parametrized_test_set():
     parametrized_test_set_list = []
     for test_key, test_data in test_data_dict.items():
-        parametrized_test_set_list.append((test_key, test_data, test_data["expected_result"]))
+        parametrized_test_set_list.append((test_data, test_data["expected_result"]))
     return parametrized_test_set_list
 
 
 @mark.smoke
-@mark.parametrize("test_key,test_data,expected_output", get_parametrized_test_set(), ids=test_data_dict.keys())
-def test__smoke__chess_board__defended_pieces(test_key, test_data, expected_output):
+@mark.parametrize("test_data,expected_output", get_parametrized_test_set(), ids=test_data_dict.keys())
+def test__smoke__chess_board__defended_pieces(test_data, expected_output):
     test_object = ChessBoard(test_data["fen"])
     test_object.generate_all_possible_moves()
-    for active_colour in test_object.defended_pieces:
+    for active_colour in test_object.defended_pieces.keys():
         actual_data = test_object.defended_pieces[active_colour]
         expected_data = expected_output[active_colour]
         assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}."

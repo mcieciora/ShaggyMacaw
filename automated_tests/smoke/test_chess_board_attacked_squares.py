@@ -61,7 +61,7 @@ def get_parametrized_test_set():
 def test__smoke__chess_board__get_attacked_squares(test_key, test_data, expected_output):
     test_object = ChessBoard(test_data["fen"])
     test_object.generate_all_possible_moves()
-    for active_colour in test_data["expected_result"]:
+    for active_colour in expected_output:
         actual_result = sorted(test_object.get_attacked_squares(active_colour))
-        assert actual_result == test_data["expected_result"][active_colour], \
+        assert actual_result == expected_output[active_colour], \
             f"Failed on {test_key}, expected: {test_data['expected_result']}, actual: {actual_result}"

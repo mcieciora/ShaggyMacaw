@@ -121,9 +121,9 @@ def test__smoke__fen__parse_board_setup__verify_fields(test_key, test_data, expe
     return_data = test_object.parse_board_setup(test_data["test_fen"])
     x, y = test_data["piece_indexes"][0], test_data["piece_indexes"][1]
     tested_piece = return_data[x][y]
-    for test_key, test_value in test_data["expected_result"].items():
-        actual_data = getattr(tested_piece, test_key)
-        assert actual_data == test_value, f"Expected: {test_value}, actual: {actual_data}"
+    for expected_key, expected_value in expected_output.items():
+        actual_data = getattr(tested_piece, expected_key)
+        assert actual_data == expected_value, f"Expected: {expected_value}, actual: {actual_data}"
 
 
 @mark.smoke

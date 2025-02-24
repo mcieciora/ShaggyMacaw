@@ -111,5 +111,5 @@ def test__smoke__chess_board__generate_pawn_moves(test_key, test_data, expected_
     test_object = ChessBoard(test_data["fen"])
     pawn = Pawn(test_data["value"], test_data["position"])
     actual_result = test_object.generate_pawn_moves(pawn)
-    assert [str(result) for result in actual_result] == test_data["expected_result"], (
-        f"Failed on {test_key}, expected: {test_data['expected_result']}, actual: {actual_result}")
+    assert [str(result) for result in actual_result] == expected_output, \
+        f"Failed on {test_key}, expected: {expected_output}, actual: {actual_result}"
