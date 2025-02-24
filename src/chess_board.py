@@ -44,7 +44,8 @@ class ChessBoard:
         all_possible_moves.extend(self.generate_kings_moves(kings))
 
         king_position = self.fen.convert_coordinates_to_square(
-            kings[self.fen.active_colour].position[0], kings[self.fen.active_colour].position[1]
+            kings[self.fen.active_colour].position[0],
+            kings[self.fen.active_colour].position[1],
         )
         if king_position in self.attacked_squares_map[not self.fen.active_colour]:
             self.in_check = True
