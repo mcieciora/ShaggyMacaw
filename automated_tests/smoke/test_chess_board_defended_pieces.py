@@ -54,4 +54,4 @@ def test__smoke__chess_board__defended_pieces(test_data, expected_output):
     test_object = ChessBoard(test_data["fen"])
     test_object.generate_all_possible_moves()
     for active_colour, actual_data in test_object.defended_pieces.items():
-        assert actual_data == expected_output, f"Expected: {expected_output}, actual: {actual_data}."
+        assert actual_data == expected_output[active_colour], f"Expected: {expected_output}, actual: {actual_data}."
