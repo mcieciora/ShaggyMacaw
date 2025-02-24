@@ -67,5 +67,5 @@ def test__smoke__chess_board__generate_all_possible_moves(test_data, expected_ou
     for active_colour in test_data:
         actual_data = len(test_data[active_colour])
         expected_data = expected_output[active_colour]
-        assert actual_data == expected_data, (f"Expected: {expected_data}, actual: {actual_data}. "
-                                              f"Generated moves: {test_data[active_colour]}")
+        assert actual_data == expected_data, \
+            f"Expected: {expected_data}, actual: {actual_data}. Generated moves: {test_data[active_colour]}"

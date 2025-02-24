@@ -63,6 +63,5 @@ def test__smoke__chess_board__get_attacked_squares(test_key, test_data, expected
     test_object.generate_all_possible_moves()
     for active_colour in test_data["expected_result"]:
         actual_result = sorted(test_object.get_attacked_squares(active_colour))
-        assert actual_result == test_data["expected_result"][active_colour], (f"Failed on {test_key}, expected: "
-                                                                     f"{test_data['expected_result']}, "
-                                                                     f"actual: {actual_result}")
+        assert actual_result == test_data["expected_result"][active_colour], \
+            f"Failed on {test_key}, expected: {test_data['expected_result']}, actual: {actual_result}"

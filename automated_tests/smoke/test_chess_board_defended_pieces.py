@@ -1,5 +1,3 @@
-from glob import glob
-
 from pytest import mark
 
 from src.chess_board import ChessBoard
