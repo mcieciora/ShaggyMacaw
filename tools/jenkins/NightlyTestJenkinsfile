@@ -1,48 +1,18 @@
 pipeline {
     agent {
-        label 'master'
+        label "master"
     }
     triggers {
         cron("H 21 * * *")
-    }
-    environment {
-        DEFAULT_NIGHTLY_FLAG = 'unittest'
     }
     options {
         skipDefaultCheckout()
     }
     stages {
-        stage ("Trigger nightly builds") {
-            parallel {
-                stage ("develop") {
-                    steps {
-                        script {
-                            def build = build job: 'ParametrizedTestPipeline_ShaggyMacaw',
-                            parameters: [
-                                string(name: 'FLAG', value: DEFAULT_NIGHTLY_FLAG),
-                                string(name: 'BRANCH', value: 'develop')
-                            ],
-                            propagate: false
-                            if (build.result != 'SUCCESS') {
-                                unstable('Stage reported as unstable')
-                            }
-                        }
-                    }
-                }
-                stage ("master") {
-                    steps {
-                        script {
-                            def build = build job: 'ParametrizedTestPipeline_ShaggyMacaw',
-                            parameters: [
-                                string(name: 'FLAG', value: DEFAULT_NIGHTLY_FLAG),
-                                string(name: 'BRANCH', value: 'master')
-                            ],
-                            propagate: false
-                            if (build.result != 'SUCCESS') {
-                                unstable('Stage reported as unstable')
-                            }
-                        }
-                    }
+        stage ("Get tools config") {
+            steps {
+                script {
+                    sh "curl -OL https://raw.githubusercontent.com/mcieciora/ShaggyMacaw/refs/heads/${SCRIPT_BRANCH}/.tools_config"
                 }
             }
         }
@@ -51,8 +21,8 @@ pipeline {
                 script {
                     def build = build job: 'PythonDependenciesVerification_ShaggyMacaw',
                     propagate: false
-                    if (build.result != 'SUCCESS') {
-                        unstable('Stage reported as unstable')
+                    if (build.result != "SUCCESS") {
+                        unstable("Stage reported as unstable")
                     }
                 }
             }
@@ -62,10 +32,42 @@ pipeline {
                 script {
                     def build = build job: 'ScanDockerImages_ShaggyMacaw',
                     propagate: false
-                        if (build.result != 'SUCCESS') {
-                            unstable('Stage reported as unstable')
+                        if (build.result != "SUCCESS") {
+                            unstable("Stage reported as unstable")
                         }
                     }
+            }
+        }
+        stage ("Trigger nightly builds") {
+            parallel {
+                stage ("develop") {
+                    steps {
+                        script {
+                            withEnv(getToolsConfig()) {
+                                def build = build job: "ParametrizedTestPipeline_ShaggyMacaw",
+                                parameters: [
+                                    string(name: "FLAG", value: "${DEFAULT_NIGHTLY_FLAG}"),
+                                    string(name: "BRANCH", value: "develop"),
+                                    booleanParam(name: "IS_NIGHTLY", value: true)
+                                ]
+                            }
+                        }
+                    }
+                }
+                stage ("master") {
+                    steps {
+                        script {
+                            withEnv(getToolsConfig()) {
+                                def build = build job: "ParametrizedTestPipeline_ShaggyMacaw",
+                                parameters: [
+                                    string(name: "FLAG", value: "${DEFAULT_NIGHTLY_FLAG}"),
+                                    string(name: "BRANCH", value: "master"),
+                                    booleanParam(name: "IS_NIGHTLY", value: true)
+                                ]
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -74,4 +76,8 @@ pipeline {
             cleanWs()
         }
     }
+}
+
+def getToolsConfig() {
+    return readFile(".tools_config").split("\n") as List
 }
