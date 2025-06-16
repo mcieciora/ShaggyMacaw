@@ -6,7 +6,7 @@ from pytest import mark
 from src.chess_board import ChessBoard
 from src.evaluation import Evaluation
 
-from os import  listdir, curdir
+from os import listdir, curdir
 
 
 @mark.nightly
