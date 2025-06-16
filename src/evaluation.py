@@ -116,11 +116,11 @@ class Evaluation:
         reversed_ranks = list(reversed(position[piece_type]))
         return [list(reversed(rank)) for rank in reversed_ranks]
 
-    def get_best_move(self, n):
+    def get_best_move(self, depth):
         """Get best move in position."""
         return_sequence = []
         original_board = deepcopy(self.chess_board)
-        for _ in range(n):
+        for _ in range(depth):
             _chess_board_deep_copy = deepcopy(self.chess_board)
             active_colour = self.chess_board.fen.active_colour
             all_moves = self.chess_board.generate_all_possible_moves()
