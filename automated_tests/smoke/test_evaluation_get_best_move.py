@@ -9,7 +9,7 @@ def get_parametrized_test_set(test_file):
     parametrized_test_set_list = []
     full_test_file_path = glob(f"automated_tests/test_data/{test_file}")[0]
     with open(full_test_file_path, mode="r", encoding="utf-8") as test_fen_file:
-        for index, line in enumerate(test_fen_file.readlines()):
+        for _, line in enumerate(test_fen_file.readlines()):
             board = ChessBoard(line)
             parametrized_test_set_list.append(board)
     return parametrized_test_set_list
