@@ -20,5 +20,5 @@ def test__nightly__evaluation__measure_get_best_move_runtime():
                 test_object.get_best_move(10)
                 runtime = datetime.now() - start
                 runtime_results_map[test_object.chess_board.fen.current_fen] = runtime.microseconds
-    with open("measure_get_best_move_runtime.json", mode="w") as result_file:
+    with open("measure_get_best_move_runtime.json", mode="w", encoding="utf-8") as result_file:
         result_file.writelines(dumps(runtime_results_map))
