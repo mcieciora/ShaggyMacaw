@@ -230,6 +230,8 @@ class ChessBoard:
         original_x, original_y = self.fen.get_position_from_square(move.original_square)
         target_x, target_y = self.fen.get_position_from_square(move.target_square)
 
+        self.fen.board_setup[original_y][original_x].position = (target_x, target_y)
+
         self.fen.update_board_setup(
             move, (original_x, original_y), (target_x, target_y)
         )
