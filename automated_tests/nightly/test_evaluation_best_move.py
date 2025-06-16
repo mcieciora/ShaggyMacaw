@@ -1,12 +1,11 @@
 from datetime import datetime
 from glob import glob
 from json import dumps
+from os import listdir, curdir
 from pytest import mark
 
 from src.chess_board import ChessBoard
 from src.evaluation import Evaluation
-
-from os import listdir, curdir
 
 
 @mark.nightly
