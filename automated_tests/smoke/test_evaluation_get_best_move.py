@@ -1,43 +1,8 @@
-from copy import deepcopy
 from glob import glob
 from pytest import mark
 
 from src.chess_board import ChessBoard
 from src.evaluation import Evaluation
-
-
-test_data_dict = {
-    "test_resource_1": {
-        "expected_sequence_colour": [False, True, False],
-    },
-    "test_resource_2": {
-        "expected_sequence_colour": [False, True, False]
-    },
-    "test_resource_3": {
-        "expected_sequence_colour": [True, False, True]
-    },
-    "test_resource_4": {
-        "expected_sequence_colour": [True, False, True]
-    },
-    "test_resource_5": {
-        "expected_sequence_colour": [True, False, True]
-    },
-    "test_resource_6": {
-        "expected_sequence_colour": [True, False, True]
-    },
-    "test_resource_7": {
-        "expected_sequence_colour": [True, False, True]
-    },
-    "test_resource_8": {
-        "expected_sequence_colour": [True, False, True]
-    },
-    "test_resource_9": {
-        "expected_sequence_colour": [False, True, False]
-    },
-    "test_resource_10": {
-        "expected_sequence_colour": [False, True, False]
-    }
-}
 
 
 def get_parametrized_test_set(test_file):
@@ -46,13 +11,14 @@ def get_parametrized_test_set(test_file):
     with open(full_test_file_path, mode="r", encoding="utf-8") as test_fen_file:
         for index, line in enumerate(test_fen_file.readlines()):
             board = ChessBoard(line)
-            parametrized_test_set_list.append((board, test_data_dict[f"test_resource_{index+1}"]))
+            parametrized_test_set_list.append(board)
     return parametrized_test_set_list
 
 
 @mark.smoke
-@mark.parametrize("test_board,expected_output", get_parametrized_test_set("fen_0"), ids=test_data_dict.keys())
-def test__smoke__evaluation__get_best_move(test_board, expected_output):
+@mark.parametrize("test_board", get_parametrized_test_set("fen_0"),
+                  ids=[f"test_resource_{index}" for index in range(1, 11)])
+def test__smoke__evaluation__get_best_move(test_board):
     starting_fen, starting_colour = test_board.fen.current_fen, test_board.fen.active_colour
     evaluation = Evaluation(test_board)
     actual_data = evaluation.get_best_move(5)
