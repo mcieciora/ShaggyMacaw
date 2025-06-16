@@ -11,6 +11,7 @@ def test__unittest__evaluation__move_piece__single_push():
     move = Move(original_square="d2", target_square="d3", is_move_legal=True)
     test_object.move_piece(move)
     actual_data = test_object.fen.regenerate_fen()
+    # TODO update tests to verify if piece position changed
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
 
 
@@ -21,6 +22,7 @@ def test__unittest__evaluation__move_piece__double_push():
     move = Move(original_square="d2", target_square="d4", is_move_legal=True, piece_value="P")
     test_object.move_piece(move)
     actual_data = test_object.fen.regenerate_fen()
+    # TODO update tests to verify if piece position changed
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
 
 
@@ -31,6 +33,7 @@ def test__unittest__evaluation__move_piece__knight_move():
     move = Move(original_square="b1", target_square="c3", is_move_legal=True)
     test_object.move_piece(move)
     actual_data = test_object.fen.regenerate_fen()
+    # TODO update tests to verify if piece position changed
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
 
 
@@ -41,6 +44,7 @@ def test__unittest__evaluation__move_piece__knight_capture():
     move = Move(original_square="c3", target_square="d5", is_move_legal=True, is_capture=True)
     test_object.move_piece(move)
     actual_data = test_object.fen.regenerate_fen()
+    # TODO update tests to verify if piece position changed
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
 
 
@@ -51,6 +55,7 @@ def test__unittest__evaluation__move_piece__bishop_move():
     move = Move(original_square="c8", target_square="e6", is_move_legal=True)
     test_object.move_piece(move)
     actual_data = test_object.fen.regenerate_fen()
+    # TODO update tests to verify if piece position changed
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
 
 
@@ -61,6 +66,7 @@ def test__unittest__evaluation__move_piece__bishop_capture():
     move = Move(original_square="e6", target_square="d5", is_move_legal=True, is_capture=True)
     test_object.move_piece(move)
     actual_data = test_object.fen.regenerate_fen()
+    # TODO update tests to verify if piece position changed
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
 
 
@@ -71,6 +77,7 @@ def test__unittest__evaluation__move_piece__rook_move():
     move = Move(original_square="a8", target_square="d8", is_move_legal=True, piece_value="r")
     test_object.move_piece(move)
     actual_data = test_object.fen.regenerate_fen()
+    # TODO update tests to verify if piece position changed
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
 
 
@@ -81,6 +88,7 @@ def test__unittest__evaluation__move_piece__rook_capture():
     move = Move(original_square="d1", target_square="d8", is_move_legal=True, is_capture=True)
     test_object.move_piece(move)
     actual_data = test_object.fen.regenerate_fen()
+    # TODO update tests to verify if piece position changed
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
 
 
@@ -91,6 +99,7 @@ def test__unittest__evaluation__move_piece__queen_move():
     move = Move(original_square="d1", target_square="a4", is_move_legal=True)
     test_object.move_piece(move)
     actual_data = test_object.fen.regenerate_fen()
+    # TODO update tests to verify if piece position changed
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
 
 
@@ -101,6 +110,7 @@ def test__unittest__evaluation__move_piece__queen_capture():
     move = Move(original_square="d8", target_square="d6", is_move_legal=True, is_capture=True)
     test_object.move_piece(move)
     actual_data = test_object.fen.regenerate_fen()
+    # TODO update tests to verify if piece position changed
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
 
 
@@ -111,6 +121,7 @@ def test__unittest__evaluation__move_piece__king_move():
     move = Move(original_square="e8", target_square="d7", is_move_legal=True, piece_value="k")
     test_object.move_piece(move)
     actual_data = test_object.fen.regenerate_fen()
+    # TODO update tests to verify if piece position changed
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
 
 
@@ -121,6 +132,7 @@ def test__unittest__evaluation__move_piece__king_capture():
     move = Move(original_square="d7", target_square="c6", is_move_legal=True, is_capture=True)
     test_object.move_piece(move)
     actual_data = test_object.fen.regenerate_fen()
+    # TODO update tests to verify if piece position changed
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
 
 
@@ -131,6 +143,7 @@ def test__unittest__evaluation__move_piece__capture():
     move = Move(original_square="f6", target_square="e4", is_move_legal=True, is_capture=True)
     test_object.move_piece(move)
     actual_data = test_object.fen.regenerate_fen()
+    # TODO update tests to verify if piece position changed
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
 
 
@@ -141,6 +154,7 @@ def test__unittest__evaluation__move_piece__en_passant():
     move = Move(original_square="d4", target_square="c3", is_move_legal=True,  is_en_passant=True)
     test_object.move_piece(move)
     actual_data = test_object.fen.regenerate_fen()
+    # TODO update tests to verify if piece position changed
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
 
 
@@ -151,6 +165,7 @@ def test__unittest__evaluation__move_piece__pawn_promotion():
     move = Move(original_square="b2", target_square="b1", is_move_legal=True, is_promotion=True, promotion_piece="q")
     test_object.move_piece(move)
     actual_data = test_object.fen.regenerate_fen()
+    # TODO update tests to verify if piece position changed
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
 
 
@@ -162,6 +177,7 @@ def test__unittest__evaluation__move_piece__pawn_promotion_with_capture():
                 promotion_piece="q")
     test_object.move_piece(move)
     actual_data = test_object.fen.regenerate_fen()
+    # TODO update tests to verify if piece position changed
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
 
 
@@ -172,6 +188,7 @@ def test__unittest__evaluation__move_piece__king_side_castling():
     move = Move(original_square="e1", target_square="g1", is_move_legal=True, is_castling=True, piece_value="K")
     test_object.move_piece(move)
     actual_data = test_object.fen.regenerate_fen()
+    # TODO update tests to verify if piece position changed
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
 
 
@@ -182,4 +199,5 @@ def test__unittest__evaluation__move_piece__queen_side_castling():
     move = Move(original_square="e1", target_square="c1", is_move_legal=True, is_castling=True, piece_value="K")
     test_object.move_piece(move)
     actual_data = test_object.fen.regenerate_fen()
+    # TODO update tests to verify if piece position changed
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"

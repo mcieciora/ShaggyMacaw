@@ -185,6 +185,7 @@ class ChessBoard:
     ):
         """Calculate new position, verify if square is in board and return Move object."""
         move = Move()
+        move.piece_value = piece.value
         x = piece.position[0] + movement[0]
         y = piece.position[1] + movement[1]
         if self.fen.coordinates_in_boundaries(x, y):
