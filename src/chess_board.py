@@ -185,6 +185,7 @@ class ChessBoard:
     ):
         """Calculate new position, verify if square is in board and return Move object."""
         move = Move()
+        move.piece_value = piece.value
         x = piece.position[0] + movement[0]
         y = piece.position[1] + movement[1]
         if self.fen.coordinates_in_boundaries(x, y):
@@ -229,6 +230,8 @@ class ChessBoard:
         original_x, original_y = self.fen.get_position_from_square(move.original_square)
         target_x, target_y = self.fen.get_position_from_square(move.target_square)
 
+        self.fen.board_setup[original_y][original_x].position = (target_x, target_y)
+
         self.fen.update_board_setup(
             move, (original_x, original_y), (target_x, target_y)
         )
@@ -236,6 +239,7 @@ class ChessBoard:
         self.fen.update_en_passant(move, (target_x, target_y), original_y)
         self.fen.update_clocks(move)
         self.fen.update_active_colour()
+        self.fen.regenerate_fen()
 
 
 class UnknownPieceType(Exception):

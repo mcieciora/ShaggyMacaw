@@ -29,7 +29,7 @@ pipeline {
             steps {
                 script {
                     sh "curl -OL https://raw.githubusercontent.com/mcieciora/ShaggyMacaw/refs/heads/${BRANCH_TO_USE}/.tools_config"
-                    def BRANCH_REV = BRANCH_TO_USE.equals("develop") || BRANCH_TO_USE.equals("master") ? "HEAD^1" : "origin/develop"
+                    def BRANCH_REV = BRANCH_TO_USE.equals("develop") || BRANCH_TO_USE.equals("master") ? "HEAD^1" : "develop"
                     withEnv(getToolsConfig()) {
                         withCredentials([sshUserPrivateKey(credentialsId: "agent_${NODE_NAME}", keyFileVariable: "key")]) {
                             sh 'GIT_SSH_COMMAND="ssh -i $key"'
@@ -205,6 +205,17 @@ pipeline {
                     steps {
                         script {
                             sh "docker run --rm test_image python tools/python/scan_for_skipped_tests.py"
+                        }
+                    }
+                }
+                stage ("Scan for tests number") {
+                    steps {
+                        script {
+                            in_docker_value = sh(script: "docker run --rm test_image python -m pytest --collect-only | grep -c '<Function'", returnStdout: true)
+                            in_workdir_value = sh(script: "python3 -m pytest --collect-only | grep -c '<Function'", returnStdout: true)
+                            if (in_docker_value.toInteger() != in_workdir_value.toInteger()) {
+                                unstable("Stage reported as unstable.\nNumber of tests in test image: ${in_docker_value} compared to tests available in workdir: ${in_workdir_value}")
+                            }
                         }
                     }
                 }
