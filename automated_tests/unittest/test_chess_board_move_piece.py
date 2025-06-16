@@ -11,7 +11,7 @@ def test__unittest__evaluation__move_piece__single_push():
     test_object = ChessBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
     move = Move(original_square="d2", target_square="d3", is_move_legal=True)
     test_object.move_piece(move)
-    actual_data = test_object.fen.regenerate_fen()
+    actual_data = test_object.fen.current_fen
     test_object_position = test_object.fen.board_setup[expected_y][expected_x].position
     assert test_object_position == (expected_x, expected_y), f"Expected: {expected_data}, actual: {actual_data}"
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
@@ -24,7 +24,7 @@ def test__unittest__evaluation__move_piece__double_push():
     test_object = ChessBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
     move = Move(original_square="d2", target_square="d4", is_move_legal=True, piece_value="P")
     test_object.move_piece(move)
-    actual_data = test_object.fen.regenerate_fen()
+    actual_data = test_object.fen.current_fen
     test_object_position = test_object.fen.board_setup[expected_y][expected_x].position
     assert test_object_position == (expected_x, expected_y), f"Expected: {expected_data}, actual: {actual_data}"
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
@@ -37,7 +37,7 @@ def test__unittest__evaluation__move_piece__knight_move():
     test_object = ChessBoard("rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq d6 0 2")
     move = Move(original_square="b1", target_square="c3", is_move_legal=True)
     test_object.move_piece(move)
-    actual_data = test_object.fen.regenerate_fen()
+    actual_data = test_object.fen.current_fen
     test_object_position = test_object.fen.board_setup[expected_y][expected_x].position
     assert test_object_position == (expected_x, expected_y), f"Expected: {expected_data}, actual: {actual_data}"
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
@@ -50,7 +50,7 @@ def test__unittest__evaluation__move_piece__knight_capture():
     test_object = ChessBoard("rn1qkbnr/ppp1pppp/4b3/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq - 2 3")
     move = Move(original_square="c3", target_square="d5", is_move_legal=True, is_capture=True)
     test_object.move_piece(move)
-    actual_data = test_object.fen.regenerate_fen()
+    actual_data = test_object.fen.current_fen
     test_object_position = test_object.fen.board_setup[expected_y][expected_x].position
     assert test_object_position == (expected_x, expected_y), f"Expected: {expected_data}, actual: {actual_data}"
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
@@ -63,7 +63,7 @@ def test__unittest__evaluation__move_piece__bishop_move():
     test_object = ChessBoard("rnbqkbnr/ppp1pppp/8/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 1 2")
     move = Move(original_square="c8", target_square="e6", is_move_legal=True)
     test_object.move_piece(move)
-    actual_data = test_object.fen.regenerate_fen()
+    actual_data = test_object.fen.current_fen
     test_object_position = test_object.fen.board_setup[expected_y][expected_x].position
     assert test_object_position == (expected_x, expected_y), f"Expected: {expected_data}, actual: {actual_data}"
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
@@ -76,7 +76,7 @@ def test__unittest__evaluation__move_piece__bishop_capture():
     test_object = ChessBoard("rn1qkbnr/ppp1pppp/4b3/3N4/3P4/8/PPP1PPPP/R1BQKBNR b KQkq - 0 3")
     move = Move(original_square="e6", target_square="d5", is_move_legal=True, is_capture=True)
     test_object.move_piece(move)
-    actual_data = test_object.fen.regenerate_fen()
+    actual_data = test_object.fen.current_fen
     test_object_position = test_object.fen.board_setup[expected_y][expected_x].position
     assert test_object_position == (expected_x, expected_y), f"Expected: {expected_data}, actual: {actual_data}"
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
@@ -89,7 +89,7 @@ def test__unittest__evaluation__move_piece__rook_move():
     test_object = ChessBoard("r3k1nr/ppp4p/2nqpp2/3b2p1/Q2P4/2P2N2/PP2PPPP/R3KB1R b KQkq - 1 10")
     move = Move(original_square="a8", target_square="d8", is_move_legal=True, piece_value="r")
     test_object.move_piece(move)
-    actual_data = test_object.fen.regenerate_fen()
+    actual_data = test_object.fen.current_fen
     test_object_position = test_object.fen.board_setup[expected_y][expected_x].position
     assert test_object_position == (expected_x, expected_y), f"Expected: {expected_data}, actual: {actual_data}"
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
@@ -102,7 +102,7 @@ def test__unittest__evaluation__move_piece__rook_capture():
     test_object = ChessBoard("3r2nr/ppp4p/2k2p2/4q1p1/8/2P1PP2/PP3P1P/3RKB1R w K - 0 16")
     move = Move(original_square="d1", target_square="d8", is_move_legal=True, is_capture=True)
     test_object.move_piece(move)
-    actual_data = test_object.fen.regenerate_fen()
+    actual_data = test_object.fen.current_fen
     test_object_position = test_object.fen.board_setup[expected_y][expected_x].position
     assert test_object_position == (expected_x, expected_y), f"Expected: {expected_data}, actual: {actual_data}"
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
@@ -115,7 +115,7 @@ def test__unittest__evaluation__move_piece__queen_move():
     test_object = ChessBoard("r3k1nr/ppp4p/2nqpp2/3b2p1/3P4/2P2N2/PP2PPPP/R2QKB1R w KQkq - 0 10")
     move = Move(original_square="d1", target_square="a4", is_move_legal=True)
     test_object.move_piece(move)
-    actual_data = test_object.fen.regenerate_fen()
+    actual_data = test_object.fen.current_fen
     test_object_position = test_object.fen.board_setup[expected_y][expected_x].position
     assert test_object_position == (expected_x, expected_y), f"Expected: {expected_data}, actual: {actual_data}"
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
@@ -128,7 +128,7 @@ def test__unittest__evaluation__move_piece__queen_capture():
     test_object = ChessBoard("r2qk1nr/ppp4p/2nBpp2/3b2p1/3P4/2P2N2/PP2PPPP/R2QKB1R b KQkq - 0 9")
     move = Move(original_square="d8", target_square="d6", is_move_legal=True, is_capture=True)
     test_object.move_piece(move)
-    actual_data = test_object.fen.regenerate_fen()
+    actual_data = test_object.fen.current_fen
     test_object_position = test_object.fen.board_setup[expected_y][expected_x].position
     assert test_object_position == (expected_x, expected_y), f"Expected: {expected_data}, actual: {actual_data}"
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
@@ -141,7 +141,7 @@ def test__unittest__evaluation__move_piece__king_move():
     test_object = ChessBoard("3rk1nr/ppp4p/2nqpp2/3b2p1/Q2P4/2P2N2/PP2PPPP/3RKB1R b Kk - 3 11")
     move = Move(original_square="e8", target_square="d7", is_move_legal=True, piece_value="k")
     test_object.move_piece(move)
-    actual_data = test_object.fen.regenerate_fen()
+    actual_data = test_object.fen.current_fen
     test_object_position = test_object.fen.board_setup[expected_y][expected_x].position
     assert test_object_position == (expected_x, expected_y), f"Expected: {expected_data}, actual: {actual_data}"
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
@@ -154,7 +154,7 @@ def test__unittest__evaluation__move_piece__king_capture():
     test_object = ChessBoard("3r2nr/pppk3p/2Qqpp2/3b2p1/3P4/2P2N2/PP2PPPP/3RKB1R b K - 0 12")
     move = Move(original_square="d7", target_square="c6", is_move_legal=True, is_capture=True)
     test_object.move_piece(move)
-    actual_data = test_object.fen.regenerate_fen()
+    actual_data = test_object.fen.current_fen
     test_object_position = test_object.fen.board_setup[expected_y][expected_x].position
     assert test_object_position == (expected_x, expected_y), f"Expected: {expected_data}, actual: {actual_data}"
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
@@ -167,7 +167,7 @@ def test__unittest__evaluation__move_piece__capture():
     test_object = ChessBoard("rnbq1rk1/ppppppbp/5np1/8/2BPP3/2N5/PPP1NPPP/R1BQK2R b KQ - 4 5")
     move = Move(original_square="f6", target_square="e4", is_move_legal=True, is_capture=True)
     test_object.move_piece(move)
-    actual_data = test_object.fen.regenerate_fen()
+    actual_data = test_object.fen.current_fen
     test_object_position = test_object.fen.board_setup[expected_y][expected_x].position
     assert test_object_position == (expected_x, expected_y), f"Expected: {expected_data}, actual: {actual_data}"
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
@@ -180,7 +180,7 @@ def test__unittest__evaluation__move_piece__en_passant():
     test_object = ChessBoard("rnbq2k1/ppp2r1p/6p1/4p3/2PpN3/5N2/PP3PPP/R1BQ1RK1 b - c3 0 11")
     move = Move(original_square="d4", target_square="c3", is_move_legal=True,  is_en_passant=True)
     test_object.move_piece(move)
-    actual_data = test_object.fen.regenerate_fen()
+    actual_data = test_object.fen.current_fen
     test_object_position = test_object.fen.board_setup[expected_y][expected_x].position
     assert test_object_position == (expected_x, expected_y), f"Expected: {expected_data}, actual: {actual_data}"
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
@@ -193,7 +193,7 @@ def test__unittest__evaluation__move_piece__pawn_promotion():
     test_object = ChessBoard("rnbq2k1/ppp2r1p/6p1/4p3/4N3/5N1P/PpQ2PP1/R1B2RK1 b - - 0 13")
     move = Move(original_square="b2", target_square="b1", is_move_legal=True, is_promotion=True, promotion_piece="q")
     test_object.move_piece(move)
-    actual_data = test_object.fen.regenerate_fen()
+    actual_data = test_object.fen.current_fen
     test_object_position = test_object.fen.board_setup[expected_y][expected_x].position
     assert test_object_position == (expected_x, expected_y), f"Expected: {expected_data}, actual: {actual_data}"
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
@@ -207,7 +207,7 @@ def test__unittest__evaluation__move_piece__pawn_promotion_with_capture():
     move = Move(original_square="b2", target_square="a1", is_move_legal=True, is_promotion=True, is_capture=True,
                 promotion_piece="q")
     test_object.move_piece(move)
-    actual_data = test_object.fen.regenerate_fen()
+    actual_data = test_object.fen.current_fen
     test_object_position = test_object.fen.board_setup[expected_y][expected_x].position
     assert test_object_position == (expected_x, expected_y), f"Expected: {expected_data}, actual: {actual_data}"
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
@@ -220,7 +220,7 @@ def test__unittest__evaluation__move_piece__king_side_castling():
     test_object = ChessBoard("rnbq2k1/ppp2r1p/6p1/3pp3/4N3/5N2/PPP2PPP/R1BQK2R w KQ d6 0 10")
     move = Move(original_square="e1", target_square="g1", is_move_legal=True, is_castling=True, piece_value="K")
     test_object.move_piece(move)
-    actual_data = test_object.fen.regenerate_fen()
+    actual_data = test_object.fen.current_fen
     test_object_position = test_object.fen.board_setup[expected_y][expected_x].position
     assert test_object_position == (expected_x, expected_y), f"Expected: {expected_data}, actual: {actual_data}"
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
@@ -233,7 +233,7 @@ def test__unittest__evaluation__move_piece__queen_side_castling():
     test_object = ChessBoard("rnbq2k1/ppp2r1p/6p1/3pp1B1/4N3/5N2/PPP1QPPP/R3K2R w KQ - 0 10")
     move = Move(original_square="e1", target_square="c1", is_move_legal=True, is_castling=True, piece_value="K")
     test_object.move_piece(move)
-    actual_data = test_object.fen.regenerate_fen()
+    actual_data = test_object.fen.current_fen
     test_object_position = test_object.fen.board_setup[expected_y][expected_x].position
     assert test_object_position == (expected_x, expected_y), f"Expected: {expected_data}, actual: {actual_data}"
     assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"

@@ -43,7 +43,8 @@ def get_parametrized_test_set(test_file):
     with open(full_test_file_path, mode="r", encoding="utf-8") as test_fen_file:
         for index, line in enumerate(test_fen_file.readlines()):
             test_board = Fen(line.replace("\n", ""))
-            regenerated_fen = test_board.regenerate_fen()
+            test_board.regenerate_fen()
+            regenerated_fen = test_board.current_fen
             parametrized_test_set_list.append((regenerated_fen, test_data_dict[f"test_resource_{index+1}"]))
     return parametrized_test_set_list
 

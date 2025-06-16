@@ -172,7 +172,7 @@ class Fen:
             [self.parse_rank_to_fen(rank) for rank in reversed(self.board_setup)]
         )
 
-        return (
+        self.current_fen = (
             f"{board} {self.parse_active_colour(self.active_colour)} "
             f"{self.castling_rights} {self.available_en_passant} {self.half_move_clock} {self.full_move_number}"
         )

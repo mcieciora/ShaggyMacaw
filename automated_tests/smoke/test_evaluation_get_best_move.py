@@ -1,3 +1,4 @@
+from copy import deepcopy
 from glob import glob
 from pytest import mark
 
@@ -7,7 +8,7 @@ from src.evaluation import Evaluation
 
 test_data_dict = {
     "test_resource_1": {
-        "expected_sequence_colour": [False, True, False]
+        "expected_sequence_colour": [False, True, False],
     },
     "test_resource_2": {
         "expected_sequence_colour": [False, True, False]
@@ -45,15 +46,20 @@ def get_parametrized_test_set(test_file):
     with open(full_test_file_path, mode="r", encoding="utf-8") as test_fen_file:
         for index, line in enumerate(test_fen_file.readlines()):
             board = ChessBoard(line)
-            test_object = Evaluation(board)
-            actual_data = test_object.get_best_move(n=3)
-            parametrized_test_set_list.append((actual_data, test_data_dict[f"test_resource_{index+1}"]))
+            parametrized_test_set_list.append((board, test_data_dict[f"test_resource_{index+1}"]))
     return parametrized_test_set_list
 
 
 @mark.smoke
-@mark.parametrize("test_data,expected_output", get_parametrized_test_set("fen_0"), ids=test_data_dict.keys())
-def test__smoke__evaluation__get_best_move(test_data, expected_output):
-    actual_data = [move.active_colour for move in test_data]
-    expected_data = expected_output["expected_sequence_colour"]
-    assert actual_data == expected_data, f"Expected: {expected_data}, actual: {actual_data}"
+@mark.parametrize("test_board,expected_output", get_parametrized_test_set("fen_0"), ids=test_data_dict.keys())
+def test__smoke__evaluation__get_best_move(test_board, expected_output):
+    starting_fen, starting_colour = test_board.fen.current_fen, test_board.fen.active_colour
+    evaluation = Evaluation(test_board)
+    actual_data = evaluation.get_best_move(5)
+    assert evaluation.chess_board.fen.current_fen == starting_fen, "Starting and final fen does not match."
+    for move in actual_data:
+        assert move.active_colour is starting_colour, "Expected sequence colour does not match pattern."
+        starting_colour = not starting_colour
+        original_square_value = evaluation.chess_board.fen.get_square_value(move.original_square)
+        assert move.piece_value == original_square_value.value, "Original square is not occupied by declared piece."
+        evaluation.chess_board.move_piece(move)

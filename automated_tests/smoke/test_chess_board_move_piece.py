@@ -72,6 +72,6 @@ def test__smoke__chess_board__move_piece_and_regenerate_fen(test_key, test_data)
     chess_board = ChessBoard(test_data["fen"])
     for move in test_data["moves"]:
         chess_board.move_piece(move)
-    actual_result = chess_board.fen.regenerate_fen()
+    actual_result = chess_board.fen.current_fen
     assert actual_result == test_data["expected_data"], \
         f"Failed on {test_key}, expected: {test_data['expected_data']}, actual: {actual_result}"

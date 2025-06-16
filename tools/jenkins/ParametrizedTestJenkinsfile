@@ -214,7 +214,7 @@ pipeline {
                             in_docker_value = sh(script: "docker run --rm test_image python -m pytest --collect-only | grep -c '<Function'", returnStdout: true)
                             in_workdir_value = sh(script: "python3 -m pytest --collect-only | grep -c '<Function'", returnStdout: true)
                             if (in_docker_value.toInteger() != in_workdir_value.toInteger()) {
-                                unstable("Stage reported as unstable")
+                                unstable("Stage reported as unstable.\nNumber of tests in test image: ${in_docker_value} compared to tests available in workdir: ${in_workdir_value}")
                             }
                         }
                     }

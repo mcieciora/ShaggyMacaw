@@ -239,6 +239,7 @@ class ChessBoard:
         self.fen.update_en_passant(move, (target_x, target_y), original_y)
         self.fen.update_clocks(move)
         self.fen.update_active_colour()
+        self.fen.regenerate_fen()
 
 
 class UnknownPieceType(Exception):

@@ -119,6 +119,7 @@ class Evaluation:
     def get_best_move(self, n):
         """Get best move in position."""
         return_sequence = []
+        original_board = deepcopy(self.chess_board)
         for _ in range(n):
             _chess_board_deep_copy = deepcopy(self.chess_board)
             active_colour = self.chess_board.fen.active_colour
@@ -135,5 +136,6 @@ class Evaluation:
             return_sequence.append(best_move)
             self.chess_board = _chess_board_deep_copy
             self.chess_board.move_piece(best_move)
-            self.chess_board.fen.current_fen = self.chess_board.fen.regenerate_fen()
+            self.chess_board.fen.regenerate_fen()
+        self.chess_board = original_board
         return return_sequence
