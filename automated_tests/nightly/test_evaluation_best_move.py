@@ -9,7 +9,7 @@ from src.evaluation import Evaluation
 
 @mark.nightly
 def test__nightly__evaluation__measure_get_best_move_runtime():
-    fen_files = glob("../../automated_tests/test_data/*")
+    fen_files = glob("automated_tests/test_data/*")
     runtime_results_map = {}
     for fen_file in fen_files:
         with open(fen_file, mode="r", encoding="utf-8") as test_fen_file:
@@ -20,5 +20,5 @@ def test__nightly__evaluation__measure_get_best_move_runtime():
                 test_object.get_best_move(10)
                 runtime = datetime.now() - start
                 runtime_results_map[test_object.chess_board.fen.current_fen] = runtime.microseconds
-    with open("measure_get_best_move_runtime.json", mode="w", encoding="utf-8") as result_file:
+    with open("results/measure_get_best_move_runtime.json", mode="w", encoding="utf-8") as result_file:
         result_file.writelines(dumps(runtime_results_map))
