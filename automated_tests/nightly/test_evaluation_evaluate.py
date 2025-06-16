@@ -9,7 +9,7 @@ from src.evaluation import Evaluation
 
 @mark.nightly
 def test__nightly__evaluation__measure_evaluate_runtime():
-    fen_files = glob(f"../../automated_tests/test_data/*")
+    fen_files = glob("../../automated_tests/test_data/*")
     runtime_results_map = {}
     for fen_file in fen_files:
         with open(fen_file, mode="r", encoding="utf-8") as test_fen_file:
