@@ -1,5 +1,6 @@
 from datetime import datetime
 from glob import glob
+from os import mkdir
 from json import dumps
 from pytest import mark
 
@@ -11,6 +12,7 @@ from src.evaluation import Evaluation
 def test__nightly__evaluation__measure_evaluate_runtime():
     fen_files = glob("./automated_tests/test_data/*")
     runtime_results_map = {}
+    mkdir("./results")
     for fen_file in fen_files:
         with open(fen_file, mode="r", encoding="utf-8") as test_fen_file:
             for line in test_fen_file.readlines():
