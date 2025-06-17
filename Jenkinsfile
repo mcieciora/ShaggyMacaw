@@ -274,7 +274,16 @@ pipeline {
                             script {
                                 if (TEST_GROUPS == "all" || TEST_GROUPS.contains(TEST_GROUP)) {
                                     echo "Running ${TEST_GROUP}"
-                                    sh "docker run --name ${TEST_GROUP}_test test_image python -m pytest -m ${FLAG} -k ${TEST_GROUP} automated_tests -v --junitxml=results/${TEST_GROUP}_results.xml"
+                                    Integer executionStatus = sh(script: "docker run --name ${TEST_GROUP}_test test_image python -m pytest -m ${FLAG} -k ${TEST_GROUP} automated_tests -v --junitxml=results/${TEST_GROUP}_results.xml", returnStatus: true)
+                                    if (executionStatus == 0) {
+                                        echo "Execution passed."
+                                    }
+                                    else if (executionStatus == 5 && FLAG == "nightly") {
+                                        echo "No tests collected. Skipping Execution."
+                                    }
+                                    else {
+                                        error("Execution failed.")
+                                    }
                                 }
                                 else {
                                     echo "Skipping execution."
@@ -286,7 +295,7 @@ pipeline {
                                 sh "docker container cp ${TEST_GROUP}_test:/app/results ./"
                                 sh "docker rm ${TEST_GROUP}_test"
                                 archiveArtifacts artifacts: "**/${TEST_GROUP}_results.xml"
-                                archiveArtifacts artifacts: "**/*.json"
+                                archiveArtifacts artifacts: "**/*.json", allowEmptyArchive: true
                             }
                         }
                     }
