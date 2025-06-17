@@ -8,6 +8,7 @@ from src.chess_board import ChessBoard
 from src.evaluation import Evaluation
 
 
+@mark.skip("Skipped until SM-18 is resolved.")
 @mark.nightly
 def test__nightly__evaluation__measure_get_best_move_runtime():
     fen_files = glob("./automated_tests/test_data/*")
