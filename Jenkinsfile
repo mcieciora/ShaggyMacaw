@@ -49,7 +49,6 @@ pipeline {
                         script {
                             withEnv(getToolsConfig()) {
                                 sh "docker build --build-arg DEFAULT_IMAGE_TAG=${DEFAULT_IMAGE_TAG} --no-cache -t test_image -f automated_tests/Dockerfile ."
-                                sh "docker build --build-arg DEFAULT_IMAGE_TAG=${DEFAULT_IMAGE_TAG} --no-cache -t pytest_image -f automated_tests/pytest.Dockerfile ."
                                 if (BRANCH_TO_USE == "master" || BRANCH_TO_USE == "develop") {
                                     sh "docker tag test_image ${DOCKERHUB_REPO}:test_image"
                                     withCredentials([usernamePassword(credentialsId: "dockerhub_id", usernameVariable: "USERNAME", passwordVariable: "PASSWORD")]) {
@@ -76,7 +75,7 @@ pipeline {
                                     sh "docker tag merge_bot_image ${DOCKERHUB_REPO}:merge_bot"
                                     withCredentials([usernamePassword(credentialsId: "dockerhub_id", usernameVariable: "USERNAME", passwordVariable: "PASSWORD")]) {
                                         sh "docker login --username $USERNAME --password $PASSWORD"
-                                        sh "docker push ${DOCKERHUB_REPO}:test_image"
+                                        sh "docker push ${DOCKERHUB_REPO}:merge_bot"
                                     }
                                 }
                             }
@@ -95,8 +94,6 @@ pipeline {
                             withEnv(getToolsConfig()) {
                                 sh "docker pull ${DOCKERHUB_REPO}:test_image"
                                 sh "docker tag ${DOCKERHUB_REPO}:test_image test_image"
-                                sh "docker pull ${DOCKERHUB_REPO}:pytest_image"
-                                sh "docker tag ${DOCKERHUB_REPO}:pytest_image pytest_image"
                             }
                         }
                     }
@@ -206,8 +203,10 @@ pipeline {
                 stage ("Scan for tests number") {
                     steps {
                         script {
-                            in_docker_value = sh(script: "docker run --rm test_image python -m pytest --collect-only | grep -c '<Function'", returnStdout: true)
-                            in_workdir_value = sh(script: "docker run -it --volume ${$(pwd)}:/app pytest_image | grep -c '<Function'", returnStdout: true)
+                            Integer in_docker_value = sh(script: "docker run --rm test_image python -m pytest --collect-only | grep -c '<Function'", returnStdout: true)
+                            Integer in_workdir_value = sh(script: "docker run --rm --volume '\$(pwd):/pytest_check' test_image python -m pytest -collect-only /pytest_check | grep -c '<Function'", returnStdout: true)
+                            println(in_docker_value)
+                            println(in_workdir_value)
                             if (in_docker_value.toInteger() != in_workdir_value.toInteger()) {
                                 unstable("Stage reported as unstable.\nNumber of tests in test image: ${in_docker_value} compared to tests available in workdir: ${in_workdir_value}")
                             }
