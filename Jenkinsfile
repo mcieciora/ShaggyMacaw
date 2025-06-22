@@ -203,11 +203,15 @@ pipeline {
                 stage ("Scan for tests number") {
                     steps {
                         script {
-                            Integer in_docker_value = sh(script: "docker run --rm test_image python -m pytest --collect-only | grep -c '<Function'", returnStdout: true)
-                            Integer in_workdir_value = sh(script: "docker run --rm --volume '\$(pwd):/pytest_check' test_image python -m pytest -collect-only /pytest_check | grep -c '<Function'", returnStdout: true)
-                            println(in_docker_value)
-                            println(in_workdir_value)
-                            if (in_docker_value.toInteger() != in_workdir_value.toInteger()) {
+                            String in_docker_log = sh(script: "docker run --rm test_image python -m pytest --collect-only >> in_docker_log.txt", returnStdout: true)
+                            sh "cat in_docker_log.txt"
+                            String in_docker_value = sh(script: "grep -c '<Function' in_docker_log.txt", returnStdout: true).toInteger()
+
+                            String in_workdir_log = sh(script: "docker run --rm --volume \$(pwd):/pytest_check test_image python -m pytest --collect-only /pytest_check >> in_workdir_log.txt", returnStdout: true)
+                            sh "cat in_workdir_log.txt"
+                            String in_workdir_value = sh(script: "grep -c '<Function' in_workdir_log.txt", returnStdout: true).toInteger()
+
+                            if (in_docker_value != in_workdir_value) {
                                 unstable("Stage reported as unstable.\nNumber of tests in test image: ${in_docker_value} compared to tests available in workdir: ${in_workdir_value}")
                             }
                         }
